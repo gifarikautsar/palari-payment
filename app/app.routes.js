@@ -1,15 +1,8 @@
 var routesApp = angular.module('routesApp', ['ui.router'])
 
 routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/payment');
 
-  $stateProvider
-
-    .state('home', {
-    	url: '/',
-    	templateUrl: 'app/components/home/home.html'
-    })
-
-  $locationProvider.html5Mode(true);
+  // $locationProvider.html5Mode(true);
 
 })

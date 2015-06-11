@@ -97,9 +97,6 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
     
   };
 
-
-
-
 }]);
 
 paymentApp.controller("submitController", function($scope, $http, CreditCardService, PaymentTypes){
