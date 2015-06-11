@@ -1,0 +1,80 @@
+<!-- Payment Form -->
+<form name="form" novalidate ng-init="go('credit_card')">
+  <div class="wrapper" ng-init="amountToggle = false; shipmentToggle = false">
+    <!-- Total Amount Section -->
+
+    <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
+      <div class=" col-xs-7 col-md-8 no-padding">
+        <span class="text-label">TOTAL AMOUNT</span>
+        <span class="text-label medium" ng-cloak>{{ totalPrice() | mycurrency}}</span>
+      </div>
+      <div class=" col-xs-5 col-md-4 no-padding">
+        <i class="fa fa-3x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
+      </div>
+    </div>
+
+    <!-- Purchased Items -->
+    <div class="hidden-content animate-show" ng-show="amountToggle">
+      <div class="inner-wrapper" ng-cloak>
+
+        <!-- Row 1 -->
+        <div class="row item" ng-repeat="item in purchasedProducts">
+          <div class="col-md-5 col-xs-5">
+            <img class="item-image" src="/assets/img/lg_nexus_5.jpg">
+          </div>
+          <div class="col-md-7 col-xs-7">
+            <span class="item-name">{{ item.name }}</span>
+            <span class="price">{{ item.price | mycurrency}}</span>
+          </div>
+        </div>
+        
+        <hr class="hr-product" ng-show="purchasedProducts.length != 1"/>
+        
+        <!-- Row 3 -->
+        <div class="row item" ng-show="purchasedProducts.length != 1">
+          <div class="col-md-8 col-xs-6">
+            <span class="item-name">Total</span>
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <span class="price total">{{ totalPrice() | mycurrency }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Shipment Section -->
+    <div class="inner-wrapper middle vertical-align" ng-click="shipmentToggle = !shipmentToggle">
+      <div class=" col-xs-7 col-md-8 no-padding">
+        <span class="text-label">SHIP TO</span>
+        <span class="text-label medium" ng-cloak>Danny Pranoto</span>
+      </div>
+      <div class=" col-xs-5 col-md-4 no-padding">
+        <i class="fa fa-3x pull-right" ng-class="shipmentToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
+      </div>
+    </div>
+
+    <!-- Shipment Information -->
+    <div class="hidden-content animate-show" ng-show="shipmentToggle">
+      <div class="inner-wrapper" ng-cloak>
+
+        <p>Jalan Ciumbuleuit No.122, Hegarmanah, Cidadap<br/>Bandung, Indonesia, 40141<br/>Tel. 0812345678<br/>Email. danny.pranoto@veritrans.co.id</p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Select Section -->
+  <div class="payment-select-section wrapper" style="z-index: 9999">
+    <div class="inner-wrapper no-padding">
+      <dropdown placeholder="Select Your Payment Method..." list="payments" selected="paymentType" property="display_name" ng-model="paymentType" ng-change="go(paymentType.payment_type)">
+      </dropdown>
+   </div>
+
+  </div>
+  <!-- Payment Details Section -->
+  <div ui-view>
+
+  </div>
+
+ 
+<!-- End of Payment Form -->
+</form>

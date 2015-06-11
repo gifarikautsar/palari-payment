@@ -1,1 +1,1 @@
-var phinisiApp = angular.module('phinisiApp', ['paymentApp', 'routesApp'])
+var paymentApp = angular.module("paymentApp", ['ngAnimate', 'angularPayments', 'routesApp', 'filterApp', 'formApp', 'dropdownApp']);

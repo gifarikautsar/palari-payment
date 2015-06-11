@@ -1,6 +1,3 @@
-var paymentApp = angular.module("paymentApp", ['ngAnimate', 'angularPayments']);
-
-
 paymentApp.config(function($sceDelegateProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
     // Allow same origin resource loads.
@@ -20,25 +17,21 @@ paymentApp.config(function($sceDelegateProvider, $httpProvider) {
   // delete $httpProvider.defaults.headers.common['X-Requested-With'];
 });
 
-
-
 //Factory
 paymentApp.value('PaymentTypes', [{
+    display_name: "BBM Money",
+    payment_type: "bbm_money",
+    image_class: "bbm-logo"
+  }, {
     display_name: "Credit Card",
     payment_type: "credit_card",
     image_class: "fa fa-lg fa-credit-card"
-  }, {
-    display_name: "Virtual Account",
+  },{
+    display_name: "Bank Transfer",
     payment_type: "permata",
     image_class: "fa fa-lg fa-diamond"
-  }, {
-    display_name: "BBM Pay",
-    payment_type: "bbm_pay",
-    image_class: "bbm-logo"
-  }]
+  } ]
 );
-
-
 
 //Service
 paymentApp.service('CreditCardService', function(){
@@ -79,61 +72,35 @@ paymentApp.service('CreditCardService', function(){
 
 });
 
-paymentApp.controller("buttonController", function($scope){
-  $scope.buttonDetails = 'SHOW DETAILS';
-  $scope.buttonActive = false;
-  $scope.button2Active = false;
-  $scope.button3Active = false;
+paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', function($scope, $http, $log, $state, PaymentTypes){
+  $scope.payments = PaymentTypes;
+  $scope.paymentType = {
+    display_name: "Credit Card",
+    payment_type: "credit_card",
+    image_class: "fa fa-lg fa-credit-card"
+  }; 
 
-  $scope.buttonClicked = function () {
-    if ($scope.buttonActive == false){
-      $scope.buttonActive = !($scope.buttonActive);
-      $scope.buttonDetails = 'HIDE DETAILS';
-    } else {
-      $scope.buttonActive = !($scope.buttonActive);
-      $scope.buttonDetails = 'SHOW DETAILS';
+  $scope.go = function (paymentType) {
+    console.log('go ' + paymentType);
+    if (paymentType === 'credit_card') {
+      $state.transitionTo('paymentDetails.creditCard', {arg : 'arg'});
     }
-  }
-
-  $scope.button2Clicked = function () {
-    if ($scope.button2Active == false){
-      $scope.button2Active = !($scope.button2Active);
-    } else {
-      $scope.button2Active = !($scope.button2Active);
+    else if (paymentType === 'permata'){
+      $state.transitionTo('paymentDetails.bankTransfer', {arg : 'arg'});
     }
-  }
-
-  $scope.button3Clicked = function () {
-    if ($scope.button3Active == false){
-      $scope.button3Active = !($scope.button3Active);
-    } else {
-      $scope.button3Active = !($scope.button3Active);
+    else if (paymentType === 'paymentDetails.bbmMoney'){
+      $state.transitionTo('paymentDetails.bbmMoney', {arg : 'arg'});
     }
-  }
+    else {
 
-});
-
-paymentApp.controller('DropdownCtrl', function ($scope, $log) {
-  $scope.items = [
-    'The first choice!',
-    'And another choice for you.',
-    'but wait! A third!'
-  ];
-
-  $scope.status = {
-    isopen: false
+    }
+    
   };
 
-  $scope.toggled = function(open) {
-    $log.log('Dropdown is now: ', open);
-  };
 
-  $scope.toggleDropdown = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    $scope.status.isopen = !$scope.status.isopen;
-  };
-});
+
+
+}]);
 
 paymentApp.controller("submitController", function($scope, $http, CreditCardService, PaymentTypes){
   $scope.card_exp_date = '12 / 2016';
@@ -172,8 +139,6 @@ paymentApp.controller("submitController", function($scope, $http, CreditCardServ
     }
   };
 
-  $scope.payments = PaymentTypes;
-  
   $scope.paymentType = "default";
 
   $scope.bankType = '';
@@ -339,47 +304,6 @@ paymentApp.controller("submitController", function($scope, $http, CreditCardServ
 
 });
 
-var INTEGER_REGEXP = /^\d+$/;
-paymentApp.directive('number', function() {
-  return {
-    require: 'ngModel',
-    link: function(scope, elm, attrs, ctrl) {
-      ctrl.$validators.number = function(modelValue, viewValue) {
-        if (ctrl.$isEmpty(modelValue)) {
-          // consider empty models to be valid
-          return true;
-        }
-
-        if (INTEGER_REGEXP.test(viewValue)) {
-          // it is valid
-          if (attrs.number == 'month'){
-            if (viewValue <= 12 && viewValue >= 1){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
-          else if (attrs.number == 'year'){
-            var date = new Date();
-            if (viewValue >= date.getFullYear()){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
-          else {
-            return true; 
-          }
-        }
-        // it is invalid
-        return false;
-      };
-    }
-  };
-});
-
 paymentApp.directive('expDate', function() {
   return{
     require: 'ngModel',
@@ -435,46 +359,6 @@ return {
     }
 }}])
 
-paymentApp.directive('inputShipping', function() {
-  return{
-    scope: {
-      type: '@',
-      name: '@',
-      model: '=?',
-      form: '=',
-      displayName: '@',
-      maxlength: '@'
-    },
-    templateUrl: 'templates/input-shipping.html',
-    link: function(scope, element, attrs){
-      scope.model = scope.model || '';
-      scope.invalid = '';
-
-      scope.$watch("model", function(value){
-        var regexRequired = new RegExp(/^[\s\t\r\n]*\S+/ig);
-        var regexEmail = new RegExp(/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i);
-        var regexNumber = new RegExp(/^\d+$/);
-        if (value == undefined){
-          scope.invalid = 'required';
-        }
-        else {
-          if (attrs.name == 'email'){
-            regexEmail.test(value) ? scope.invalid = 'valid' : scope.invalid = 'email';
-          }
-          else if (attrs.name == 'phonenumber'){
-            regexNumber.test(value) ? scope.invalid = 'valid' : scope.invalid = 'phone';
-          }
-          else {
-            regexRequired.test(value) ? scope.invalid = 'valid' : scope.invalid = "required";
-          }
-        }
-        console.log (scope.model + ' : ' + scope.invalid)
-      });
-
-    }
-  }
-});
-
 paymentApp.directive('loading', function ($http) {
   return {
       restrict: 'A',
@@ -494,164 +378,4 @@ paymentApp.directive('loading', function ($http) {
           });
       }
   };
-});
-
-paymentApp.directive('paymentsVal', function(CreditCardService){
-  return{
-    restrict: 'A',
-    require: 'ngModel',
-    link: function (scope, element, attrs) {
-      scope.$watch('creditCard.card_exp_month', function(newValue, oldValue) {
-          var arr = String(newValue).split("");
-          if (arr.length === 0) return;
-          if (arr.length === 1 && (arr[0] == '-' || arr[0] === '.' )) return;
-          if (arr.length === 2 && newValue === '-.') return;
-          if (isNaN(newValue)) {
-              scope.creditCard.card_exp_month = oldValue;    
-          }
-      });
-      scope.$watch('creditCard.card_exp_year', function(newValue, oldValue) {
-          var arr = String(newValue).split("");
-          if (arr.length === 0) return;
-          if (arr.length === 1 && (arr[0] == '-' || arr[0] === '.' )) return;
-          if (arr.length === 2 && newValue === '-.') return;
-          if (isNaN(newValue)) {
-              scope.creditCard.card_exp_year = oldValue;    
-          }
-      });
-    }
-  }  
-});
-
-// paymentApp.directive('ccLogo', function(){
-//   return{
-//     restrict: 'A',
-//     link: function ($scope, element, attrs){
-//       $scope.$watch($scope.creditCard.card_number, function(val){
-//         var cardType = CreditCardService.numberValidation(val).cardType;
-//         var valid = CreditCardService.numberValidation(val).valid;
-//         if (valid === 'valid'){
-//           if (cardType === 'Visa'){
-//             $scope.status = 'visa';
-//           } else if (cardType === 'MasterCard'){
-//             $scope.status = 'mastercard';
-//           }
-//         } else if (valid === 'not valid' && val.length == 16){
-//           $scope.status = 'invalid';
-//         }
-
-//       });
-//     }
-//   }
-// });
-
-// paymentApp.directive('autoCcFormat', function())
-
-
-paymentApp.filter('mycurrency', function(){
-  return function(number){
-    var rev     = parseInt(number, 10).toString().split('').reverse().join('');
-    var rev2    = '';
-    for(var i = 0; i < rev.length; i++){
-        rev2  += rev[i];
-        if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
-            rev2 += '.';
-        }
-    }
-    return 'Rp. ' + rev2.split('').reverse().join('') + ',00';
-  };
-});
-
-angular.module('myApp', ['filters']);
-
-angular.module('filters', []).  
-filter('validate', [function () {  
-    return function (ccnumber) {
-      if (!ccnumber) { return ''; }
-      var len = ccnumber.length;
-      var cardType, valid;
-      mul = 0,
-      prodArr = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 2, 4, 6, 8, 1, 3, 5, 7, 9]],
-      sum = 0;
-
-      while (len--) {
-          sum += prodArr[mul][parseInt(ccnumber.charAt(len), 10)];
-          mul ^= 1;
-      }
-
-      if (sum % 10 === 0 && sum > 0) {
-        valid = "valid"
-      } else {
-        valid = "not valid"
-      }
-      ccnumber = ccnumber.toString().replace(/\s+/g, '');
-
-      if(/^5[1-5]/.test(ccnumber)) {
-        cardType = "MasterCard";
-      }
-      if (/^4/.test(ccnumber)) {
-        cardType = "Visa"
-      }
-      return ccnumber + " is a(n) " + cardType + " and it's " + valid;
-    };
-}]);
-
-
-
-paymentApp.controller("dropdownDemo", function($scope) {
-
-});
-
-paymentApp.run(function($rootScope) {
-  angular.element(document).on("click", function(e) {
-    $rootScope.$broadcast("documentClicked", angular.element(e.target));
-  });
-});
-
-paymentApp.directive("dropdown", function($rootScope) {
-  return {
-    restrict: "E",
-    templateUrl: "app/shared/dropdown/dropdown.html",
-    scope: {
-      placeholder: "@",
-      list: "=",
-      selected: "=",
-      property: "@"
-    },
-    link: function(scope) {
-      scope.listVisible = false;
-      scope.isPlaceholder = true;
-
-      scope.select = function(item) {
-        scope.isPlaceholder = false;
-        scope.selected = item;
-        scope.listVisible = false;
-      };
-
-      scope.isSelected = function(item) {
-        return item[scope.property] === scope.selected[scope.property];
-      };
-
-      scope.show = function() {
-        scope.listVisible = true;
-      };
-
-      // $rootScope.$on("documentClicked", function(inner, target) {
-      //   console.log($(target[0]).is(".dropdown-display.clicked") || $(target[0]).parents(".dropdown-display.clicked").length > 0);
-      //   if (!$(target[0]).is(".dropdown-display.clicked") && !$(target[0]).parents(".dropdown-display.clicked").length > 0)
-      //     scope.$apply(function() {
-      //       scope.listVisible = false;
-      //     });
-      // });
-
-      // scope.$watch("listVisible", function(value){
-      //   console.log("list Visible:" + scope.listVisible);
-      // });
-
-      scope.$watch("selected", function(value) {
-        scope.isPlaceholder = scope.selected[scope.property] === undefined;
-        scope.display = scope.selected;
-      });
-    }
-  }
 });

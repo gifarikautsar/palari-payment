@@ -1,0 +1,75 @@
+<div class="wrapper tab">    
+    <h5>Add Address</h5> 
+    <div class="inner-wrapper inner-content">  
+      <p>Please complete your shipping details below. All fields are required.</p>
+      <ng-form name="shippingForm">
+
+            <div class="form-group">
+              <span class="text-label">FULL NAME</span>
+              <div class="right-inner-addon">
+                <input type="text" class="form-control" name="firstname" ng-model="customerDetails.first_name" required>
+                <div ng-show="form.$submitted || shippingForm.firstname.$touched">
+                  <i class="glyphicon glyphicon-ok" ng-show="shippingForm.firstname.$valid"></i>
+                  <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.firstname.$valid"></i>
+                  <span class="error-message" ng-show="shippingForm.firstname.$error.required">First Name is required.</span>
+                </div>
+              </div>
+            </div>
+          <div class="form-group">
+            <span class="text-label">PHONE NUMBER</span>
+            <div class="right-inner-addon">
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">+62</span>
+                <input type="text" class="form-control" name="phonenumber" maxlength="11" ng-model="customerDetails.phone" required number>
+              </div>
+              <div ng-show="form.$submitted || shippingForm.phonenumber.$touched">
+                <i class="glyphicon glyphicon-ok" ng-show="shippingForm.phonenumber.$valid"></i>
+                <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.phonenumber.$valid"></i>
+                <span class="error-message" ng-show="shippingForm.phonenumber.$error.required">Phone Number is required.</span>
+                <span class="error-message" ng-show="shippingForm.phonenumber.$error.number">Please input a valid phone number.</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <span class="text-label">ADDRESS</span>
+            <div class="right-inner-addon">
+              <input type="text" class="form-control" name="address" ng-model="customerDetails.billing_address.address" required>
+              <div ng-show="form.$submitted || shippingForm.address.$touched">
+                <i class="glyphicon glyphicon-ok" ng-show="shippingForm.address.$valid"></i>
+                <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.address.$valid"></i>
+                <span class="error-message" ng-show="shippingForm.address.$error.required">Address is required.</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <span class="text-label">PROVINCE</span>
+              <div class="right-inner-addon">
+                <select ng-model="selectedProvince">
+                  <option  ng-repeat="province in provinces" value={{province.id}}> {{province.name}} </option>
+                </select>
+                <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+            </div>
+          </div>
+          <div class="form-group">
+            <span class="text-label">CITY</span>
+              <div class="right-inner-addon">
+                <select ng-model="storeDetails.merchant_address.city_id">
+                  <option  ng-repeat="city in cities | filter : {provinceId: selectedProvince}" value={{city.cityId}}> {{city.name}} </option>
+                </select>
+                <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+            </div>
+          </div>
+      </ng-form>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="inner-wrapper">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding">
+          <a ui-sref="shippingDetails" class="btn btn-default pull-left" style="width: 90%">CANCEL</a>
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 no-padding">
+          <a ui-sref="shippingDetails" class="btn btn-primary pull-right" style="width: 90%">SAVE & CONTINUE</a>
+        </div>
+    </div>
+</div>

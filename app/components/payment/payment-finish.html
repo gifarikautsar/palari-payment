@@ -1,0 +1,55 @@
+<div class="wrapper animate-show">
+  <div class="inner-content">
+    <div class="inner-wrapper">
+      <span class="text-label big text-center"><strong>PAYMENT COMPLETE</strong></span><br/>
+      <div class="col-xs-6 col-md-6 col-lg-6 nopadding">
+        <span class="small-text-label">PAYMENT TYPE : {{ paymentType.display_name }}</span>
+      </div>
+      <div class="col-xs-6 col-md-6 col-lg-6 nopadding">
+        <span class="small-text-label pull-right">STATUS : {{ responseStatus.transaction_status }}</span>
+      </div>  
+    </div>
+  </div>
+  <div class="tab middle">
+    <h5>PURCHASED PRODUCTS</h5>
+    <div class="inner-wrapper">
+      <!-- Row 1 -->
+      <div class="row item" ng-repeat="item in purchasedProducts">
+        <div class="col-md-5 col-xs-5">
+          <img class="item-image" src="../assets/img/lg_nexus_5.jpg">
+        </div>
+        <div class="col-md-7 col-xs-7">
+          <span class="item-name">{{ item.name }}</span>
+          <span class="price">{{ item.price | mycurrency}}</span>
+        </div>
+      </div>
+      
+      <hr class="hr-product" ng-show="purchasedProducts.length != 1"/>
+      
+      <!-- Row 3 -->
+      <div class="row item" ng-show="purchasedProducts.length != 1">
+        <div class="col-md-8 col-xs-6">
+          <span class="item-name">Total</span>
+        </div>
+        <div class="col-md-4 col-xs-6">
+          <span class="price total">{{ totalPrice() | mycurrency }}</span>
+        </div>
+      </div>
+    
+    </div>
+
+  </div>
+
+  <div class="tab middle">
+    <h5>SHIPPING INFORMATION</h5>
+    <div class="inner-wrapper">
+      
+      <span class="shipping-label-h1">{{ customerDetails.first_name + " " + customerDetails.billing_address.last_name}}</span>
+      <span class="shipping-label-h2">{{ customerDetails.billing_address.address }} </span>
+      <span class="shipping-label-h2">{{ customerDetails.billing_address.city + ', ' + customerDetails.billing_address.postal_code }}</span>
+      <span class="shipping-label-h2">{{ "Phone : " + customerDetails.phone }}</span>
+      <span class="shipping-label-h2">{{ "Email : " + customerDetails.email }}</span>
+                  
+    </div>
+  </div>
+</div>
