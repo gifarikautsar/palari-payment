@@ -1,18 +1,18 @@
-<div class="wrapper tab">    
+<div class="wrapper tab" ng-init="getProductDetails()">    
     <h5>Purchased Items</h5> 
     <div class="inner-wrapper">
       <div class="row">
         <div class="col-md-5 col-xs-5">
-          <img class="item-image" src="/assets/img/lg_nexus_5.jpg">
+          <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
         </div>
         <div class="col-md-7 col-xs-7">
-          <span class="big-text-label pull-right">{{ item.name }}</span>
-          <span class="text-label pull-right">{{ item.price | mycurrency}}</span>
+          <span class="big-text-label pull-right">{{productDetails.name}}</span>
+          <span class="text-label pull-right">{{productDetails.price | mycurrency}}</span>
         </div>
       </div>
       <div class="inner-wrapper inner-content" style="margin-top: 20px">
           <span class="text-label pull-left">TOTAL</span>
-          <span class="text-label pull-right">{{ item.price | mycurrency}}</span>
+          <span class="text-label pull-right">{{totalAmount() | mycurrency}}</span>
       </div>
     </div>
 </div>

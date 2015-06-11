@@ -96,9 +96,36 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
     }
     
   };
+//////////////////////
+  $scope.productDetails = {};
+  $scope.deliveryFee = 0;
+  $scope.url = 'http://128.199.71.156:8080/v1/customer/product/1d53c45b-73d8-4cde-ac89-8951d6b3d6b5';
+  $scope.quantity = 1;
+  $scope.totalAmount = function(){
+    return ($scope.productDetails.price*$scope.quantity) + $scope.deliveryFee;
+  };
 
-
-
+  $scope.getProductDetails = function(){
+    $log.debug($scope.deliveryFee);
+    $log.debug($scope.totalAmount());
+    
+    $http.get(
+        //url
+        $scope.url,
+        //config
+        {
+          headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+        }
+      )
+      .success(function(data){
+        $scope.productDetails = data; 
+        $log.debug($scope.productDetails);
+        $log.debug("Get product details success");
+      })
+      .error(function(data){
+        $scope.error = data.description;        
+      });
+  };
 
 }]);
 
