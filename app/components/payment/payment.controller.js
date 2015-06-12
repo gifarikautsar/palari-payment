@@ -37,6 +37,7 @@ paymentApp.service('dataService', function(){
   var productDetails = null;
   var shippingDetails = null;
   var customerDetails = null;
+  var creditCard = null;
 
   return {
     getProductDetails: function () {
@@ -56,6 +57,12 @@ paymentApp.service('dataService', function(){
     },
     setCustomerDetails: function (value) {
       customerDetails = value;
+    },
+    getCreditCard: function () {
+      return creditCard;
+    },
+    setCreditCard: function (value) {
+      creditCard = value;
     }
 
   }
@@ -69,6 +76,8 @@ paymentApp.run(['$rootScope', '$state', '$stateParams',
 
 paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', '$stateParams', 'dataService', function($scope, $http, $log, $state, PaymentTypes, $stateParams, dataService){
   $scope.payments = PaymentTypes;
+  $scope.shippingDetails = dataService.getShippingDetails();
+  $scope.productDetails = dataService.getProductDetails();
   $scope.paymentType = {
     display_name: "Credit Card",
     payment_type: "credit_card",
@@ -291,7 +300,7 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   };
 }]);
 
-paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state, $stateParams){
+paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataService', function($scope, $http, $log, $state, $stateParams, dataService){
   $scope.creditCard = {
     card_number: '5211111111111117',
     card_cvv: '123',
@@ -308,20 +317,18 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
   }
 
   $scope.getToken = function(){
-    $state.transitionTo('loading', { params : { 'card': $scope.card,
-                                                'productDetails': $scope.productDetails
-                                        }
-                                    });
+    dataService.setCreditCard($scope.card);
+    $state.transitionTo('loading', { arg: 'arg'});
   }
 
 }]);
 
-paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state, $stateParams){
+paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataService', function($scope, $http, $log, $state, $stateParams, dataService){
   
   Veritrans.url = "https://api.sandbox.veritrans.co.id/v2/token";
-  Veritrans.client_key = 'VT-client-SimkwEjR3_fKj73D';
+  Veritrans.client_key = 'VT-client-VWnPRCD75wDVnB2s';
   var card = function(){
-    return $stateParams.params.card;
+    return dataService.getCreditCard();
   }
 
   $scope.chargeTransaction = function(response) {
@@ -333,10 +340,10 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
           client_key : "VT-client-SimkwEjR3_fKj73D",
           payment_type : "credit_card",
           item_details : [ {
-            "id" : $stateParams.productDetails.id,
-            "price" : $stateParams.productDetails.price,
-            "quantity" : 1,
-            "name" : $stateParams.productDetails.name
+            "id" : dataService.getProductDetails().id,
+            "price" : dataService.getProductDetails().price,
+            "quantity" : dataService.getProductDetails().quantity,
+            "name" : dataService.getProductDetails().name
           } ],
           credit_card : {
             token_id : response.token_id,
@@ -356,7 +363,7 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
         console.log(data)
         //Confirm Transaction
         $http.post(
-          phinisiEndpoint + 'merchant/payment/confirm', 
+          phinisiEndpoint + '/merchant/payment/confirm', 
           {
             client_key : "VT-client-SimkwEjR3_fKj73D",
             transaction_id : data.transaction_id
@@ -414,8 +421,8 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
   }
 
   $scope.loadInit = function(){
-    console.log($stateParams.params.card);
-    console.log($stateParams.params.productDetails);
+    console.log(dataService.getCreditCard());
+    console.log(dataService.getProductDetails());
     Veritrans.token(card, callback);
   }
 
