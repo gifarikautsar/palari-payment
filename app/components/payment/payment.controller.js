@@ -83,22 +83,22 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
   $scope.deliveryFee = 0;
   $scope.url = 'http://128.199.71.156:8080/v1/customer/product/1d53c45b-73d8-4cde-ac89-8951d6b3d6b5';
   $scope.quantity = 1;
-  $scope.customerDetails = {
-    full_name : "",
-    phone_number : "",
-    address : "",
-    province_id : "",
-    city_id : "",
-    district_id: ""
-  };
   // $scope.customerDetails = {
-  //   full_name : "Gifari Kautsar",
-  //   phone_number : "08123456",
-  //   address : "Jalan Pelesiran",
-  //   province_id : "32",
-  //   city_id : "3201",
-  //   district_id: "3201010"
+  //   full_name : "",
+  //   phone_number : "",
+  //   address : "",
+  //   province_id : "",
+  //   city_id : "",
+  //   district_id: ""
   // };
+  $scope.customerDetails = {
+    full_name : "Gifari Kautsar",
+    phone_number : "08123456",
+    address : "Jalan Pelesiran",
+    province_id : "32",
+    city_id : "3201",
+    district_id: "3201010"
+  };
   $scope.provinces = {};
   $scope.cities = {};
   $scope.districts = {};

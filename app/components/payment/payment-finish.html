@@ -42,12 +42,12 @@
 
   <div class="tab middle">
     <h5>SHIPPING INFORMATION</h5>
-    <div class="inner-wrapper">
+    <div class="inner-wrapper" ng-init="getLocationName()">
       
-      <span class="shipping-label-h1">{{ customerDetails.first_name + " " + customerDetails.billing_address.last_name}}</span>
-      <span class="shipping-label-h2">{{ customerDetails.billing_address.address }} </span>
-      <span class="shipping-label-h2">{{ customerDetails.billing_address.city + ', ' + customerDetails.billing_address.postal_code }}</span>
-      <span class="shipping-label-h2">{{ "Phone : " + customerDetails.phone }}</span>
+      <span class="shipping-label-h1">{{ customerDetails.full_name}}</span>
+      <span class="shipping-label-h2">{{ customerDetails.address }} </span>
+      <span class="shipping-label-h2">{{ cityName + ', ' + customerDetails.billing_address.postal_code }}</span>
+      <span class="shipping-label-h2">{{ "Phone : " + customerDetails.phone_number }}</span>
       <span class="shipping-label-h2">{{ "Email : " + customerDetails.email }}</span>
                   
     </div>
