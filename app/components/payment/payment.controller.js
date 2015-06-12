@@ -39,7 +39,7 @@ paymentApp.run(['$rootScope', '$state', '$stateParams',
     $rootScope.$stateParams = $stateParams;
 }])
 
-paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', '$stateParams', function($scope, $http, $log, $state, $stateParams, PaymentTypes){
+paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', '$stateParams', function($scope, $http, $log, $state, PaymentTypes, $stateParams){
   $scope.payments = PaymentTypes;
   $scope.paymentType = {
     display_name: "Credit Card",
@@ -98,7 +98,7 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
   };
 
   $scope.getLocationName = function(){
-    $log.debug($scope.customerDetails);
+    console.log($scope.customerDetails);
     if($scope.customerDetails != null){
       $scope.getProvinceName();
       $scope.getCityName();
@@ -162,6 +162,7 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
       $scope.error = data.description;        
     });
   };
+
 }]);
 
 paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state,$stateParams){
@@ -263,7 +264,10 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
   }
 
   $scope.getToken = function(){
-    $state.transitionTo('loading', {'card': $scope.card} );
+    $state.transitionTo('loading', { params : { 'card': $scope.card,
+                                                'productDetails': $scope.productDetails
+                                        }
+                                    });
   }
 
 }]);
@@ -273,7 +277,7 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
   Veritrans.url = "https://api.sandbox.veritrans.co.id/v2/token";
   Veritrans.client_key = 'VT-client-SimkwEjR3_fKj73D';
   var card = function(){
-    return $stateParams.card;
+    return $stateParams.params.card;
   }
 
   $scope.chargeTransaction = function(response) {
@@ -285,10 +289,10 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
           client_key : "VT-client-SimkwEjR3_fKj73D",
           payment_type : "credit_card",
           item_details : [ {
-            "id" : "1",
-            "price" : 50000,
-            "quantity" : 3,
-            "name" : "Baygon rasa jambu batu"
+            "id" : $stateParams.productDetails.id,
+            "price" : $stateParams.productDetails.price,
+            "quantity" : 1,
+            "name" : $stateParams.productDetails.name
           } ],
           credit_card : {
             token_id : response.token_id,
@@ -366,8 +370,8 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
   }
 
   $scope.loadInit = function(){
-    console.log($stateParams.card);
-    $log.debug(card);
+    console.log($stateParams.params.card);
+    console.log($stateParams.params.productDetails);
     Veritrans.token(card, callback);
   }
 

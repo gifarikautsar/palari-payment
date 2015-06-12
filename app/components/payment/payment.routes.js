@@ -11,7 +11,7 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 			url: '/shipping',
 			templateUrl: 'app/components/payment/shipping-details.html',
 			controller: 'paymentController',
-			params: {details: null}
+			params: { details: null }
 		})
 		.state('addAddress', {
 			url: '/add-address',
@@ -42,6 +42,6 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('loading', {
 			templateUrl: 'app/components/payment/loading.html',
 			controller: 'loadingController',
-			params: { card: null}
+			params: { params: null}
 		});
 });
