@@ -1,12 +1,12 @@
 <!-- Payment Form -->
-<form name="form" novalidate ng-init="go('credit_card')">
+<form name="form" novalidate ng-init="go('credit_card'); getProductDetails()">
   <div class="wrapper" ng-init="amountToggle = false; shipmentToggle = false">
     <!-- Total Amount Section -->
 
     <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">TOTAL AMOUNT</span>
-        <span class="text-label medium" ng-cloak>{{ totalPrice() | mycurrency}}</span>
+        <span class="text-label medium" ng-cloak>{{ totalAmount() | mycurrency}}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-3x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
@@ -18,13 +18,13 @@
       <div class="inner-wrapper" ng-cloak>
 
         <!-- Row 1 -->
-        <div class="row item" ng-repeat="item in purchasedProducts">
+        <div class="row item">
           <div class="col-md-5 col-xs-5">
-            <img class="item-image" src="/assets/img/lg_nexus_5.jpg">
+            <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
           </div>
           <div class="col-md-7 col-xs-7">
-            <span class="item-name">{{ item.name }}</span>
-            <span class="price">{{ item.price | mycurrency}}</span>
+            <span class="item-name">{{ productDetails.name }}</span>
+            <span class="price">{{ productDetails.price | mycurrency}}</span>
           </div>
         </div>
         
@@ -36,7 +36,7 @@
             <span class="item-name">Total</span>
           </div>
           <div class="col-md-4 col-xs-6">
-            <span class="price total">{{ totalPrice() | mycurrency }}</span>
+            <span class="price total">{{ totalAmount() | mycurrency }}</span>
           </div>
         </div>
       </div>
