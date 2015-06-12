@@ -239,7 +239,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     card_exp_date: '12/2018'
   };
 
-  var card = {
+  $scope.card = {
     'card_number': $scope.creditCard.card_number,
     'card_cvv': $scope.creditCard.card_cvv,
     'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
@@ -249,7 +249,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
   }
 
   $scope.getToken = function(){
-    $state.transitionTo('loading', {'card': card} );
+    $state.transitionTo('loading', {'card': $scope.card} );
   }
 
 }]);
@@ -352,7 +352,8 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
   }
 
   $scope.loadInit = function(){
-    console.log(card);
+    console.log($stateParams.card);
+    $log.debug(card);
     Veritrans.token(card, callback);
   }
 
