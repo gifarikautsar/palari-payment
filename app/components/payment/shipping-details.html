@@ -47,7 +47,7 @@
           <div class="form-group">
             <span class="text-label">FULL NAME</span>
             <div class="right-inner-addon">
-              <input type="text" class="form-control" name="firstname" ng-model="customerDetails.first_name" required>
+              <input type="text" class="form-control" name="firstname" ng-model="shippingDetails.first_name" required>
               <div ng-show="form.$submitted || shippingForm.firstname.$touched">
                 <i class="glyphicon glyphicon-ok" ng-show="shippingForm.firstname.$valid"></i>
                 <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.firstname.$valid"></i>
@@ -58,7 +58,7 @@
           <div class="form-group">
             <span class="text-label">EMAIL ADDRESS</span>
             <div class="right-inner-addon">
-              <input type="text" class="form-control" name="lastname" ng-model="customerDetails.billing_address.last_name" required>
+              <input type="text" class="form-control" name="lastname" ng-model="shippingDetails.billing_address.last_name" required>
               <div ng-show="form.$submitted || shippingForm.lastname.$touched">
                 <i class="glyphicon glyphicon-ok" ng-show="shippingForm.lastname.$valid"></i>
                 <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.lastname.$valid"></i>
@@ -69,7 +69,7 @@
           <div class="form-group">
             <span class="text-label">PHONE NUMBER</span>
             <div class="right-inner-addon">
-              <input type="text" class="form-control" name="lastname" ng-model="customerDetails.billing_address.last_name" required>
+              <input type="text" class="form-control" name="lastname" ng-model="shippingDetails.billing_address.last_name" required>
               <div ng-show="form.$submitted || shippingForm.lastname.$touched">
                 <i class="glyphicon glyphicon-ok" ng-show="shippingForm.lastname.$valid"></i>
                 <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.lastname.$valid"></i>
@@ -81,20 +81,20 @@
   </div>
   <div class="tab middle">    
     <h5>Shipping Details</h5> 
-    <div class="inner-wrapper inner-content" ng-hide="customerDetails != null">
+    <div class="inner-wrapper inner-content" ng-hide="shippingDetails != null">
       <p align="justify">You haven't had any shipping details yet, please add one by clicking button below.</p>
-      <small><a ui-sref="addAddress" class="btn btn-default">ADD ADDRESS</a></small>
+      <small><a ui-sref="addAddress({productDetails: productDetails})" class="btn btn-default">ADD ADDRESS</a></small>
     </div>
-    <div class="inner-wrapper inner-content" ng-hide="customerDetails == null">
+    <div class="inner-wrapper inner-content" ng-hide="shippingDetails == null">
       <div class="row">
         <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8">
-          <span class="text-label big">{{customerDetails.full_name}}</span>
+          <span class="text-label big">{{shippingDetails.full_name}}</span>
         </div>
         <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
           <small><a ui-sref="addAddress" class="btn btn-default pull-right">CHANGE ADDRESS</a></small>
         </div>
       </div>
-      <p>{{customerDetails.address}}<br/>{{districtName}}, {{cityName}}, {{provinceName}}<br/>Tel.{{customerDetails.phone_number}}</p>
+      <p>{{shippingDetails.address}}<br/>{{districtName}}, {{cityName}}, {{provinceName}}<br/>Tel.{{shippingDetails.phone_number}}</p>
       <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
       
       <div class="row no-margin ng-hide">

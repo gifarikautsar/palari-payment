@@ -1,4 +1,4 @@
-<div class="wrapper tab" ng-init="getProductDetails()">    
+<div class="wrapper tab" ng-init="getProduct()">    
     <h5>Purchased Items</h5> 
     <div class="inner-wrapper">
       <div class="row">
@@ -19,6 +19,6 @@
 
 <div class="wrapper">
     <div class="inner-wrapper">
-        <a ui-sref="shippingDetails" class="btn btn-primary" style="width: 100%">CHECKOUT</a>
+        <a ng-click="checkout()" class="btn btn-primary" style="width: 100%">CHECKOUT</a>
     </div>
 </div>
