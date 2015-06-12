@@ -81,20 +81,20 @@
   </div>
   <div class="tab middle">    
     <h5>Shipping Details</h5> 
-    <div class="inner-wrapper inner-content ng-hide">
+    <div class="inner-wrapper inner-content" ng-hide="customerDetails.address != ''">
       <p align="justify">You haven't had any shipping details yet, please add one by clicking button below.</p>
       <small><a ui-sref="addAddress" class="btn btn-default">ADD ADDRESS</a></small>
     </div>
-    <div class="inner-wrapper inner-content">
+    <div class="inner-wrapper inner-content" ng-hide="customerDetails.address == ''">
       <div class="row">
         <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8">
-          <span class="text-label big">Danny Pranoto</span>
+          <span class="text-label big">{{customerDetails.full_name}}</span>
         </div>
         <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
           <small><a ui-sref="addAddress" class="btn btn-default pull-right">CHANGE ADDRESS</a></small>
         </div>
       </div>
-      <p>Jalan Ciumbuleuit No.122<br/>Hegarmanah, Cidadap, Bandung, Indonesia<br/>Tel.0812345678</p>
+      <p ng-init="getLocationName()">{{customerDetails.address}}<br/>{{districtName}}, {{cityName}}, {{provinceName}}<br/>Tel.{{customerDetails.phone_number}}</p>
       <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
       
       <div class="row no-margin ng-hide">

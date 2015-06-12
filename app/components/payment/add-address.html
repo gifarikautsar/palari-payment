@@ -41,11 +41,11 @@
               </div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" ng-init="getProvinceList()">
             <span class="text-label">PROVINCE</span>
               <div class="right-inner-addon">
-                <select ng-model="selectedProvince">
-                  <option  ng-repeat="province in provinces" value={{province.id}}> {{province.name}} </option>
+                <select ng-model="customerDetails.province_id" ng-change="getCityList()" required>
+                  <option  ng-repeat="province in provinces | orderBy: 'nama_propinsi'" value={{province.id}}> {{province.nama_propinsi}} </option>
                 </select>
                 <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
             </div>
@@ -53,8 +53,17 @@
           <div class="form-group">
             <span class="text-label">CITY</span>
               <div class="right-inner-addon">
-                <select ng-model="storeDetails.merchant_address.city_id">
-                  <option  ng-repeat="city in cities | filter : {provinceId: selectedProvince}" value={{city.cityId}}> {{city.name}} </option>
+                <select ng-model="customerDetails.city_id" ng-change="getDistrictList()" required>
+                  <option  ng-repeat="city in cities.kota | orderBy: 'nama_kota'" value={{city.id}}> {{city.nama_kota}} </option>
+                </select>
+                <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+            </div>
+          </div>
+          <div class="form-group">
+            <span class="text-label">DISTRICT</span>
+              <div class="right-inner-addon">
+                <select ng-model="customerDetails.district_id" required>
+                  <option  ng-repeat="district in districts.kecamatan | orderBy: 'nama_kecamatan'" value={{district.id}}> {{district.nama_kecamatan}} </option>
                 </select>
                 <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
             </div>

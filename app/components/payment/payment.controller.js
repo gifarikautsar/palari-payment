@@ -83,7 +83,29 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
   $scope.deliveryFee = 0;
   $scope.url = 'http://128.199.71.156:8080/v1/customer/product/1d53c45b-73d8-4cde-ac89-8951d6b3d6b5';
   $scope.quantity = 1;
-  
+  $scope.customerDetails = {
+    full_name : "",
+    phone_number : "",
+    address : "",
+    province_id : "",
+    city_id : "",
+    district_id: ""
+  };
+  // $scope.customerDetails = {
+  //   full_name : "Gifari Kautsar",
+  //   phone_number : "08123456",
+  //   address : "Jalan Pelesiran",
+  //   province_id : "32",
+  //   city_id : "3201",
+  //   district_id: "3201010"
+  // };
+  $scope.provinces = {};
+  $scope.cities = {};
+  $scope.districts = {};
+  $scope.provinceName = '';
+  $scope.cityName = '';
+  $scope.districtName = '';
+
   $scope.totalAmount = function(){
     return ($scope.productDetails.price*$scope.quantity) + $scope.deliveryFee;
   };
@@ -101,8 +123,7 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
     }
     else {
 
-    }
-    
+    }  
   };
 
   $scope.getProductDetails = function(){
@@ -125,6 +146,128 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
       .error(function(data){
         $scope.error = data.description;        
       });
+  };
+
+  $scope.getProvinceList = function(){
+    $scope.customerDetails.city_id = '';
+    $scope.customerDetails.district_id = '',
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/province',       
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $scope.provinces = data;
+      $log.debug($scope.provinces);
+      $log.debug("Get province list success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  }
+
+  $scope.getCityList = function (){
+    $scope.customerDetails.district_id = '',
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/city?parent=' + $scope.customerDetails.province_id,
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $scope.cities = data; 
+      $log.debug($scope.cities);
+      $log.debug("Get city list success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+
+  $scope.getDistrictList = function (){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/district?parent=' + $scope.customerDetails.city_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $scope.districts = data;  
+      $log.debug($scope.districts);
+      $log.debug("Get district list success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+
+  $scope.getLocationName = function(){
+    $scope.getProvinceName();
+    $scope.getCityName();
+    $scope.getDistrictName();
+  }
+  $scope.getProvinceName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/province?id=' + $scope.customerDetails.province_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.provinceName = data.nama_propinsi;
+      $log.debug("Get province name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+
+  $scope.getCityName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/city?id=' + $scope.customerDetails.city_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.cityName = data.nama_kota;
+      $log.debug("Get city name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+
+  $scope.getDistrictName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/district?id=' + $scope.customerDetails.district_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.districtName = data.nama_kecamatan;
+      $log.debug("Get district name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
   };
 }]);
 
