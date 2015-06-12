@@ -1,4 +1,4 @@
-<div class="wrapper" ng-init="amountToggle = false; getProductDetails()">
+<div class="wrapper" ng-init="amountToggle = false; getProductDetails(); getLocationName()">
     <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">TOTAL AMOUNT</span>
@@ -81,11 +81,11 @@
   </div>
   <div class="tab middle">    
     <h5>Shipping Details</h5> 
-    <div class="inner-wrapper inner-content" ng-hide="customerDetails.address != ''">
+    <div class="inner-wrapper inner-content" ng-hide="customerDetails != null">
       <p align="justify">You haven't had any shipping details yet, please add one by clicking button below.</p>
       <small><a ui-sref="addAddress" class="btn btn-default">ADD ADDRESS</a></small>
     </div>
-    <div class="inner-wrapper inner-content" ng-hide="customerDetails.address == ''">
+    <div class="inner-wrapper inner-content" ng-hide="customerDetails == null">
       <div class="row">
         <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8">
           <span class="text-label big">{{customerDetails.full_name}}</span>
@@ -94,7 +94,7 @@
           <small><a ui-sref="addAddress" class="btn btn-default pull-right">CHANGE ADDRESS</a></small>
         </div>
       </div>
-      <p ng-init="getLocationName()">{{customerDetails.address}}<br/>{{districtName}}, {{cityName}}, {{provinceName}}<br/>Tel.{{customerDetails.phone_number}}</p>
+      <p>{{customerDetails.address}}<br/>{{districtName}}, {{cityName}}, {{provinceName}}<br/>Tel.{{customerDetails.phone_number}}</p>
       <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
       
       <div class="row no-margin ng-hide">

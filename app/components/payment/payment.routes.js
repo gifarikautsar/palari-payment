@@ -10,12 +10,13 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('shippingDetails', {
 			url: '/shipping',
 			templateUrl: 'app/components/payment/shipping-details.html',
-			controller: 'paymentController'
+			controller: 'paymentController',
+			params: {details: null}
 		})
 		.state('addAddress', {
 			url: '/add-address',
 			templateUrl: 'app/components/payment/add-address.html',
-			controller: 'paymentController'
+			controller: 'addAddressController'
 		})
 		.state('paymentDetails', {
 			url: '/payment-details',
