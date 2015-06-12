@@ -1,8 +1,8 @@
-<div class="wrapper" ng-init="amountToggle = false">
+<div class="wrapper" ng-init="amountToggle = false; getProductDetails()">
     <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">TOTAL AMOUNT</span>
-        <span class="text-label big" ng-cloak>{{ totalPrice() | mycurrency}}</span>
+        <span class="text-label big" ng-cloak>{{totalAmount() | mycurrency}}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-3x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px"></i>
@@ -14,13 +14,13 @@
     <div class="inner-wrapper" ng-cloak>
 
       <!-- Row 1 -->
-      <div class="row" ng-repeat="item in purchasedProducts">
+      <div class="row">
         <div class="col-md-5 col-xs-5">
-          <img class="item-image" src="/assets/img/lg_nexus_5.jpg">
+          <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
         </div>
         <div class="col-md-7 col-xs-7">
-          <span class="text-label medium">{{ item.name }}</span>
-          <span class="text-label">{{ item.price | mycurrency}}</span>
+          <span class="text-label medium">{{ productDetails.name }}</span>
+          <span class="text-label">{{ productDetails.price | mycurrency}}</span>
         </div>
       </div>
       
@@ -32,7 +32,7 @@
           <span class="text-label medium">TOTAL</span>
         </div>
         <div class="col-md-4 col-xs-6">
-          <span class="text-label medium">{{ totalPrice() | mycurrency }}</span>
+          <span class="text-label medium">{{totalAmount() | mycurrency}}</span>
         </div>
       </div>
     </div>
@@ -81,20 +81,20 @@
   </div>
   <div class="tab middle">    
     <h5>Shipping Details</h5> 
-    <div class="inner-wrapper inner-content ng-hide">
+    <div class="inner-wrapper inner-content" ng-hide="customerDetails.address != ''">
       <p align="justify">You haven't had any shipping details yet, please add one by clicking button below.</p>
       <small><a ui-sref="addAddress" class="btn btn-default">ADD ADDRESS</a></small>
     </div>
-    <div class="inner-wrapper inner-content">
+    <div class="inner-wrapper inner-content" ng-hide="customerDetails.address == ''">
       <div class="row">
         <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8">
-          <span class="text-label big">Danny Pranoto</span>
+          <span class="text-label big">{{customerDetails.full_name}}</span>
         </div>
         <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
           <small><a ui-sref="addAddress" class="btn btn-default pull-right">CHANGE ADDRESS</a></small>
         </div>
       </div>
-      <p>Jalan Ciumbuleuit No.122<br/>Hegarmanah, Cidadap, Bandung, Indonesia<br/>Tel.0812345678</p>
+      <p ng-init="getLocationName()">{{customerDetails.address}}<br/>{{districtName}}, {{cityName}}, {{provinceName}}<br/>Tel.{{customerDetails.phone_number}}</p>
       <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
       
       <div class="row no-margin ng-hide">

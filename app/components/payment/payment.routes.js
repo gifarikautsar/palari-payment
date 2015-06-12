@@ -35,7 +35,8 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('paymentFinish', {
 			url: '/payment-finish',
 			templateUrl: 'app/components/payment/payment-finish.html',
-			params: { data: null }
+			controller: 'paymentController',
+			params: { data: null }		
 		})
 		.state('loading', {
 			templateUrl: 'app/components/payment/loading.html',
