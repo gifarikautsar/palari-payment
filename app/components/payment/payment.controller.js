@@ -33,7 +33,13 @@ paymentApp.value('PaymentTypes', [{
   } ]
 );
 
-paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', function($scope, $http, $log, $state, PaymentTypes){
+paymentApp.run(['$rootScope', '$state', '$stateParams',
+  function ($rootScope, $state, $stateParams) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
+}])
+
+paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', '$stateParams', function($scope, $http, $log, $state, $stateParams, PaymentTypes){
   $scope.payments = PaymentTypes;
   $scope.paymentType = {
     display_name: "Credit Card",
@@ -42,27 +48,9 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
   }; 
   $scope.productDetails = {};
   $scope.deliveryFee = 0;
-  $scope.url = 'http://128.199.71.156:8080/v1/customer/product/1d53c45b-73d8-4cde-ac89-8951d6b3d6b5';
+  $scope.url = 'http://128.199.71.156:8080/v1/customer/product/c3e5d255-dbaf-42a9-b938-2de5156037f7';
   $scope.quantity = 1;
-  $scope.customerDetails = {
-    full_name : "",
-    phone_number : "",
-    address : "",
-    province_id : "",
-    city_id : "",
-    district_id: ""
-  };
-  // $scope.customerDetails = {
-  //   full_name : "Gifari Kautsar",
-  //   phone_number : "08123456",
-  //   address : "Jalan Pelesiran",
-  //   province_id : "32",
-  //   city_id : "3201",
-  //   district_id: "3201010"
-  // };
-  $scope.provinces = {};
-  $scope.cities = {};
-  $scope.districts = {};
+  $scope.customerDetails = $stateParams.details;
   $scope.provinceName = '';
   $scope.cityName = '';
   $scope.districtName = '';
@@ -108,6 +96,86 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
         $scope.error = data.description;        
       });
   };
+
+  $scope.getLocationName = function(){
+    $log.debug($scope.customerDetails);
+    if($scope.customerDetails != null){
+      $scope.getProvinceName();
+      $scope.getCityName();
+      $scope.getDistrictName();
+    }
+  };
+
+  $scope.getProvinceName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/province?id=' + $scope.customerDetails.province_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.provinceName = data.nama_propinsi;
+      $log.debug("Get province name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+
+  $scope.getCityName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/city?id=' + $scope.customerDetails.city_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.cityName = data.nama_kota;
+      $log.debug("Get city name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+
+  $scope.getDistrictName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/district?id=' + $scope.customerDetails.district_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.districtName = data.nama_kecamatan;
+      $log.debug("Get district name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+}]);
+
+paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state,$stateParams){
+  $scope.customerDetails = {
+    full_name : "",
+    phone_number : "",
+    address : "",
+    province_id : "",
+    city_id : "",
+    district_id: ""
+  };
+  $scope.provinces = {};
+  $scope.cities = {};
+  $scope.districts = {};
 
   $scope.getProvinceList = function(){
     $scope.customerDetails.city_id = '';
@@ -169,67 +237,13 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
     });
   };
 
-  $scope.getLocationName = function(){
-    $scope.getProvinceName();
-    $scope.getCityName();
-    $scope.getDistrictName();
-  }
-  $scope.getProvinceName = function(){
-    $http.get(
-      //url
-      phinisiEndpoint + '/area/province?id=' + $scope.customerDetails.province_id,        
-      //config
-      {
-        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
-      }
-    )
-    .success(function(data){
-      $log.debug(data);
-      $scope.provinceName = data.nama_propinsi;
-      $log.debug("Get province name success");
-    })
-    .error(function(data){
-      $scope.error = data.description;        
-    });
+  $scope.onSubmit = function(){
+    if ($scope.shippingForm.$valid){
+      $log.debug($scope.customerDetails);
+      $state.transitionTo('shippingDetails', {'details': $scope.customerDetails});  
+    }
   };
 
-  $scope.getCityName = function(){
-    $http.get(
-      //url
-      phinisiEndpoint + '/area/city?id=' + $scope.customerDetails.city_id,        
-      //config
-      {
-        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
-      }
-    )
-    .success(function(data){
-      $log.debug(data);
-      $scope.cityName = data.nama_kota;
-      $log.debug("Get city name success");
-    })
-    .error(function(data){
-      $scope.error = data.description;        
-    });
-  };
-
-  $scope.getDistrictName = function(){
-    $http.get(
-      //url
-      phinisiEndpoint + '/area/district?id=' + $scope.customerDetails.district_id,        
-      //config
-      {
-        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
-      }
-    )
-    .success(function(data){
-      $log.debug(data);
-      $scope.districtName = data.nama_kecamatan;
-      $log.debug("Get district name success");
-    })
-    .error(function(data){
-      $scope.error = data.description;        
-    });
-  };
 }]);
 
 paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state, $stateParams){
