@@ -33,31 +33,47 @@ paymentApp.value('PaymentTypes', [{
   } ]
 );
 
+paymentApp.service('dataService', function(){
+  var productDetails = null;
+  var shippingDetails = null;
+  var customerDetails = null;
+
+  return {
+    getProductDetails: function () {
+      return productDetails;
+    },
+    setProductDetails: function (value) {
+      productDetails = value;
+    },
+    getShippingDetails: function () {
+      return shippingDetails;
+    },
+    setShippingDetails: function (value) {
+      shippingDetails = value;
+    },
+    getCustomerDetails: function () {
+      return customerDetails;
+    },
+    setCustomerDetails: function (value) {
+      customerDetails = value;
+    }
+
+  }
+})
+
 paymentApp.run(['$rootScope', '$state', '$stateParams',
   function ($rootScope, $state, $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
 }])
 
-paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', '$stateParams', function($scope, $http, $log, $state, PaymentTypes, $stateParams){
+paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', '$stateParams', 'dataService', function($scope, $http, $log, $state, PaymentTypes, $stateParams, dataService){
   $scope.payments = PaymentTypes;
   $scope.paymentType = {
     display_name: "Credit Card",
     payment_type: "credit_card",
     image_class: "fa fa-lg fa-credit-card"
   }; 
-  $scope.productDetails = {};
-  $scope.deliveryFee = 0;
-  $scope.url = 'http://128.199.71.156:8080/v1/customer/product/c3e5d255-dbaf-42a9-b938-2de5156037f7';
-  $scope.quantity = 1;
-  $scope.customerDetails = $stateParams.details;
-  $scope.provinceName = '';
-  $scope.cityName = '';
-  $scope.districtName = '';
-
-  $scope.totalAmount = function(){
-    return ($scope.productDetails.price*$scope.quantity) + $scope.deliveryFee;
-  };
 
   $scope.go = function (paymentType) {
     console.log('go ' + paymentType);
@@ -74,99 +90,10 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
 
     }  
   };
-
-  $scope.getProductDetails = function(){
-    $log.debug($scope.deliveryFee);
-    $log.debug($scope.totalAmount());
-    
-    $http.get(
-        //url
-        $scope.url,
-        //config
-        {
-          headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
-        }
-      )
-      .success(function(data){
-        $scope.productDetails = data; 
-        $log.debug($scope.productDetails);
-        $log.debug("Get product details success");
-      })
-      .error(function(data){
-        $scope.error = data.description;        
-      });
-  };
-
-  $scope.getLocationName = function(){
-    console.log($scope.customerDetails);
-    if($scope.customerDetails != null){
-      $scope.getProvinceName();
-      $scope.getCityName();
-      $scope.getDistrictName();
-    }
-  };
-
-  $scope.getProvinceName = function(){
-    $http.get(
-      //url
-      phinisiEndpoint + '/area/province?id=' + $scope.customerDetails.province_id,        
-      //config
-      {
-        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
-      }
-    )
-    .success(function(data){
-      $log.debug(data);
-      $scope.provinceName = data.nama_propinsi;
-      $log.debug("Get province name success");
-    })
-    .error(function(data){
-      $scope.error = data.description;        
-    });
-  };
-
-  $scope.getCityName = function(){
-    $http.get(
-      //url
-      phinisiEndpoint + '/area/city?id=' + $scope.customerDetails.city_id,        
-      //config
-      {
-        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
-      }
-    )
-    .success(function(data){
-      $log.debug(data);
-      $scope.cityName = data.nama_kota;
-      $log.debug("Get city name success");
-    })
-    .error(function(data){
-      $scope.error = data.description;        
-    });
-  };
-
-  $scope.getDistrictName = function(){
-    $http.get(
-      //url
-      phinisiEndpoint + '/area/district?id=' + $scope.customerDetails.district_id,        
-      //config
-      {
-        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
-      }
-    )
-    .success(function(data){
-      $log.debug(data);
-      $scope.districtName = data.nama_kecamatan;
-      $log.debug("Get district name success");
-    })
-    .error(function(data){
-      $scope.error = data.description;        
-    });
-  };
-
 }]);
 
-paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state,$stateParams){
-  $scope.customerDetails = {
+paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataService', function($scope, $http, $log, $state,$stateParams, dataService){
+  $scope.shippingDetails = {
     full_name : "",
     phone_number : "",
     address : "",
@@ -179,8 +106,8 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
   $scope.districts = {};
 
   $scope.getProvinceList = function(){
-    $scope.customerDetails.city_id = '';
-    $scope.customerDetails.district_id = '',
+    $scope.shippingDetails.city_id = '';
+    $scope.shippingDetails.district_id = '',
     $http.get(
       //url
       phinisiEndpoint + '/area/province',       
@@ -200,10 +127,10 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
   }
 
   $scope.getCityList = function (){
-    $scope.customerDetails.district_id = '',
+    $scope.shippingDetails.district_id = '',
     $http.get(
       //url
-      phinisiEndpoint + '/area/city?parent=' + $scope.customerDetails.province_id,
+      phinisiEndpoint + '/area/city?parent=' + $scope.shippingDetails.province_id,
       //config
       {
         headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
@@ -222,7 +149,7 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
   $scope.getDistrictList = function (){
     $http.get(
       //url
-      phinisiEndpoint + '/area/district?parent=' + $scope.customerDetails.city_id,        
+      phinisiEndpoint + '/area/district?parent=' + $scope.shippingDetails.city_id,        
       //config
       {
         headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
@@ -240,11 +167,128 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
 
   $scope.onSubmit = function(){
     if ($scope.shippingForm.$valid){
-      $log.debug($scope.customerDetails);
-      $state.transitionTo('shippingDetails', {'details': $scope.customerDetails});  
+      $log.debug($scope.shippingDetails);
+      dataService.setShippingDetails($scope.shippingDetails);
+      $state.transitionTo('shippingDetails', { arg: 'arg' });
     }
   };
 
+}]);
+
+paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataService', function($scope, $http, $log, $state,$stateParams, dataService){
+  $scope.productDetails = {};
+  $scope.productDetails.quantity = 1;
+  $scope.url = 'http://128.199.71.156:8080/v1/customer/product/c3e5d255-dbaf-42a9-b938-2de5156037f7';
+
+  $scope.totalAmount = function(){
+    return ($scope.productDetails.price * $scope.productDetails.quantity);
+  }
+
+  $scope.getProduct = function(){
+    $http.get(
+      //url
+      $scope.url,
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $scope.productDetails = data;
+      $scope.productDetails.quantity = 1;
+      $log.debug($scope.productDetails);
+      $log.debug("Get product details success");
+      dataService.setProductDetails($scope.productDetails);
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+  $scope.checkout = function(){
+    $state.transitionTo('shippingDetails', { arg: 'arg' });  
+  }
+}]);
+
+paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataService', function($scope, $http, $log, $state,$stateParams, dataService){
+  $scope.productDetails = dataService.getProductDetails();
+  $scope.shippingDetails = dataService.getShippingDetails();
+  $scope.customerDetails = dataService.getCustomerDetails();
+  $scope.provinceName = '';
+  $scope.cityName = '';
+  $scope.districtName = '';
+  
+  $scope.totalAmount = function(){
+    return ($scope.productDetails.price * $scope.productDetails.quantity);
+  };
+
+  $scope.addAddress = function(){
+    $state.transitionTo('shippingDetails', {productDetails: $scope.productDetails});  
+  }
+
+  $scope.getLocationName = function(){
+    if($scope.shippingDetails != null){
+      $scope.getProvinceName();
+      $scope.getCityName();
+      $scope.getDistrictName();
+    }
+  };
+
+  $scope.getProvinceName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/province?id=' + $scope.shippingDetails.province_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.provinceName = data.nama_propinsi;
+      $log.debug("Get province name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+
+  $scope.getCityName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/city?id=' + $scope.shippingDetails.city_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.cityName = data.nama_kota;
+      $log.debug("Get city name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
+
+  $scope.getDistrictName = function(){
+    $http.get(
+      //url
+      phinisiEndpoint + '/area/district?id=' + $scope.shippingDetails.district_id,        
+      //config
+      {
+        headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+      }
+    )
+    .success(function(data){
+      $log.debug(data);
+      $scope.districtName = data.nama_kecamatan;
+      $log.debug("Get district name success");
+    })
+    .error(function(data){
+      $scope.error = data.description;        
+    });
+  };
 }]);
 
 paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state, $stateParams){

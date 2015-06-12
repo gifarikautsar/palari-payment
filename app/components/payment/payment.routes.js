@@ -5,13 +5,12 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('checkout', {
 			url: '/payment',
 			templateUrl: 'app/components/payment/checkout.html',
-			controller: 'paymentController'			
+			controller: 'checkoutController'			
 		})
 		.state('shippingDetails', {
 			url: '/shipping',
 			templateUrl: 'app/components/payment/shipping-details.html',
-			controller: 'paymentController',
-			params: { details: null }
+			controller: 'shippingController'
 		})
 		.state('addAddress', {
 			url: '/add-address',
