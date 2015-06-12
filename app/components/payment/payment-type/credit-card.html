@@ -1,5 +1,5 @@
 <!-- Credit Card -->
-<ng-form name="creditCardForm">    
+<form name="creditCardForm" ng-submit="getToken()">    
   <div class="wrapper tab animate-show">
     <div class="tab">
       <h5>Card Information</h5>
@@ -14,16 +14,15 @@
         </div>  
         <div class="form-group" style="overflow: auto">
             <span class="small-text-label">CREDIT CARD NUMBER (VISA / MASTERCARD)</span>
-            <card-number ng-model="card_number"> </card-number>
-            {{card_number}}
+            <card-number ng-model="creditCard.card_number"> </card-number>
         </div>
 
         <div class="form-group" style="overflow: auto">
             <div class="col-xs-4 col-sm-4 col-md-4 no-padding">
             <span class="small-text-label">EXP. DATE</span>
             <div class="right-inner-addon"> 
-              <input type="text" id="card_expiry_date" name="expdate" class="form-control" placeholder="MM/YYYY" ng-model="card_exp_date" required payments-format="expiry" exp-date/>
-              <div ng-show="form.$submitted || creditCardForm.expdate.$touched">
+              <input type="text" id="card_expiry_date" name="expdate" class="form-control" placeholder="MM/YYYY" ng-model="creditCard.card_exp_date" required payments-format="expiry" exp-date/>
+              <div ng-show="creditCardForm.$submitted || creditCardForm.expdate.$touched">
                 <i class="glyphicon glyphicon-ok" ng-show="creditCardForm.expdate.$valid"></i>
                 <i class="glyphicon glyphicon-remove" ng-show="!creditCardForm.expdate.$valid"></i>
                 <span class="error-message" ng-show="creditCardForm.expdate.$error.required">Exp.Date is required.</span>
@@ -49,7 +48,7 @@
             <span class="small-text-label">CVV</span>
               <div class="right-inner-addon">   
                 <input id="card_cvv" name="cvv" class="form-control" type="password" placeholder="***" ng-model="creditCard.card_cvv" payments-format="cvc" required/>
-                <div ng-show="form.$submitted || creditCardForm.cvv.$touched">
+                <div ng-show="creditCardForm.$submitted || creditCardForm.cvv.$touched">
                   <i class="glyphicon glyphicon-ok" ng-show="creditCardForm.cvv.$valid"></i>
                   <i class="glyphicon glyphicon-remove" ng-show="!creditCardForm.cvv.$valid"></i>
                   <span class="error-message" ng-show="creditCardForm.cvv.$error.required">CVV is required.</span>
@@ -61,7 +60,7 @@
       </div>
     </div>
   <!-- Payment Options -->
-    <div class="tab middle" ng-init="installmentToggle = false">
+<!--     <div class="tab middle" ng-init="installmentToggle = false">
       <h5 ng-click="installmentToggle = !installmentToggle">Installment Term <span style="color: #ff7400">(Optional)</span><i class="fa fa-lg pull-right" ng-class="button2Active ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
       <div class="inner-wrapper inner-content animate-show" ng-show="installmentToggle">
             <span class="text-label">Please select your bank</span>
@@ -106,10 +105,10 @@
 
       </div>
     </div>
-  </div>
+ -->  </div>
   <div class="wrapper">
     <div class="inner-wrapper">
-        <a ui-sref="paymentFinish" class="btn btn-primary" style="width: 100%">CONFIRM PAYMENT</a>
+        <input type="submit" class="btn btn-primary" style="width: 100%" value="CONFIRM PAYMENT" />
     </div>
   </div>
-</ng-form>
+</form>

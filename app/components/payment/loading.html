@@ -1,5 +1,5 @@
-<div class="3d-secure-loading-page">
-  <div class="wrapper">
+<div class="3d-secure-loading-page" ng-init="loadInit()">
+  <div class="wrapper" ng-show="paymentStatus !== '3d-secure'">
 
     <div class="tab 3d-secure-loading">
       <h3 ng-if="paymentStatus == 'charge-loading'">PROCESSING YOUR PAYMENT</h3>
@@ -15,7 +15,7 @@
 
   </div>
   <div class="wrapper" ng-show="paymentStatus == '3d-secure'">
-    <iframe width="100%" height="400px" class="3d-secure-content" iframe-onload="loadFinish()" ng-src="{{ responseStatus.redirect_url }}">
+    <iframe width="100%" height="400px" class="3d-secure-content" iframe-onload="loadFinish()" ng-src="{{ response.redirect_url }}">
       
     </iframe>
   </div>

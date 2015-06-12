@@ -1,7 +1,7 @@
 <div class=" inner-addon right-addon">
   <input id="card_number" name="cardnumber" class="card-number pull-left form-control" ng-class="{default:'black', visa:'blue', mastercard:'blue', invalid:'red'}[status]" type="text"  placeholder="4234 5678 1234 5678" ng-model="ngModel" payments-format="card" required/>
   <i class="cc-icon pull-right" ng-class="{default:'card-default', visa:'card-visa', mastercard:'card-mastercard', invalid:'card-invalid'}[status]"></i>
-  <div ng-show="form.$submitted || creditCardForm.cardnumber.$touched">
+  <div ng-show="creditCardForm.$submitted || creditCardForm.cardnumber.$touched">
     <span class="error-message" ng-show="status == 'default'">Please complete your credit card number</span>
     <span class="error-message" ng-show="status == 'invalid'">Credit Card Number is Invalid</span>
   </div>

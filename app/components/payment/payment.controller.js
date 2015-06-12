@@ -33,45 +33,6 @@ paymentApp.value('PaymentTypes', [{
   } ]
 );
 
-//Service
-paymentApp.service('CreditCardService', function(){
-
-  this.numberValidation = function (ccnumber) {
-    var len = ccnumber.length;
-    var cardType, valid;
-    mul = 0,
-    prodArr = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 2, 4, 6, 8, 1, 3, 5, 7, 9]],
-    sum = 0;
-
-    while (len--) {
-        sum += prodArr[mul][parseInt(ccnumber.charAt(len), 10)];
-        mul ^= 1;
-    }
-
-    if (sum % 10 === 0 && sum > 0) {
-      valid = "valid"
-    } else {
-      valid = "not valid"
-    }
-    ccnumber = ccnumber.toString().replace(/\s+/g, '');
-
-    if(/^5[1-5]/.test(ccnumber)) {
-      cardType = "MasterCard";
-    }
-    else if (/^4/.test(ccnumber)) {
-      cardType = "Visa";
-    } else {
-      cardType = "None";
-    }
-
-    return {
-      cardType: cardType,
-      valid: valid
-    }
-  }
-
-});
-
 paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', function($scope, $http, $log, $state, PaymentTypes){
   $scope.payments = PaymentTypes;
   $scope.paymentType = {
@@ -97,6 +58,148 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
     
   };
 
+}]);
+
+paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state, $stateParams){
+  $scope.creditCard = {
+    card_number: '5211111111111117',
+    card_cvv: '123',
+    card_exp_date: '12/2018'
+  };
+
+  var card = {
+    'card_number': $scope.creditCard.card_number,
+    'card_cvv': $scope.creditCard.card_cvv,
+    'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
+    'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
+    'secure': true,
+    'gross_amount': 10
+  }
+
+  $scope.getToken = function(){
+    $state.transitionTo('loading', {'card': card} );
+  }
+
+}]);
+
+paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state, $stateParams){
+  
+  Veritrans.url = "https://api.sandbox.veritrans.co.id/v2/token";
+  Veritrans.client_key = 'VT-client-SimkwEjR3_fKj73D';
+  var card = function(){
+    return $stateParams.card;
+  }
+
+  $scope.chargeTransaction = function(response) {
+    $http.post(
+        //url
+        phinisiEndpoint + '/charge',
+        //data
+        {
+          client_key : "VT-client-SimkwEjR3_fKj73D",
+          payment_type : "credit_card",
+          item_details : [ {
+            "id" : "1",
+            "price" : 50000,
+            "quantity" : 3,
+            "name" : "Baygon rasa jambu batu"
+          } ],
+          credit_card : {
+            token_id : response.token_id,
+            save_token_id : false
+          },
+          customer_details : {
+            email : 'dichi@alfaridi.info'
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      ).success(function(data, status, headers, config) {
+        console.log(data)
+        //Confirm Transaction
+        $http.post(
+          phinisiEndpoint + 'merchant/payment/confirm', 
+          {
+            client_key : "VT-client-SimkwEjR3_fKj73D",
+            transaction_id : data.transaction_id
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          }
+        ).success(function(data, status, headers, config){
+            console.log(data);
+            setTimeout(function() {
+              $scope.$apply(function(){
+                $scope.responseStatus = data;
+                $state.transitionTo('paymentFinish', {'data': data})
+              })
+            }, 10000);
+        }).error(function(data, status, headers, config){
+            console.log(data);
+        });
+
+      }).
+      error(function(data, status, headers, config) {
+        console.log(response);
+      });
+  }
+  
+  function callback(response) {
+    console.log(response);
+    if (response.redirect_url) {
+      console.log("3D SECURE");
+      $scope.$apply(function(){
+        $scope.response = response;
+        $scope.paymentStatus = '3d-secure-loading';
+      });
+    }
+    else if (response.status_code == "200") {
+      console.log("NOT 3-D SECURE");
+      // Success 3-D Secure or success normal
+      console.log($scope.paymentStatus);
+      $scope.$apply(function(){
+        $scope.paymentStatus = 'charge-loading';
+      });
+      $scope.chargeTransaction(response);
+    }
+    else {
+      // Failed request token
+      $scope.response = 'invalid';
+      $scope.statusMessage = response.status_message;
+    }
+    console.log($scope.response);
+    console.log($scope.paymentStatus);
+    console.log("callback");
+  }
+
+  $scope.loadInit = function(){
+    console.log(card);
+    Veritrans.token(card, callback);
+  }
+
+  $scope.loadFinish = function(){
+    if ($scope.paymentStatus == '3d-secure-loading'){
+      setTimeout(function() {
+        $scope.$apply(function(){
+          $scope.paymentStatus = '3d-secure';
+        })
+      }, 1000);
+    }
+  }
+
+}]);
+
+paymentApp.controller('permataController', ['$scope','$http', '$log', '$state', function($scope, $http, $log, $state){
+  $scope.chargePermata = function(){
+
+  }
 }]);
 
 paymentApp.controller("submitController", function($scope, $http, CreditCardService, PaymentTypes){
@@ -149,39 +252,6 @@ paymentApp.controller("submitController", function($scope, $http, CreditCardServ
     return total;
   }
 
-  $scope.$watch('creditCard.card_number', function(val){
-    if (val != undefined){
-      var cardType = CreditCardService.numberValidation(val).cardType;
-      var valid = CreditCardService.numberValidation(val).valid;
-      if (val.length == 16) {
-        if (valid === 'valid'){
-          if (cardType === 'Visa'){
-            $scope.status = 'visa';
-          } else if (cardType === 'MasterCard'){
-            $scope.status = 'mastercard';
-          }
-          else {
-            $scope.status = 'invalid';
-          }
-        } else if (valid === 'not valid'){
-          $scope.status = 'invalid';
-        }      
-      } else {
-        $scope.status = 'default';
-      }
-    }
-
-  });
-
-  $scope.loadFinish = function(){
-    if ($scope.paymentStatus == '3d-secure-loading'){
-      setTimeout(function() {
-        $scope.$apply(function(){
-          $scope.paymentStatus = '3d-secure';
-        })
-      }, 1000);
-    }
-  }
 
   $scope.submit = function() {
     // Sandbox URL
@@ -219,18 +289,18 @@ paymentApp.controller("submitController", function($scope, $http, CreditCardServ
             $http({
               method: 'POST',
               url: "http://128.199.71.156:8080/v1/charge", 
-              data : {
-                client_key : "VT-client-SimkwEjR3_fKj73D",
-                payment_type : "credit_card",
-                item_details : $scope.purchasedProducts,
-                credit_card : {
-                  token_id : response.token_id,
-                  save_token_id : false
-                },
-                customer_details : {
-                  email : $scope.customerDetails.email
-                }
-              }
+              data :       {
+          client_key : "VT-client-SimkwEjR3_fKj73D",
+          payment_type : "credit_card",
+          item_details : $scope.purchasedProducts,
+          credit_card : {
+            token_id : response.token_id,
+            save_token_id : false
+          },
+          customer_details : {
+            email : $scope.customerDetails.email
+          }
+        }
               ,
               headers: {
                 'Content-Type': 'application/json',
@@ -356,23 +426,23 @@ return {
     }
 }}])
 
-paymentApp.directive('loading', function ($http) {
-  return {
-      restrict: 'A',
-      link: function (scope, elm, attrs)
-      {
-          scope.isLoading = function () {
-              return $http.pendingRequests.length > 0;
-          };
+// paymentApp.directive('loading', function ($http) {
+//   return {
+//       restrict: 'A',
+//       link: function (scope, elm, attrs)
+//       {
+//           scope.isLoading = function () {
+//               return $http.pendingRequests.length > 0;
+//           };
 
-          scope.$watch(scope.isLoading, function (v)
-          {
-              if(v){
-                  $(elm).show();
-              }else{
-                  $(elm).hide();
-              }
-          });
-      }
-  };
-});
+//           scope.$watch(scope.isLoading, function (v)
+//           {
+//               if(v){
+//                   $(elm).show();
+//               }else{
+//                   $(elm).hide();
+//               }
+//           });
+//       }
+//   };
+// });

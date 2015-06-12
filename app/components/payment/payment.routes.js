@@ -23,7 +23,8 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 			controller: 'paymentController'
 		})
 		.state('paymentDetails.creditCard', {
-			templateUrl: 'app/components/payment/payment-type/credit-card.html'
+			templateUrl: 'app/components/payment/payment-type/credit-card.html',
+			controller: 'creditCardController'
 		})
 		.state('paymentDetails.bankTransfer', {
 			templateUrl: 'app/components/payment/payment-type/bank-transfer.html'
@@ -33,9 +34,12 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		})	
 		.state('paymentFinish', {
 			url: '/payment-finish',
-			templateUrl: 'app/components/payment/payment-finish.html'
+			templateUrl: 'app/components/payment/payment-finish.html',
+			params: { data: null }
 		})
 		.state('loading', {
-			templateUrl: 'app/components/payment/loading.html'
+			templateUrl: 'app/components/payment/loading.html',
+			controller: 'loadingController',
+			params: { card: null}
 		});
 });
