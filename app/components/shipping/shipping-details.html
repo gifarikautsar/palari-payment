@@ -1,8 +1,8 @@
-<div class="wrapper" ng-init="amountToggle = false; getProductDetails(); getLocationName()">
+<div class="wrapper" ng-init="amountToggle = false">
     <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">TOTAL AMOUNT</span>
-        <span class="text-label big" ng-cloak>{{totalAmount() | mycurrency}}</span>
+        <span class="text-label big" ng-cloak>{{ productDetails.totalAmount | mycurrency}}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-3x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px"></i>
@@ -32,7 +32,7 @@
           <span class="text-label medium">TOTAL</span>
         </div>
         <div class="col-md-4 col-xs-6">
-          <span class="text-label medium">{{totalAmount() | mycurrency}}</span>
+          <span class="text-label medium">{{productDetails.totalAmount | mycurrency}}</span>
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@
           <small><a ui-sref="addAddress" class="btn btn-default pull-right">CHANGE ADDRESS</a></small>
         </div>
       </div>
-      <p>{{shippingDetails.address}}<br/>{{districtName}}, {{cityName}}, {{provinceName}}<br/>Tel.{{shippingDetails.phone_number}}</p>
+      <p>{{shippingDetails.address}}<br/>{{shippingDetails.districtName}}, {{shippingDetails.cityName}}, {{shippingDetails.provinceName}}<br/>Tel.{{shippingDetails.phone_number}}</p>
       <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
       
       <div class="row no-margin ng-hide">

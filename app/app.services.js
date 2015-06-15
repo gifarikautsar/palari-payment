@@ -1,7 +1,7 @@
 var servicesApp = angular.module('servicesApp', []);
 
 //Service
-servicesApp.service('CreditCardService', function(){
+servicesApp.service('creditCardService', function(){
 
   this.numberValidation = function (ccnumber) {
     var len = ccnumber.length;
@@ -38,3 +38,80 @@ servicesApp.service('CreditCardService', function(){
   }
 
 });
+
+servicesApp.service('shippingService', function($http){
+  return {
+
+    getAreaName: function(type, id){
+      $http.get(
+        //url
+        phinisiEndpoint + '/area/' + type + '?id=' + province_id,        
+        //config
+        {
+          headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+        }
+      )
+      .success(function(data){
+        console.log(data);
+        return data;
+      })
+      .error(function(data){
+        return null;      
+      });
+    },
+    getAreaList: function(type, parent){     
+      $http.get(
+        //url
+        phinisiEndpoint + '/area/' + type + '?parent=' + parent,       
+        //config
+        {
+          headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
+        }
+      )
+      .success(function(data){
+        console.log(data);
+        return data;
+      })
+      .error(function(data){
+        return null;        
+      });
+    }
+
+  }
+});
+
+servicesApp.service('dataService', function(){
+  var productDetails = null;
+  var shippingDetails = null;
+  var customerDetails = null;
+  var creditCard = null;
+
+  return {
+    getProductDetails: function () {
+      return productDetails;
+    },
+    setProductDetails: function (value) {
+      productDetails = value;
+    },
+    getShippingDetails: function () {
+      return shippingDetails;
+    },
+    setShippingDetails: function (value) {
+      shippingDetails = value;
+    },
+    getCustomerDetails: function () {
+      return customerDetails;
+    },
+    setCustomerDetails: function (value) {
+      customerDetails = value;
+    },
+    getCreditCard: function () {
+      return creditCard;
+    },
+    setCreditCard: function (value) {
+      creditCard = value;
+    }
+
+  }
+})
+

@@ -89,7 +89,7 @@ formApp.directive('validationType', function() {
   }
 });
 
-formApp.directive('cardNumber', function(CreditCardService){
+formApp.directive('cardNumber', function(creditCardService){
   return{
     restrict: "E",
     templateUrl: "../app/shared/form/card-number.html",
@@ -102,8 +102,8 @@ formApp.directive('cardNumber', function(CreditCardService){
       scope.$watch('ngModel', function(val){
         console.log(scope.status);
         if (val != undefined){
-          var cardType = CreditCardService.numberValidation(val).cardType;
-          var valid = CreditCardService.numberValidation(val).valid;
+          var cardType = creditCardService.numberValidation(val).cardType;
+          var valid = creditCardService.numberValidation(val).valid;
           if (val.length == 16) {
             if (valid === 'valid'){
               if (cardType === 'Visa'){
@@ -128,3 +128,59 @@ formApp.directive('cardNumber', function(CreditCardService){
     }
   }
 });
+
+formApp.directive('expDate', function() {
+  return{
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      ctrl.$validators.expDate = function(modelValue, viewValue) {
+        if (ctrl.$isEmpty(viewValue)) {
+          return true;
+        }
+        else{
+          var date = viewValue.split("/");
+          var currentDate = new Date();
+          if (viewValue.length == 5) {
+            //Format date mm/yy
+            var str = '20';
+            date[1] = str.concat(date[1]);
+          }
+
+          if (currentDate.getFullYear() == date[1]){
+            if (date[0] >= currentDate.getMonth() && date[0] <= 12){
+              return true;
+            }
+            else {
+              return false;
+            }            
+          }
+          else if (date[1] > currentDate.getFullYear()){
+            if (date[0] >= 1 && date[0] <= 12){
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
+          else{
+            return false;
+          }
+        }
+      }
+    }
+
+  }
+});
+
+formApp.directive('iframeOnload', [function(){
+return {
+    scope: {
+        callBack: '&iframeOnload'
+    },
+    link: function(scope, element, attrs){
+        element.on('load', function(){
+            return scope.callBack();
+        })
+    }
+}}])
+
