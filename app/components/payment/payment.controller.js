@@ -289,6 +289,11 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
       $scope.error = data.description;        
     });
   };
+
+  $scope.onSubmit = function(){
+    dataService.setCustomerDetails($scope.customerDetails);
+    $state.transitionTo('paymentDetails', { arg: 'arg' }); 
+  }
 }]);
 
 paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$state', '$stateParams', function($scope, $http, $log, $state, $stateParams){

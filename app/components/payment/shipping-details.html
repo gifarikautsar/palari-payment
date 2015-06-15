@@ -47,7 +47,7 @@
           <div class="form-group">
             <span class="text-label">FULL NAME</span>
             <div class="right-inner-addon">
-              <input type="text" class="form-control" name="firstname" ng-model="shippingDetails.first_name" required>
+              <input type="text" class="form-control" name="firstname" ng-model="customerDetails.full_name" required>
               <div ng-show="form.$submitted || shippingForm.firstname.$touched">
                 <i class="glyphicon glyphicon-ok" ng-show="shippingForm.firstname.$valid"></i>
                 <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.firstname.$valid"></i>
@@ -58,7 +58,7 @@
           <div class="form-group">
             <span class="text-label">EMAIL ADDRESS</span>
             <div class="right-inner-addon">
-              <input type="text" class="form-control" name="lastname" ng-model="shippingDetails.billing_address.last_name" required>
+              <input type="text" class="form-control" name="lastname" ng-model="customerDetails.email_address" required>
               <div ng-show="form.$submitted || shippingForm.lastname.$touched">
                 <i class="glyphicon glyphicon-ok" ng-show="shippingForm.lastname.$valid"></i>
                 <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.lastname.$valid"></i>
@@ -69,7 +69,7 @@
           <div class="form-group">
             <span class="text-label">PHONE NUMBER</span>
             <div class="right-inner-addon">
-              <input type="text" class="form-control" name="lastname" ng-model="shippingDetails.billing_address.last_name" required>
+              <input type="text" class="form-control" name="lastname" ng-model="customerDetails.phone_number" required>
               <div ng-show="form.$submitted || shippingForm.lastname.$touched">
                 <i class="glyphicon glyphicon-ok" ng-show="shippingForm.lastname.$valid"></i>
                 <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.lastname.$valid"></i>
@@ -149,6 +149,6 @@
 <div class="wrapper">
     <div class="inner-wrapper">
         <a ui-sref="checkout" class="btn btn-default pull-left" style="width: 45%">BACK</a>
-        <a ui-sref="paymentDetails" class="btn btn-primary pull-right" style="width: 45%">NEXT</a>
+        <a ng-click="onSubmit()" class="btn btn-primary pull-right" style="width: 45%">NEXT</a>
     </div>
 </div>
