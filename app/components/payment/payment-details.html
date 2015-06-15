@@ -45,7 +45,7 @@
     <div class="inner-wrapper middle vertical-align" ng-click="shipmentToggle = !shipmentToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">SHIP TO</span>
-        <span class="text-label medium" ng-cloak>Danny Pranoto</span>
+        <span class="text-label medium" ng-cloak>{{ shippingDetails.full_name }}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-3x pull-right" ng-class="shipmentToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
@@ -56,7 +56,7 @@
     <div class="hidden-content animate-show" ng-show="shipmentToggle">
       <div class="inner-wrapper" ng-cloak>
 
-        <p>Jalan Ciumbuleuit No.122, Hegarmanah, Cidadap<br/>Bandung, Indonesia, 40141<br/>Tel. 0812345678<br/>Email. danny.pranoto@veritrans.co.id</p>
+        <p>{{ shippingDetails.address }}<br/>Bandung, Indonesia, 40141<br/>Tel. {{ shippingDetails.phone_number }}<br/>Email. danny.pranoto@veritrans.co.id</p>
 
       </div>
     </div>
