@@ -4,17 +4,17 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 	$stateProvider
 		.state('checkout', {
 			url: '/payment',
-			templateUrl: 'app/components/payment/checkout.html',
+			templateUrl: 'app/components/checkout/checkout.html',
 			controller: 'checkoutController'			
 		})
 		.state('shippingDetails', {
 			url: '/shipping',
-			templateUrl: 'app/components/payment/shipping-details.html',
+			templateUrl: 'app/components/shipping/shipping-details.html',
 			controller: 'shippingController'
 		})
 		.state('addAddress', {
 			url: '/add-address',
-			templateUrl: 'app/components/payment/add-address.html',
+			templateUrl: 'app/components/shipping/add-address.html',
 			controller: 'addAddressController'
 		})
 		.state('paymentDetails', {
