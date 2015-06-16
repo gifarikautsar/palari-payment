@@ -1,13 +1,23 @@
 <!-- Virtual Account -->
-<div class="inner-wrapper inner-content animate-show">
-  <div class="row">
-    <div class="col-xs-12 col-md-12 col-lg-12">
-      <span class="small-text-label">VIRTUAL ACCOUNT PAYMENT PROCESS</span>
+<form name="bankTransferForm" ng-submit="chargeBankTransfer()">
+  <div class="wrapper tab animate-show">
+    <div class="tab">
+
+      <h5>Bank Transfer Process</h5>
+      <div class="inner-wrapper inner-content animate-show">
+        <div class="row">
+          <div class="col-xs-12 col-md-12 col-lg-12">
+            <img src="/assets/img/va_process.png" class="virtual-account-process"></img>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="wrapper">
+    <div class="inner-wrapper">
+        <input type="submit" class="btn btn-primary" style="width: 100%" value="CONFIRM PAYMENT" />
     </div>
   </div>
-  <div class="row">
-    <div class="col-xs-12 col-md-12 col-lg-12">
-      <img src="/assets/img/va_process.png" class="virtual-account-process"></img>
-    </div>
-  </div>
-</div>
+  
+</form>

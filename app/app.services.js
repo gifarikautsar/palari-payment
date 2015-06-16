@@ -42,76 +42,69 @@ servicesApp.service('creditCardService', function(){
 servicesApp.service('shippingService', function($http){
   return {
 
-    getAreaName: function(type, id){
-      $http.get(
-        //url
-        phinisiEndpoint + '/area/' + type + '?id=' + province_id,        
-        //config
-        {
-          headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
-        }
-      )
-      .success(function(data){
-        console.log(data);
-        return data;
-      })
-      .error(function(data){
-        return null;      
-      });
-    },
     getAreaList: function(type, parent){     
-      $http.get(
+      return $http.get(
         //url
         phinisiEndpoint + '/area/' + type + '?parent=' + parent,       
         //config
         {
           headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
         }
-      )
-      .success(function(data){
-        console.log(data);
-        return data;
-      })
-      .error(function(data){
-        return null;        
-      });
+      );
     }
 
   }
 });
 
-servicesApp.service('dataService', function(){
-  var productDetails = null;
-  var shippingDetails = null;
-  var customerDetails = null;
-  var creditCard = null;
-
+servicesApp.factory('dataFactory', ['$window', function($window){
   return {
-    getProductDetails: function () {
-      return productDetails;
+    set: function(key, value) {
+      $window.localStorage[key] = value;
     },
-    setProductDetails: function (value) {
-      productDetails = value;
+    get: function(key) {
+      return $window.localStorage[key] || null;
     },
-    getShippingDetails: function () {
-      return shippingDetails;
+    setObject: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
     },
-    setShippingDetails: function (value) {
-      shippingDetails = value;
-    },
-    getCustomerDetails: function () {
-      return customerDetails;
-    },
-    setCustomerDetails: function (value) {
-      customerDetails = value;
-    },
-    getCreditCard: function () {
-      return creditCard;
-    },
-    setCreditCard: function (value) {
-      creditCard = value;
+    getObject: function(key) {
+      return JSON.parse($window.localStorage[key] || null);
     }
-
   }
-})
+}]);
+
+// servicesApp.service('dataFactory', function(){
+//   var productDetails = null;
+//   var shippingDetails = null;
+//   var customerDetails = null;
+//   var creditCard = null;
+
+//   return {
+//     getProductDetails: function () {
+//       return productDetails;
+//     },
+//     setProductDetails: function (value) {
+//       productDetails = value;
+//     },
+//     getShippingDetails: function () {
+//       return shippingDetails;
+//     },
+//     setShippingDetails: function (value) {
+//       shippingDetails = value;
+//     },
+//     getCustomerDetails: function () {
+//       return customerDetails;
+//     },
+//     setCustomerDetails: function (value) {
+//       customerDetails = value;
+//     },
+//     getCreditCard: function () {
+//       return creditCard;
+//     },
+//     setCreditCard: function (value) {
+//       creditCard = value;
+//     }
+
+//   }
+// })
 

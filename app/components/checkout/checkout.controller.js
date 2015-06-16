@@ -1,11 +1,13 @@
-paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state', 'dataService', function($scope, $http, $log, $state, dataService){
+paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state', '$stateParams', '$window', 'dataFactory', function($scope, $http, $log, $state, $stateParams, $window, dataFactory){
   $scope.productDetails = {};
   $scope.productDetails.quantity = 1;
+  $scope.productId = $stateParams.productId;
   
   $scope.getProduct = function(){
+    $window.localStorage.clear();
     $http.get(
       //url
-      phinisiEndpoint + '/customer/product/c3e5d255-dbaf-42a9-b938-2de5156037f7',
+      phinisiEndpoint + '/customer/product/' + $scope.productId,
       //config
       {
         headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
@@ -24,7 +26,7 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
   };
 
   $scope.checkout = function(){
-    dataService.setProductDetails($scope.productDetails);
+    dataFactory.setObject('productDetails', $scope.productDetails);
     $state.transitionTo('shippingDetails', { arg: 'arg' });  
   }
 

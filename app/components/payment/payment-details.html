@@ -6,7 +6,7 @@
     <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">TOTAL AMOUNT</span>
-        <span class="text-label medium" ng-cloak>{{ totalAmount() | mycurrency}}</span>
+        <span class="text-label medium" ng-cloak>{{ productDetails.totalAmount | mycurrency}}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-3x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
@@ -23,20 +23,20 @@
             <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
           </div>
           <div class="col-md-7 col-xs-7">
-            <span class="item-name">{{ productDetails.name }}</span>
-            <span class="price">{{ productDetails.price | mycurrency}}</span>
+            <span class="text-label medium text-right">{{ productDetails.name }}</span>
+            <span class="text-label text-right">{{ productDetails.price | mycurrency}}</span>
           </div>
         </div>
         
-        <hr class="hr-product" ng-show="purchasedProducts.length != 1"/>
+        <hr class="no-margin" ng-show="purchasedProducts.length != 1"/>
         
         <!-- Row 3 -->
         <div class="row item" ng-show="purchasedProducts.length != 1">
           <div class="col-md-8 col-xs-6">
-            <span class="item-name">Total</span>
+            <span class="text-label">Total</span>
           </div>
           <div class="col-md-4 col-xs-6">
-            <span class="price total">{{ totalAmount() | mycurrency }}</span>
+            <span class="text-label text-right">{{ productDetails.totalAmount | mycurrency }}</span>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
     <div class="inner-wrapper middle vertical-align" ng-click="shipmentToggle = !shipmentToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">SHIP TO</span>
-        <span class="text-label medium" ng-cloak>{{ shippingDetails.full_name }}</span>
+        <span class="text-label medium" ng-cloak>{{ customerDetails.full_name + shippingDetails.full_name }}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-3x pull-right" ng-class="shipmentToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
@@ -55,8 +55,7 @@
     <!-- Shipment Information -->
     <div class="hidden-content animate-show" ng-show="shipmentToggle">
       <div class="inner-wrapper" ng-cloak>
-
-        <p>{{ shippingDetails.address }}<br/>Bandung, Indonesia, 40141<br/>Tel. {{ shippingDetails.phone_number }}<br/>Email. danny.pranoto@veritrans.co.id</p>
+        <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>Tel. {{ shippingDetails.phone_number }}</p>
 
       </div>
     </div>

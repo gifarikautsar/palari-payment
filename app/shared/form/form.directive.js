@@ -11,7 +11,7 @@ formApp.directive('validationType', function() {
     require: 'ngModel',
     link: function(scope, elm, attrs, ctrl) {
       if (attrs.validationType == 'phonenumber'){
-        ctrl.$validators.phone_number = function(modelValue, viewValue) {
+        ctrl.$validators.phonenumber = function(modelValue, viewValue) {
           if (ctrl.$isEmpty(modelValue)) {
             // consider empty models to be valid
             return true;
