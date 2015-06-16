@@ -134,6 +134,8 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
         }
       ).success(function(data, status, headers, config) {
         console.log(data)
+        dataFactory.setObject('transactionDetails', data);
+
         //Confirm Transaction
         $http.post(
           phinisiEndpoint + '/merchant/payment/confirm', 
@@ -151,11 +153,9 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
             console.log(data);
             setTimeout(function() {
               $scope.$apply(function(){
-                $scope.responseStatus = data;
-                dataFactory.setObject('transactionDetails', data);
                 $state.transitionTo('paymentFinish', {'data': data})
               })
-            }, 10000);
+            }, 5000);
         }).error(function(data, status, headers, config){
             console.log(data);
         });
