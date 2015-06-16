@@ -45,7 +45,7 @@
     <div class="inner-wrapper middle vertical-align" ng-click="shipmentToggle = !shipmentToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">SHIP TO</span>
-        <span class="text-label medium" ng-cloak>{{ customerDetails.full_name + shippingDetails.full_name }}</span>
+        <span class="text-label medium" ng-cloak>{{ shippingDetails.full_name }}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-3x pull-right" ng-class="shipmentToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>

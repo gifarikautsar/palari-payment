@@ -75,7 +75,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
     'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
     'secure': true,
-    'gross_amount': 10
+    'gross_amount': dataFactory.getObject('productDetails').totalAmount
   }
 
   $scope.getToken = function(){
@@ -152,6 +152,7 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
             setTimeout(function() {
               $scope.$apply(function(){
                 $scope.responseStatus = data;
+                dataFactory.setObject('transactionDetails', data);
                 $state.transitionTo('paymentFinish', {'data': data})
               })
             }, 10000);
