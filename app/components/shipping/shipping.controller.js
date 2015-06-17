@@ -22,22 +22,31 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log','dataSe
   $scope.cities = {};
   $scope.districts = {};
 
+  shippingService.initAreaList();
+
+  $scope.$watch('shippingService.getAreaList()', function(newVal) {
+    $scope.provinces = newVal;
+    console.log(newVal);
+  });
+
   $scope.getProvinceList = function() {
-    $scope.shippingDetails.city_id = '';
-    $scope.shippingDetails.district_id = '';
-    $scope.provinces = shippingService.getAreaList('province', '');
-  }
+    // $scope.shippingDetails.city_id = '';
+    // $scope.shippingDetails.district_id = '';
+    // shippingService.initAreaList();
+    // $scope.provinces = shippingService.getAreaList();
+    // $log.debug("-----" + $scope.provinces);
+  };
 
   $scope.getCityList = function() {
     $scope.shippingDetails.district_id = '';
     $scope.cities = shippingService.getAreaList('city', $scope.shippingDetails.province_id);
-  }
+  };
 
   $scope.getDistrictList = function() {
     $scope.shippingDetails.city_id = '';
     $scope.shippingDetails.district_id = '';
     $scope.districts = shippingService.getAreaList('district', $scope.shippingDetails.district_id);
-  }
+  };
 
   $scope.onSubmit = function(){
     if ($scope.shippingForm.$valid){
@@ -48,5 +57,4 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log','dataSe
       $state.transitionTo('shippingDetails', { arg: 'arg' });
     }
   };
-
 }]);

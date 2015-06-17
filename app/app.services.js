@@ -2,7 +2,6 @@ var servicesApp = angular.module('servicesApp', []);
 
 //Service
 servicesApp.service('creditCardService', function(){
-
   this.numberValidation = function (ccnumber) {
     var len = ccnumber.length;
     var cardType, valid;
@@ -36,16 +35,15 @@ servicesApp.service('creditCardService', function(){
       valid: valid
     }
   }
-
 });
 
 servicesApp.service('shippingService', function($http){
   return {
-
+    
     getAreaName: function(type, id){
       $http.get(
         //url
-        phinisiEndpoint + '/area/' + type + '?id=' + province_id,        
+        phinisiEndpoint + '/area/' + type + '?id=' + id,        
         //config
         {
           headers :{ 'Content-Type': 'application/json','Accept': 'application/json'} ,       
@@ -73,10 +71,9 @@ servicesApp.service('shippingService', function($http){
         return data;
       })
       .error(function(data){
-        return null;        
+        return null;   
       });
     }
-
   }
 });
 
