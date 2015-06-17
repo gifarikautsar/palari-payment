@@ -1,5 +1,4 @@
 routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
-  	$urlRouterProvider.otherwise('/payment');
 
 	$stateProvider
 		.state('checkout', {
@@ -42,5 +41,10 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('loading', {
 			templateUrl: 'app/components/payment/loading.html',
 			controller: 'loadingController'
+		})
+		.state('404', {
+			url: '/404',
+			templateUrl: 'app/components/errors/404.html'
 		});
+
 });

@@ -2,8 +2,8 @@
   <div class="wrapper" ng-show="paymentStatus !== '3d-secure'">
 
     <div class="tab 3d-secure-loading">
-      <h3 ng-if="paymentStatus == 'charge-loading'">PROCESSING YOUR PAYMENT</h3>
-      <h3 ng-if="paymentStatus == '3d-secure-loading'">REDIRECTING TO 3D SECURE</h3>
+      <h5 ng-if="paymentStatus == 'charge-loading'">PROCESSING YOUR PAYMENT</h5>
+      <h5 ng-if="paymentStatus == '3d-secure-loading'">REDIRECTING TO 3D SECURE</h5>
       <div class="inner-wrapper">
         <span class="loading-gif"></span>
         <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2" style="text-align: center; padding-bottom: 40px;">

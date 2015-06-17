@@ -1,3 +1,10 @@
+<!-- Header Section -->
+<header class="wrapper">
+    <div class="inner-wrapper">
+      <img src="/assets/img/dummy-data/storelogo.png" alt="Store Logo">
+    </div>
+</header>
+            
 <form name="customerForm" ng-submit="onSubmit()">
 
   <div class="wrapper" ng-init="amountToggle = false">
@@ -45,7 +52,7 @@
     <div class="tab">    
       <h5>Customer Details</h5> 
       <div class="inner-wrapper inner-content">
-        <p align="justify">Welcome to BBM Pay! It seems this is your first time purchasing product from our system. Please complete the information below</p>
+        <p align="justify">Welcome to BBM Pay! It seems this is your first time purchasing product from our system. Please complete the information below {{ productDetails }}</p>
             <div class="form-group">
               <span class="text-label">FULL NAME</span>
               <div class="right-inner-addon">
@@ -65,21 +72,26 @@
                   <i class="glyphicon glyphicon-ok" ng-show="customerForm.email.$valid"></i>
                   <i class="glyphicon glyphicon-remove" ng-show="!customerForm.email.$valid"></i>
                   <span class="error-message" ng-show="customerForm.email.$error.required">Email is required.</span>
-                  <span class="error-message" ng-show="customerForm.email.$error.required">Email is invalid.</span>
+                  <span class="error-message" ng-show="customerForm.email.$error.email">Please enter a valid email address.</span>
                 </div>
               </div>
             </div>
             <div class="form-group">
               <span class="text-label">PHONE NUMBER</span>
               <div class="right-inner-addon">
-                <input type="text" class="form-control" name="phonenumber" ng-model="customerDetails.phone_number" required>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">+62</span>
+                  <input type="text" class="form-control" name="phonenumber" maxlength="11" ng-model="customerDetails.phone_number" validation-type="phonenumber" required>
+                </div>
                 <div ng-show="customerForm.$submitted || customerForm.phonenumber.$touched">
                   <i class="glyphicon glyphicon-ok" ng-show="customerForm.phonenumber.$valid"></i>
                   <i class="glyphicon glyphicon-remove" ng-show="!customerForm.phonenumber.$valid"></i>
                   <span class="error-message" ng-show="customerForm.phonenumber.$error.required">Phone Number is required.</span>
+                  <span class="error-message" ng-show="customerForm.phonenumber.$error.phonenumber">Please enter a valid phone number.</span>
                 </div>
               </div>
             </div>
+          <p align="justify">NOTE : Please use your active email since we'll send you the purchase notification via your email.</p>  
         </div>
     </div>
     <div class="tab middle">    
@@ -151,7 +163,7 @@
 
   <div class="wrapper">
       <div class="inner-wrapper">
-          <a ui-sref="checkout" class="btn btn-default pull-left" style="width: 45%">BACK</a>
+          <a ui-sref="checkout({productId: '{{productDetails.id}}'})" class="btn btn-default pull-left" style="width: 45%">BACK</a>
           <input type="submit" class="btn btn-primary pull-right" style="width: 45%" value="NEXT" />
       </div>
   </div>
