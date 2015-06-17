@@ -20,20 +20,20 @@
               <div class="right-inner-addon">
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon1">+62</span>
-                  <input type="text" class="form-control" name="phonenumber" maxlength="11" ng-model="shippingDetails.phone_number" required number>
+                  <input type="text" class="form-control" name="phonenumber" maxlength="11" ng-model="shippingDetails.phone_number" validation-type="phonenumber" required>
                 </div>
                 <div ng-show="shippingForm.$submitted || shippingForm.phonenumber.$touched">
                   <i class="glyphicon glyphicon-ok" ng-show="shippingForm.phonenumber.$valid"></i>
                   <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.phonenumber.$valid"></i>
                   <span class="error-message" ng-show="shippingForm.phonenumber.$error.required">Phone Number is required.</span>
-                  <span class="error-message" ng-show="shippingForm.phonenumber.$error.number">Please input a valid phone number.</span>
+                  <span class="error-message" ng-show="shippingForm.phonenumber.$error.phonenumber">Please input a valid phone number.</span>
                 </div>
               </div>
             </div>
             <div class="form-group">
               <span class="text-label">ADDRESS</span>
               <div class="right-inner-addon">
-                <input type="text" class="form-control" name="address" ng-model="shippingDetails.address" required>
+                <textarea rows="4" class="form-control" name="address" ng-model="shippingDetails.address" required></textarea>
                 <div ng-show="shippingForm.$submitted || shippingForm.address.$touched">
                   <i class="glyphicon glyphicon-ok" ng-show="shippingForm.address.$valid"></i>
                   <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.address.$valid"></i>
@@ -44,28 +44,34 @@
             <div class="form-group" ng-init="getProvinceList()">
               <span class="text-label">PROVINCE</span>
                 <div class="right-inner-addon">
-                  <select ng-model="shippingDetails.province_id" ng-change="getCityList()" required>
-                    <option  ng-repeat="province in provinces | orderBy: 'nama_propinsi'" value={{province.id}}> {{province.nama_propinsi}} </option>
+                  <select name="province" ng-model="shippingDetails.province" ng-change="getCityList()" ng-options="province.nama_propinsi for province in provinces | orderBy: nama_propinsi" required>
                   </select>
                   <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="shippingForm.$submitted || shippingForm.province.$touched">
+                    <span class="error-message" ng-show="shippingForm.province.$error.required">Please select your province.</span>
+                  </div>
               </div>
             </div>
             <div class="form-group">
-              <span class="text-label">CITY</span>
+              <span class="text-label" ng-class="{ 'disabled': !shippingDetails.province }">CITY</span>
                 <div class="right-inner-addon">
-                  <select ng-model="shippingDetails.city_id" ng-change="getDistrictList()" required>
-                    <option  ng-repeat="city in cities.kota | orderBy: 'nama_kota'" value={{city.id}}> {{city.nama_kota}} </option>
+                  <select name="city" ng-model="shippingDetails.city" ng-change="getDistrictList()" ng-options="city.nama_kota for city in cities.kota | orderBy: nama_kota" ng-disabled="!shippingDetails.province" required>                   
                   </select>
                   <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="shippingForm.$submitted || shippingForm.city.$touched">
+                    <span class="error-message" ng-show="shippingForm.city.$error.required">Please select your city.</span>
+                  </div>
               </div>
             </div>
             <div class="form-group">
-              <span class="text-label">DISTRICT</span>
+              <span class="text-label" ng-class="{ 'disabled': !shippingDetails.province }">DISTRICT</span>
                 <div class="right-inner-addon">
-                  <select ng-model="shippingDetails.district_id" required>
-                    <option  ng-repeat="district in districts.kecamatan | orderBy: 'nama_kecamatan'" value={{district.id}}> {{district.nama_kecamatan}} </option>
+                  <select name="district" ng-model="shippingDetails.district" ng-options="district.nama_kecamatan for district in districts.kecamatan | orderBy: nama_kecamatan"  ng-disabled="!shippingDetails.city" required>
                   </select>
                   <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="shippingForm.$submitted || shippingForm.district.$touched">
+                    <span class="error-message" ng-show="shippingForm.district.$error.required">Please select your district.</span>
+                  </div>
               </div>
             </div>
         

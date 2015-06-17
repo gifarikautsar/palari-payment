@@ -6,13 +6,13 @@
           <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
         </div>
         <div class="col-md-7 col-xs-7">
-          <span class="big-text-label pull-right">{{productDetails.name}}</span>
-          <span class="text-label pull-right">{{productDetails.price | mycurrency}}</span>
+          <span class="text-label medium text-right">{{productDetails.name}}</span>
+          <span class="text-label text-right">{{productDetails.price | mycurrency}}</span>
         </div>
       </div>
       <div class="inner-wrapper inner-content" style="margin-top: 20px">
           <span class="text-label pull-left">TOTAL</span>
-          <span class="text-label pull-right">{{productDetails.totalAmount | mycurrency}}</span>
+          <span class="text-label text-right">{{productDetails.totalAmount | mycurrency}}</span>
       </div>
     </div>
 </div>

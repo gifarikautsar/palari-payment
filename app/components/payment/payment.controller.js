@@ -33,10 +33,12 @@ paymentApp.value('PaymentTypes', [{
   } ]
 );
 
-paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', '$stateParams', 'dataService', function($scope, $http, $log, $state, PaymentTypes, $stateParams, dataService){
+paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state', 'PaymentTypes', '$stateParams', 'dataFactory', function($scope, $http, $log, $state, PaymentTypes, $stateParams, dataFactory){
   $scope.payments = PaymentTypes;
-  $scope.shippingDetails = dataService.getShippingDetails();
-  $scope.productDetails = dataService.getProductDetails();
+  $scope.shippingDetails = dataFactory.getObject('shippingDetails');
+  $scope.productDetails = dataFactory.getObject('productDetails');
+  $scope.customerDetails = dataFactory.getObject('customerDetails');
+
   $scope.paymentType = {
     display_name: "Credit Card",
     payment_type: "credit_card",
@@ -60,7 +62,7 @@ paymentApp.controller('paymentController', ['$scope', '$http', '$log', '$state',
   };
 }]);
 
-paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataService', function($scope, $http, $log, $state, $stateParams, dataService){
+paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataFactory', function($scope, $http, $log, $state, $stateParams, dataFactory){
   $scope.creditCard = {
     card_number: '5211111111111117',
     card_cvv: '123',
@@ -73,22 +75,23 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
     'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
     'secure': true,
-    'gross_amount': 10
+    'gross_amount': dataFactory.getObject('productDetails').totalAmount
   }
 
   $scope.getToken = function(){
-    dataService.setCreditCard($scope.card);
+    dataFactory.setObject('creditCard', $scope.card);
+    dataFactory.getObject('creditCard');
     $state.transitionTo('loading', { arg: 'arg'});
   }
 
 }]);
 
-paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataService', function($scope, $http, $log, $state, $stateParams, dataService){
+paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataFactory', function($scope, $http, $log, $state, $stateParams, dataFactory){
   
   Veritrans.url = "https://api.sandbox.veritrans.co.id/v2/token";
   Veritrans.client_key = 'VT-client-VWnPRCD75wDVnB2s';
   var card = function(){
-    return dataService.getCreditCard();
+    return dataFactory.getObject('creditCard');
   }
 
   $scope.chargeTransaction = function(response) {
@@ -97,21 +100,31 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
         phinisiEndpoint + '/charge',
         //data
         {
-          client_key : "VT-client-SimkwEjR3_fKj73D",
+          client_key : "VT-client-VWnPRCD75wDVnB2s",
           payment_type : "credit_card",
           item_details : [ {
-            "id" : dataService.getProductDetails().id,
-            "price" : dataService.getProductDetails().price,
-            "quantity" : dataService.getProductDetails().quantity,
-            "name" : dataService.getProductDetails().name
+            "id" : dataFactory.getObject('productDetails').id,
+            "price" : dataFactory.getObject('productDetails').price,
+            "quantity" : dataFactory.getObject('productDetails').quantity,
+            "name" : dataFactory.getObject('productDetails').name
           } ],
           credit_card : {
             token_id : response.token_id,
             save_token_id : false
           },
           customer_details : {
-            email : 'dichi@alfaridi.info'
-          }
+            "full_name": dataFactory.getObject('customerDetails').full_name,
+            "email": dataFactory.getObject('customerDetails').email,
+            "phone_number": dataFactory.getObject('customerDetails').phone_number,
+            shipping_details: {
+              "full_name": dataFactory.getObject('shippingDetails').full_name,
+              "phone_number": '+62' + dataFactory.getObject('shippingDetails').phone_number,
+              "address": dataFactory.getObject('shippingDetails').address,
+              "province": dataFactory.getObject('shippingDetails').province.nama_propinsi,
+              "city": dataFactory.getObject('shippingDetails').city.nama_kota,
+              "district": dataFactory.getObject('shippingDetails').district.nama_kecamatan
+            }
+          }        
         },
         {
           headers: {
@@ -121,11 +134,13 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
         }
       ).success(function(data, status, headers, config) {
         console.log(data)
+        dataFactory.setObject('transactionDetails', data);
+
         //Confirm Transaction
         $http.post(
           phinisiEndpoint + '/merchant/payment/confirm', 
           {
-            client_key : "VT-client-SimkwEjR3_fKj73D",
+            client_key : "VT-client-VWnPRCD75wDVnB2s",
             transaction_id : data.transaction_id
           },
           {
@@ -138,10 +153,9 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
             console.log(data);
             setTimeout(function() {
               $scope.$apply(function(){
-                $scope.responseStatus = data;
                 $state.transitionTo('paymentFinish', {'data': data})
               })
-            }, 10000);
+            }, 5000);
         }).error(function(data, status, headers, config){
             console.log(data);
         });
@@ -181,8 +195,7 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
   }
 
   $scope.loadInit = function(){
-    console.log(dataService.getCreditCard());
-    console.log(dataService.getProductDetails());
+    console.log(dataFactory.getObject('creditCard'));
     Veritrans.token(card, callback);
   }
 
@@ -198,10 +211,59 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
 
 }]);
 
-paymentApp.controller('permataController', ['$scope','$http', '$log', '$state', function($scope, $http, $log, $state){
-  $scope.chargePermata = function(){
+paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$state', 'dataFactory', function($scope, $http, $log, $state, dataFactory){
+  $scope.chargeBankTransfer = function(){
+    $http.post(
+        //url
+        phinisiEndpoint + '/charge',
+        //data
+        {
+          client_key : "VT-client-VWnPRCD75wDVnB2s",
+          payment_type : "bank_transfer",
+          item_details : [ {
+            "id" : dataFactory.getObject('productDetails').id,
+            "price" : dataFactory.getObject('productDetails').price,
+            "quantity" : dataFactory.getObject('productDetails').quantity,
+            "name" : dataFactory.getObject('productDetails').name
+          } ],
+          customer_details : {
+            "full_name": dataFactory.getObject('customerDetails').full_name,
+            "phone_number": dataFactory.getObject('customerDetails').phone_number,
+            "email": dataFactory.getObject('customerDetails').email,
+            "shipping_details": {
+              "full_name": dataFactory.getObject('shippingDetails').full_name,
+              "phone_number": '+62' + dataFactory.getObject('shippingDetails').phone_number,
+              "address": dataFactory.getObject('shippingDetails').address,
+              "province": dataFactory.getObject('shippingDetails').province.nama_propinsi,
+              "city": dataFactory.getObject('shippingDetails').city.nama_kota,
+              "district": dataFactory.getObject('shippingDetails').district.nama_kecamatan
+            }
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      ).success(function(data, status, headers, config) {
+        console.log(data)
+        dataFactory.setObject('transactionDetails', data);
+        $state.transitionTo('paymentFinish', { arg: 'arg' });
+        //Confirm Transaction
 
+      }).
+      error(function(data, status, headers, config) {
+        console.log(response);
+      });
   }
+}]);
+
+paymentApp.controller('paymentFinishController', ['$scope','$http', '$log', '$state', 'dataFactory', function($scope, $http, $log, $state, dataFactory){
+  $scope.transactionDetails = dataFactory.getObject('transactionDetails');
+  $scope.shippingDetails = dataFactory.getObject('shippingDetails');
+  $scope.customerDetails = dataFactory.getObject('customerDetails');
+  $scope.productDetails = dataFactory.getObject('productDetails');
 }]);
 
 // paymentApp.directive('loading', function ($http) {
