@@ -26,6 +26,10 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
     });
   };
 
+  $scope.$watch("productDetails.qty", function(){
+    $scope.productDetails.totalAmount = $scope.productDetails.price * $scope.productDetails.qty;
+  })
+
   $scope.checkout = function(){
     dataFactory.setObject('productDetails', $scope.productDetails);
     $state.transitionTo('shippingDetails', { arg: 'arg' });  
