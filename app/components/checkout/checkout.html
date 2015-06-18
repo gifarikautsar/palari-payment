@@ -5,27 +5,40 @@
     </div>
 </header>
 
-<div class="wrapper tab" ng-init="getProduct()">    
-    <h5>Purchased Items</h5> 
-    <div class="inner-wrapper">
-      <div class="row">
-        <div class="col-md-5 col-xs-5">
-          <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
+<form name="checkoutForm">
+  <div class="wrapper tab" ng-init="getProduct()">    
+      <h5>Purchased Items</h5> 
+      <div class="inner-wrapper">
+        <div class="row">
+          <div class="col-md-5 col-xs-5">
+            <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
+          </div>
+          <div class="col-md-7 col-xs-7">
+            <span class="text-label medium text-right">{{productDetails.name}}</span>
+            <span class="text-label text-right">{{productDetails.price | mycurrency}}</span>
+            <span class="text-label text-right" style="color: #3c763d"><strong>Available Stock : {{productDetails.quantity}}</strong></span>
+          </div>
         </div>
-        <div class="col-md-7 col-xs-7">
-          <span class="text-label medium text-right">{{productDetails.name}}</span>
-          <span class="text-label text-right">{{productDetails.price | mycurrency}}</span>
+        <hr/>
+        <div class="row">
+          <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+            <span class="text-label">Quantity</span>
+          </div>
+          <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+            <number ng-model="productDetails.qty" max={{productDetails.quantity}}>
+            </number>
+          </div>
+        </div>
+        <div class="inner-wrapper inner-content" style="margin-top: 20px">
+            <span class="text-label pull-left">TOTAL</span>
+            <span class="text-label text-right">{{productDetails.totalAmount | mycurrency}}</span>
         </div>
       </div>
-      <div class="inner-wrapper inner-content" style="margin-top: 20px">
-          <span class="text-label pull-left">TOTAL</span>
-          <span class="text-label text-right">{{productDetails.totalAmount | mycurrency}}</span>
-      </div>
-    </div>
-</div>
+  </div>
 
-<div class="wrapper">
-    <div class="inner-wrapper">
-        <a ng-click="checkout()" class="btn btn-primary" style="width: 100%">CHECKOUT</a>
-    </div>
-</div>
+  <div class="wrapper">
+      <div class="inner-wrapper">
+          <a ng-click="checkout()" class="btn btn-primary" style="width: 100%">CHECKOUT</a>
+      </div>
+  </div>
+</form>

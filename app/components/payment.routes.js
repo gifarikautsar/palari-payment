@@ -45,6 +45,10 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('404', {
 			url: '/404',
 			templateUrl: 'app/components/errors/404.html'
+		})
+		.state('500', {
+			url: '/500',
+			templateUrl: 'app/components/errors/500.html'
 		});
 
 });

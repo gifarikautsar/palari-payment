@@ -10,11 +10,19 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
 
   $scope.onSubmit = function(){
     if ($scope.customerForm.$valid){
-      dataFactory.setObject('customerDetails', $scope.customerDetails);
-      console.log($scope.customerDetails);
-      console.log(dataFactory.getObject('customerDetails'));
-      console.log(dataFactory.getObject('shippingDetails'));
-      $state.transitionTo('paymentDetails', { arg: 'arg'});
+      if ($scope.productDetails.need_address && ($scope.shippingDetails == null)){
+       $scope.errorMessageShipping = "Please set your shipping address and shipping method before proceeding to the next step.";
+      } 
+      else {
+        dataFactory.setObject('customerDetails', $scope.customerDetails);
+        console.log($scope.customerDetails);
+        console.log(dataFactory.getObject('customerDetails'));
+        console.log(dataFactory.getObject('shippingDetails'));
+        $state.transitionTo('paymentDetails', { arg: 'arg'});
+      }
+    }
+    else {
+      $scope.errorMessage = "Invalid form. Please correct your information details below before proceeding to the next step.";
     }
   }
 

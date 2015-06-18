@@ -197,3 +197,42 @@ formApp.directive('select', function($interpolate) {
   };
 });
 
+formApp.directive('number', function() {
+  return {
+    restrict: "E",
+    templateUrl: "../app/shared/form/number.html",
+    scope: {
+      ngModel: '=',
+      max: '@'
+    },
+    link: function(scope, element, attrs, ctrl) {
+      scope.ngModel = 1;
+     
+      scope.minus = function() {
+        if (scope.ngModel > 1) {
+          scope.ngModel = scope.ngModel - 1;
+        }
+      }
+
+      scope.plus = function() {
+        if (scope.ngModel < parseInt(scope.max)){
+          scope.ngModel = scope.ngModel + 1;
+        }
+      }
+
+      scope.$watch('ngModel', function(newValue, oldValue){
+        if (scope.ngModel < 1) {
+          scope.ngModel = 1;
+        }
+        else if (scope.ngModel > parseInt(scope.max)) {
+          scope.ngModel = parseInt(scope.max);
+        }
+        else if (isNaN(scope.ngModel)) {
+          scope.ngModel = oldValue;
+        }
+      })
+
+    }
+  }
+})
+

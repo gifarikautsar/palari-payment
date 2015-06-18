@@ -1,3 +1,9 @@
+<header class="wrapper">
+    <div class="inner-wrapper">
+      <img src="/assets/img/dummy-data/storelogo.png" alt="Store Logo">
+    </div>
+</header>
+
 <div class="3d-secure-loading-page" ng-init="loadInit()">
   <div class="wrapper" ng-show="paymentStatus !== '3d-secure'">
 
@@ -14,8 +20,9 @@
     </div>
 
   </div>
+
   <div class="wrapper" ng-show="paymentStatus == '3d-secure'">
-    <iframe width="100%" height="400px" class="3d-secure-content" iframe-onload="loadFinish()" ng-src="{{ response.redirect_url }}">
+    <iframe width="100%" height="420px" class="3d-secure-content" iframe-onload="loadFinish()" ng-src="{{ response.redirect_url }}">
       
     </iframe>
   </div>
