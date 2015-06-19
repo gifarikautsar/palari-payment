@@ -26,8 +26,6 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
   $scope.cities = {};
   $scope.districts = {};
 
-  shippingService.initAreaList();
-
   $scope.$watch('shippingService.getAreaList()', function(newVal) {
     $scope.provinces = newVal;
     console.log(newVal);
