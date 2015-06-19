@@ -1,9 +1,15 @@
+<header class="wrapper">
+    <div class="inner-wrapper">
+      <img src="/assets/img/dummy-data/storelogo.png" alt="Store Logo">
+    </div>
+</header>
+
 <div class="3d-secure-loading-page" ng-init="loadInit()">
   <div class="wrapper" ng-show="paymentStatus !== '3d-secure'">
 
-    <div class="tab 3d-secure-loading">
-      <h3 ng-if="paymentStatus == 'charge-loading'">PROCESSING YOUR PAYMENT</h3>
-      <h3 ng-if="paymentStatus == '3d-secure-loading'">REDIRECTING TO 3D SECURE</h3>
+    <div class="tab">
+      <h5 ng-if="paymentStatus == 'charge-loading'">PROCESSING YOUR PAYMENT</h5>
+      <h5 ng-if="paymentStatus == '3d-secure-loading'">REDIRECTING TO 3D SECURE</h5>
       <div class="inner-wrapper">
         <span class="loading-gif"></span>
         <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2" style="text-align: center; padding-bottom: 40px;">
@@ -14,8 +20,10 @@
     </div>
 
   </div>
-  <div class="wrapper" ng-show="paymentStatus == '3d-secure'">
-    <iframe width="100%" height="400px" class="3d-secure-content" iframe-onload="loadFinish()" ng-src="{{ response.redirect_url }}">
+
+  <div class="wrapper tab" ng-show="paymentStatus == '3d-secure'">
+    <h5>3D SECURE AUTHENTICATION</h5>
+    <iframe width="100%" height="420px" class="3d-secure-content" iframe-onload="loadFinish()" ng-src="{{ response.redirect_url }}">
       
     </iframe>
   </div>

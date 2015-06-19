@@ -1,6 +1,6 @@
 paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state', '$stateParams', '$window', 'dataFactory', function($scope, $http, $log, $state, $stateParams, $window, dataFactory){
   $scope.productDetails = {};
-  $scope.productDetails.quantity = 1;
+  $scope.productDetails.qty = 1;
   $scope.productId = $stateParams.productId;
   
   $scope.getProduct = function(){
@@ -14,16 +14,26 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
       }
     )
     .success(function(data){
-      $scope.productDetails = data;
-      $scope.productDetails.quantity = 1;
-      $log.debug($scope.productDetails);
-      $log.debug("Get product details success");
-      $scope.productDetails.totalAmount = $scope.productDetails.price * $scope.productDetails.quantity;
+      if (data.merchant_id){
+        $scope.productDetails = data;
+        $scope.productDetails.qty = 1;
+        $log.debug($scope.productDetails);
+        $log.debug("Get product details success");
+        $scope.productDetails.totalAmount = $scope.productDetails.price * $scope.productDetails.qty;  
+      }
+      else {
+        $state.transitionTo('404', { arg: 'arg'})
+      }
     })
     .error(function(data){
-      $scope.error = data.description;        
+      $scope.error = data.description;
+      $state.transitionTo('500', { arg: 'arg'});        
     });
   };
+
+  $scope.$watch("productDetails.qty", function(){
+    $scope.productDetails.totalAmount = $scope.productDetails.price * $scope.productDetails.qty;
+  })
 
   $scope.checkout = function(){
     dataFactory.setObject('productDetails', $scope.productDetails);
