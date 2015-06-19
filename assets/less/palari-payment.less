@@ -7,6 +7,8 @@
 @dark-gray        : #858585;
 @very-dark-gray   : #636363;
 @black            : #000000;
+@orange : #F7931D;
+
 
 @font-face {
   font-family: "Proxima Nova";
@@ -141,7 +143,7 @@ header {
   overflow: auto;
 }
 .inner-wrapper {
-  padding: 10px 15px;
+  padding: 0.5em 0.8em;
 }
 .inner-wrapper.middle {
   border-top: 1px solid @light-gray;
@@ -199,6 +201,35 @@ header {
   border-radius: 0;
   font-size: 1.2em;
 }
+.btn-dark-gray {
+  background: @dark-gray;
+}
+.btn-dark-gray:focus,
+.btn-dark-gray:hover {
+  background: @dark-gray;
+  border-color: @dark-gray;
+}
+
+.btn-light-gray {
+  background: @light-gray;
+  color:black;
+}
+.btn-light-gray:focus,
+.btn-light-gray:hover {
+  background: @light-gray;
+  border-color: @light-gray;
+}
+
+.btn-orange {
+  color: @white;
+  background: @orange;
+}
+.btn-orange:focus,
+.btn-orange:hover {
+  background: @orange;
+  border-color: @orange;
+}
+
 
 /* Images */
 .loading-gif {
@@ -429,6 +460,9 @@ label.css-label {
 }
 
 @media (max-width: 480px) {
+  body{
+    line-height: 1.25;
+  }
   .card-number {
     font-size: 18px;
     color: @very-dark-gray;
@@ -634,3 +668,33 @@ label.css-label {
 iframe {
   border: 0;
 }
+
+.dialog-box {
+  background: @black;
+  opacity: 0.9;
+  color: @white;
+  height: auto;
+  /*min-height: 100px;*/
+  padding: 20px;
+  width: 100%;
+  z-index: 9999;
+
+}
+
+.absolute-center {
+  /*overflow: auto;*/
+  margin: auto;
+  position: absolute;
+  top: 100px; left: 0; right: 0;
+}
+
+.bg-orange {
+  background-color: @orange;
+  color: @white;
+}
+
+.bg-gray {
+  background-color: @very-light-gray;
+  color: @black;
+}
+
