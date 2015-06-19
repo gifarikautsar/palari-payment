@@ -145,7 +145,15 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
   $scope.chargeTransaction = function(response) {
     var shippingDetails = {};
     if (dataFactory.getObject('productDetails').need_address){
-      shippingDetails = dataFactory.getObject('shippingDetails');
+      shippingDetails = {
+        "full_name": dataFactory.getObject('shippingDetails').full_name,
+        "address": dataFactory.getObject('shippingDetails').address,
+        "phone_number": dataFactory.getObject('shippingDetails').phone_number,
+        "province": dataFactory.getObject('shippingDetails').province.id,
+        "city": dataFactory.getObject('shippingDetails').city.id,
+        "district": dataFactory.getObject('shippingDetails').district.id
+      }
+      console.log(shippingDetails);
     }
 
     $http.post(
@@ -168,7 +176,7 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
             "full_name": dataFactory.getObject('customerDetails').full_name,
             "email": dataFactory.getObject('customerDetails').email,
             "phone_number": '+62' + dataFactory.getObject('customerDetails').phone_number,
-            shipping_details: shippingDetails
+            "shipping_address": shippingDetails
           }        
         },
         {

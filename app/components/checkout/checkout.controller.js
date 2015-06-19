@@ -14,11 +14,16 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
       }
     )
     .success(function(data){
-      $scope.productDetails = data;
-      $scope.productDetails.qty = 1;
-      $log.debug($scope.productDetails);
-      $log.debug("Get product details success");
-      $scope.productDetails.totalAmount = $scope.productDetails.price * $scope.productDetails.qty;
+      if (data.merchant_id){
+        $scope.productDetails = data;
+        $scope.productDetails.qty = 1;
+        $log.debug($scope.productDetails);
+        $log.debug("Get product details success");
+        $scope.productDetails.totalAmount = $scope.productDetails.price * $scope.productDetails.qty;  
+      }
+      else {
+        $state.transitionTo('404', { arg: 'arg'})
+      }
     })
     .error(function(data){
       $scope.error = data.description;

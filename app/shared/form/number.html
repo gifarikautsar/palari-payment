@@ -1,7 +1,7 @@
 <div class="vertical-align" style="justify-content: flex-start">
-	<button class="btn btn-default vertical-align text-center" style="width: 40px; height:30px;" ng-click="minus()"><i class="fa fa-minus"></i></button>
+	<button class="btn btn-default vertical-align text-center" style="width: 40px; height:30px;" ng-click="minus()"><i class="fa fa-minus" style="color: #858585"></i></button>
 	<input type="text" name="quantity" class="form-control text-right" style="width: 70px; height:30px; display:inline-block" ng-model="ngModel" required/>
-	<button class="btn btn-default vertical-align text-center" style="width: 40px; height:30px;" ng-click="plus()"><i class="fa fa-plus"></i></button>
+	<button class="btn btn-default vertical-align text-center" style="width: 40px; height:30px;" ng-click="plus()"><i class="fa fa-plus" style="color: #858585"></></i></button>
 </div>
 <div ng-show="checkoutForm.$submitted || checkoutForm.quantity.$touched">
 	<span class="error-message" ng-show="checkoutForm.quantity.$error.required">Quantity is required.</span>
