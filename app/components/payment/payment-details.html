@@ -12,7 +12,7 @@
     <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
         <span class="text-label">TOTAL AMOUNT</span>
-        <span class="text-label medium" ng-cloak>{{ productDetails.totalAmount | mycurrency}}</span>
+        <span class="text-label medium" ng-cloak>{{ productDetails.totalAmount + shippingDetails.shippingCost | mycurrency}}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-2x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
@@ -33,7 +33,14 @@
             <span class="text-label text-right">{{ productDetails.price | mycurrency}}</span>
           </div>
         </div>
-        
+        <div class="row item">
+          <div class="col-md-5 col-xs-5">
+            <span class="text-label text-left">Delivery Fee</span>        
+          </div>
+          <div class="col-md-7 col-xs-7">
+            <span class="text-label text-right">{{ shippingDetails.shippingCost | mycurrency}}</span>        
+          </div>
+        </div>
         <hr class="no-margin" ng-show="purchasedProducts.length != 1"/>
         
         <!-- Row 3 -->
@@ -42,7 +49,7 @@
             <span class="text-label">Total</span>
           </div>
           <div class="col-md-4 col-xs-6">
-            <span class="text-label text-right">{{ productDetails.totalAmount | mycurrency }}</span>
+            <span class="text-label text-right">{{ productDetails.totalAmount + shippingDetails.shippingCost | mycurrency }}</span>
           </div>
         </div>
       </div>
@@ -64,7 +71,7 @@
         <div class="vertical-align" style="justify-content: flex-start">
           <span class="shipping-logo jne"></span>
           <span class="vertical-line"></span>
-          <span class="text-label big" style="display: inline-block">Rp 12.000 </span>
+          <span class="text-label big" style="display: inline-block"> {{ shippingDetails.shippingCost | mycurrency }} </span>
         </div>
         <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}<br/>Tel. +62{{ shippingDetails.phone_number }}</p>
         <small><a ui-sref="addAddress" ng-click="addAddress()" class="btn btn-default">CHANGE ADDRESS</a></small>

@@ -80,7 +80,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
       'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
       'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
       'secure': true,
-      'gross_amount': dataFactory.getObject('productDetails').totalAmount
+      'gross_amount': dataFactory.getObject('productDetails').totalAmount + dataFactory.getObject('shippingDetails').shippingCost
     });
     dataFactory.getObject('creditCard');
     dataFactory.set('paymentType', 'Credit Card');

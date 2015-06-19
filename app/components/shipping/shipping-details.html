@@ -143,24 +143,24 @@
            
         </div>
 
-        <div class="animate-float-left">
+        <div class="animate-float-left" ng-init="getFare()">
 
           <div class="vertical-align" style="justify-content: flex-start">
             <span class="shipping-logo jne"></span>
             <span class="vertical-line"></span>
-            <span class="text-label big" style="display: inline-block">Rp 12.000 </span>
+            <span class="text-label big" style="display: inline-block">{{ shippingDetails.shippingCost[shippingPackage].service_fare | mycurrency}}</span>
           </div>
           
           <span class="text-label animate-float-left">Please select your shipping package.</span>
           
           <div class="row no-margin">
-            <input type="radio" id="3-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="3" />   
-            <label for="3-months" class="css-label">OKE</label>
+            <input type="radio" id="3-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="0" />   
+            <label for="3-months" class="css-label">YES</label>
           </div>
 
           <div class="row no-margin">
-            <input type="radio" id="6-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="6" />   
-            <label for="6-months" class="css-label">YES</label>
+            <input type="radio" id="6-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="1" />   
+            <label for="6-months" class="css-label">OKE</label>
           </div>
 
         </div>
