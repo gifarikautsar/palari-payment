@@ -197,6 +197,15 @@ header {
 }
 
 /* Button Style */
+.btn-blue {
+  background: @blue;
+  color: @white;
+  font-size: 1.2em;
+}
+.btn-blue:focus,
+.btn-blue:hover {
+  background: @blue;
+}
 .btn {
   border-radius: 0;
   font-size: 1.2em;
@@ -698,3 +707,87 @@ iframe {
   color: @black;
 }
 
+.progress-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100px;
+}
+
+.step-wrapper {
+  position: relative;
+  z-index: 3;
+  width: 25%;
+  min-height: 100px;
+  display: inline-block;
+  float: left;
+}
+
+.line-wrapper {
+  width: 75%;
+  position: relative;
+  top: 24px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 1;
+  min-height: 20px;
+}
+
+.circular {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  background: @very-light-gray;
+  display: block;
+  z-index: 20;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.circular.active {
+  background: #337ab7;
+}
+
+.progress-label {
+  display: block;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.progress-line {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-bottom: 4px solid @very-light-gray;
+}
+
+.line-active-1 {
+  width: 33%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border-bottom: 4px solid #337ab7;
+}
+.line-active-2 {
+  width: 66%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border-bottom: 4px solid #337ab7;
+}
+.line-active-3 {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border-bottom: 4px solid #337ab7;
+}
