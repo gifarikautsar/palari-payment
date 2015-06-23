@@ -80,7 +80,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
       'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
       'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
       'secure': true,
-      'gross_amount': dataFactory.getObject('productDetails').totalAmount
+      'gross_amount': dataFactory.getObject('productDetails').totalAmount + dataFactory.getObject('shippingDetails').shippingCost
     });
     dataFactory.getObject('creditCard');
     dataFactory.set('paymentType', 'Credit Card');
@@ -148,10 +148,8 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
       shippingDetails = {
         "full_name": dataFactory.getObject('shippingDetails').full_name,
         "address": dataFactory.getObject('shippingDetails').address,
-        "phone_number": dataFactory.getObject('shippingDetails').phone_number,
-        "province": dataFactory.getObject('shippingDetails').province.id,
-        "city": dataFactory.getObject('shippingDetails').city.id,
-        "district": dataFactory.getObject('shippingDetails').district.id
+        "phone": dataFactory.getObject('shippingDetails').phone_number,
+        "district_id": dataFactory.getObject('shippingDetails').district.id
       }
       console.log(shippingDetails);
     }
@@ -173,9 +171,9 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
             save_token_id : false
           },
           customer_details : {
-            "full_name": dataFactory.getObject('customerDetails').full_name,
+            "first_name": dataFactory.getObject('customerDetails').full_name,
             "email": dataFactory.getObject('customerDetails').email,
-            "phone_number": '+62' + dataFactory.getObject('customerDetails').phone_number,
+            "phone": '+62' + dataFactory.getObject('customerDetails').phone_number,
             "shipping_address": shippingDetails
           }        
         },
@@ -193,7 +191,7 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
         $http.post(
           phinisiEndpoint + '/merchant/payment/confirm', 
           {
-            transaction_id : data.transaction_id
+            order_id : data.order_id
           },
           {
             headers: {
@@ -248,7 +246,13 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
   $scope.chargeBankTransfer = function(){
     var shippingDetails = {};
     if (dataFactory.getObject('productDetails').need_address){
-      shippingDetails = dataFactory.getObject('shippingDetails');
+      shippingDetails = {
+        "full_name": dataFactory.getObject('shippingDetails').full_name,
+        "address": dataFactory.getObject('shippingDetails').address,
+        "phone": dataFactory.getObject('shippingDetails').phone_number,
+        "district_id": dataFactory.getObject('shippingDetails').district.id
+      }
+      console.log(shippingDetails);
     }
     dataFactory.set('paymentType', 'Bank Transfer');
     $state.transitionTo('loading', { arg: 'arg'});
@@ -265,10 +269,10 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
             "name" : dataFactory.getObject('productDetails').name
           } ],
           customer_details : {
-            "full_name": dataFactory.getObject('customerDetails').full_name,
-            "phone_number": '+62' + dataFactory.getObject('customerDetails').phone_number,
+            "first_name": dataFactory.getObject('customerDetails').full_name,
+            "phone": '+62' + dataFactory.getObject('customerDetails').phone_number,
             "email": dataFactory.getObject('customerDetails').email,
-            "shipping_details": shippingDetails
+            "shipping_address": shippingDetails
           }
         },
         {

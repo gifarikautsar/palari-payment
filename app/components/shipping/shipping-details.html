@@ -1,4 +1,35 @@
 <!-- Header Section -->
+<div class="progress-wrapper text-center">
+  <div class="step-wrapper">
+    <div class="circular active">
+      <i class="fa fa-2x fa-shopping-cart" style="color: #FFFFFF; margin-top: 10px;"></i>
+    </div>
+    <span class="progress-label">CHECKOUT</span>
+  </div>
+  <div class="step-wrapper">
+    <div class="circular active">
+      <i class="fa fa-2x fa-truck" style="color: #FFFFFF; margin-top: 10px;"></i>
+    </div>
+    <span class="progress-label">SHIPPING DETAILS</span>
+  </div>
+  <div class="step-wrapper">
+    <div class="circular">
+      <i class="fa fa-2x fa-credit-card" style="color: #FFFFFF; margin-top: 10px;"></i>
+    </div>
+    <span class="progress-label">PAYMENT DETAILS</span>
+  </div>
+  <div class="step-wrapper">  
+    <div class="circular">
+      <i class="fa fa-2x fa-check" style="color: #FFFFFF; margin-top: 10px;"></i>
+    </div>
+    <span class="progress-label">PAYMENT CONFIRM</span>
+  </div>
+  <div class="line-wrapper">
+    <span class="progress-line line-active-1"></span>
+    <span class="progress-line"></span>
+  </div>
+</div>
+
 <header class="wrapper">
     <div class="inner-wrapper">
       <img src="/assets/img/dummy-data/storelogo.png" alt="Store Logo">
@@ -11,10 +42,10 @@
       <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
         <div class=" col-xs-7 col-md-8 no-padding">
           <span class="text-label">TOTAL AMOUNT</span>
-          <span class="text-label big" ng-cloak>{{ productDetails.totalAmount | mycurrency}}</span>
+          <span class="text-label medium" ng-cloak>{{ productDetails.totalAmount | mycurrency}}</span>
         </div>
         <div class=" col-xs-5 col-md-4 no-padding">
-          <i class="fa fa-3x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px"></i>
+          <i class="fa fa-2x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px"></i>
         </div>
       </div>
 
@@ -30,6 +61,7 @@
           <div class="col-md-7 col-xs-7">
             <span class="text-label medium text-right">{{ productDetails.name }}</span>
             <span class="text-label text-right">{{ productDetails.price | mycurrency}}</span>
+            <span class="text-label text-right">Quantity : {{ productDetails.qty }}</span>
           </div>
         </div>
         
@@ -97,7 +129,7 @@
           <p align="justify">NOTE : Please use your active email since we'll send you the purchase notification via your email.</p>  
         </div>
     </div>
-    <div class="tab middle" ng-show="productDetails.need_address">    
+    <div class="tab middle" ng-show="productDetails.need_address" ng-init="changeAddressToggle = false">    
       <h5>Shipping Details</h5> 
       <div class="error-box animate-blink" ng-show="errorMessageShipping">
           <div class="error-message">{{ errorMessageShipping }}</div>
@@ -116,7 +148,7 @@
         </div> -->
         <span class="text-label big">{{shippingDetails.full_name}}</span>
         <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
-        <small><a ui-sref="addAddress" ng-click="addAddress()" class="btn btn-default">CHANGE ADDRESS</a></small>
+        <small><a ng-click="changeAddressToggle = !changeAddressToggle" class="btn btn-default">CHANGE ADDRESS</a></small>
 
         <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
         
@@ -143,24 +175,24 @@
            
         </div>
 
-        <div class="animate-float-left">
+        <div class="animate-float-left" ng-init="getFare()">
 
           <div class="vertical-align" style="justify-content: flex-start">
             <span class="shipping-logo jne"></span>
             <span class="vertical-line"></span>
-            <span class="text-label big" style="display: inline-block">Rp 12.000 </span>
+            <span class="text-label big" style="display: inline-block">{{ shippingDetails.shippingCost[shippingPackage].service_fare | mycurrency}}</span>
           </div>
           
           <span class="text-label animate-float-left">Please select your shipping package.</span>
           
           <div class="row no-margin">
-            <input type="radio" id="3-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="3" />   
-            <label for="3-months" class="css-label">OKE</label>
+            <input type="radio" id="3-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="0" />   
+            <label for="3-months" class="css-label">YES</label>
           </div>
 
           <div class="row no-margin">
-            <input type="radio" id="6-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="6" />   
-            <label for="6-months" class="css-label">YES</label>
+            <input type="radio" id="6-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="1" />   
+            <label for="6-months" class="css-label">OKE</label>
           </div>
 
         </div>
@@ -171,9 +203,22 @@
 
   <div class="wrapper">
       <div class="inner-wrapper">
-          <a ui-sref="checkout({productId: '{{productDetails.id}}'})" class="btn btn-default pull-left" style="width: 45%">BACK</a>
-          <input type="submit" class="btn btn-primary pull-right" style="width: 45%" value="NEXT" />
+          <a ui-sref="checkout({productId: '{{productDetails.id}}'})" class="btn btn-default pull-left" style="width: 48%">BACK</a>
+          <input type="submit" class="btn btn-primary pull-right" style="width: 48%" value="NEXT" />
       </div>
+  </div>
+
+  <div class="dialog-box absolute-center" ng-show="changeAddressToggle">
+    <span class="text-label medium text-center" style="margin-bottom: 20px">SELECT SHIPPING ADDRESS</span>
+    <div class="inner-wrapper" style="background: #FFFFFF; height: 200px; overflow: scroll; margin-bottom: 20px;">
+
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
+      <a class="btn-light-gray btn pull-left" style="width: 95% !important" ng-click="changeAddressToggle = false">CANCEL</a>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
+      <a ui-sref="addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >ADD ADDRESS</a>
+    </div>
   </div>
 
 </form>

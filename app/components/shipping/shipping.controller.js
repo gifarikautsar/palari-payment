@@ -2,10 +2,39 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   $scope.productDetails = dataFactory.getObject('productDetails');
   $scope.shippingDetails = dataFactory.getObject('shippingDetails');
   $scope.customerDetails = dataFactory.getObject('customerDetails');
+  $scope.shippingPackage = "0";
   
   $scope.addAddress = function(){
     dataFactory.setObject('customerDetails', $scope.customerDetails);
     console.log($scope.customerDetails); 
+  }
+
+  $scope.getFare = function() {
+    if ($scope.shippingDetails){
+      $http.post(
+        //url
+        phinisiEndpoint + '/package/fare',
+        //data
+        {
+          "product_id": $scope.productDetails.id,
+          "destination_district_id": $scope.shippingDetails.district.id,
+          "quantity": $scope.productDetails.qty
+        },
+        //config
+        {
+          headers :{ 'Content-Type': 'application/json','Accept': 'application/json'}
+        }
+      )
+      .success(function(data){
+        console.log(data);
+        $scope.shippingDetails.shippingCost = data.expedition[0].expedition_service;
+        console.log($scope.shippingDetails.shippingCost);
+      })
+      .error(function(data){
+        $scope.error = data.description;
+        $state.transitionTo('500', { arg: 'arg'});        
+      })
+    }
   }
 
   $scope.onSubmit = function(){
@@ -14,7 +43,9 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
        $scope.errorMessageShipping = "Please set your shipping address and shipping method before proceeding to the next step.";
       } 
       else {
+        $scope.shippingDetails.shippingCost = $scope.shippingDetails.shippingCost[$scope.shippingPackage].service_fare;
         dataFactory.setObject('customerDetails', $scope.customerDetails);
+        dataFactory.setObject('shippingDetails', $scope.shippingDetails);
         console.log($scope.customerDetails);
         console.log(dataFactory.getObject('customerDetails'));
         console.log(dataFactory.getObject('shippingDetails'));
