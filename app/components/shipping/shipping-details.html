@@ -4,13 +4,13 @@
     <div class="circular active">
       <i class="fa fa-2x fa-shopping-cart" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">CHECKOUT</span>
+    <span class="progress-label active">CHECKOUT</span>
   </div>
   <div class="step-wrapper">
     <div class="circular active">
       <i class="fa fa-2x fa-truck" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">SHIPPING DETAILS</span>
+    <span class="progress-label active">SHIPPING DETAILS</span>
   </div>
   <div class="step-wrapper">
     <div class="circular">
@@ -65,7 +65,7 @@
           </div>
         </div>
         
-        <hr class="no-margin"/>
+        <hr/>
         
         <!-- Row 3 -->
         <div class="row">
@@ -180,19 +180,38 @@
           <div class="vertical-align" style="justify-content: flex-start">
             <span class="shipping-logo jne"></span>
             <span class="vertical-line"></span>
-            <span class="text-label big" style="display: inline-block">{{ shippingDetails.shippingCost[shippingPackage].service_fare | mycurrency}}</span>
+            <span class="text-label big" style="display: inline-block" ng-show="servicePackage">{{ shippingDetails.insurance ? servicePackage.service_fare_with_issurance : servicePackage.service_fare | mycurrency}}</span>
           </div>
           
-          <span class="text-label animate-float-left">Please select your shipping package.</span>
-          
-          <div class="row no-margin">
-            <input type="radio" id="3-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="0" />   
-            <label for="3-months" class="css-label">YES</label>
-          </div>
+          <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group">  
+                <span class="text-label animate-float-left">Shipping package :</span>
+                <div class="right-inner-addon">
+                  <select name="servicePackage" ng-model="servicePackage" ng-options="servicePackage.service_name for servicePackage in servicePackageList" required>
+                    
+                  </select>
+                  <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="shippingForm.$submitted || shippingForm.city.$touched">
+                    <span class="error-message" ng-show="shippingForm.city.$error.required">Please select your city.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group" ng-class="{ 'disabled': !servicePackage }">  
+                <span class="text-label animate-float-left">Insurance : {{shippingDetails.insurance }}</span>
+                <div class="right-inner-addon">
+                  <select name="insurance" ng-model="shippingDetails.insurance" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" ng-disabled="!servicePackage" required>
 
-          <div class="row no-margin">
-            <input type="radio" id="6-months" class="css-checkbox" name="radio2" ng-model="shippingPackage" value="1" />   
-            <label for="6-months" class="css-label">OKE</label>
+                  </select>
+                  <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="shippingForm.$submitted || shippingForm.city.$touched">
+                    <span class="error-message" ng-show="shippingForm.city.$error.required">Please select your city.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>

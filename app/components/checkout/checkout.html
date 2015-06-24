@@ -1,13 +1,13 @@
 <!-- Header Section -->
 <div class="progress-wrapper text-center">
   <div class="step-wrapper">
-    <div class="circular">
+    <div class="circular active">
       <i class="fa fa-2x fa-shopping-cart" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">CHECKOUT</span>
+    <span class="progress-label active">CHECKOUT</span>
   </div>
   <div class="step-wrapper">
-    <div class="circular active">
+    <div class="circular">
       <i class="fa fa-2x fa-truck" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
     <span class="progress-label">SHIPPING DETAILS</span>
@@ -25,10 +25,10 @@
     <span class="progress-label">PAYMENT CONFIRM</span>
   </div>
   <div class="line-wrapper">
-    <span class="progress-line line-active-1"></span>
     <span class="progress-line"></span>
   </div>
 </div>
+
 <header class="wrapper">
     <div class="inner-wrapper">
       <img src="/assets/img/dummy-data/storelogo.png" alt="Store Logo">
@@ -46,7 +46,7 @@
           <div class="col-md-7 col-xs-7">
             <span class="text-label medium text-right">{{productDetails.name}}</span>
             <span class="text-label text-right">{{productDetails.price | mycurrency}}</span>
-            <span class="text-label text-right" style="color: #3c763d"><strong>Available Stock : {{productDetails.quantity}}</strong></span>
+            <span class="text-label text-right" style="color: #3c763d"><strong>{{ productDetails.limitless ? 'Stock Available' : 'Available Stock : ' + productDetails.quantity }}</strong></span>
           </div>
         </div>
         <hr/>
@@ -55,7 +55,7 @@
             <span class="text-label">Quantity</span>
           </div>
           <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-            <number ng-model="productDetails.qty" max={{productDetails.quantity}}>
+            <number ng-model="productDetails.qty" max="{{productDetails.limitless ? 100000 : productDetails.quantity}}">
             </number>
           </div>
         </div>

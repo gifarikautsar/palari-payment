@@ -144,21 +144,25 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
 
   $scope.chargeTransaction = function(response) {
     var shippingDetails = {};
+    var serviceDetails = {};
     if (dataFactory.getObject('productDetails').need_address){
       shippingDetails = {
         "full_name": dataFactory.getObject('shippingDetails').full_name,
         "address": dataFactory.getObject('shippingDetails').address,
         "phone": dataFactory.getObject('shippingDetails').phone_number,
         "district_id": dataFactory.getObject('shippingDetails').district.id
-      }
-      console.log(shippingDetails);
+      };
+      serviceDetails = {
+        "include_shipping_insurance": dataFactory.getObject('shippingDetails').insurance,
+        "shipping_service_id": dataFactory.getObject('shippingDetails').servicePackage.service_id 
+      };
     }
 
     $http.post(
         //url
         phinisiEndpoint + '/charge',
         //data
-        {
+        angular.extend({
           payment_type : "credit_card",
           item_details : [ {
             "id" : dataFactory.getObject('productDetails').id,
@@ -176,7 +180,7 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
             "phone": '+62' + dataFactory.getObject('customerDetails').phone_number,
             "shipping_address": shippingDetails
           }        
-        },
+        }, serviceDetails),
         {
           headers: {
             'Content-Type': 'application/json',
@@ -184,7 +188,7 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
           }
         }
       ).success(function(data, status, headers, config) {
-        console.log(data)
+        console.log(data);
         dataFactory.setObject('transactionDetails', data);
 
         //Confirm Transaction
@@ -245,14 +249,19 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
 
   $scope.chargeBankTransfer = function(){
     var shippingDetails = {};
+    var serviceDetails = {};
     if (dataFactory.getObject('productDetails').need_address){
       shippingDetails = {
-        "full_name": dataFactory.getObject('shippingDetails').full_name,
+        "first_name": dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
+        "last_name": dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
         "address": dataFactory.getObject('shippingDetails').address,
-        "phone": dataFactory.getObject('shippingDetails').phone_number,
+        "phone": '+62' + dataFactory.getObject('shippingDetails').phone_number,
         "district_id": dataFactory.getObject('shippingDetails').district.id
-      }
-      console.log(shippingDetails);
+      };
+      serviceDetails = {
+        "include_shipping_insurance": dataFactory.getObject('shippingDetails').insurance,
+        "shipping_service_id": dataFactory.getObject('shippingDetails').servicePackage.service_id 
+      };
     }
     dataFactory.set('paymentType', 'Bank Transfer');
     $state.transitionTo('loading', { arg: 'arg'});
@@ -260,7 +269,7 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
         //url
         phinisiEndpoint + '/charge',
         //data
-        {
+        angular.extend({
           payment_type : "bank_transfer",
           item_details : [ {
             "id" : dataFactory.getObject('productDetails').id,
@@ -269,12 +278,14 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
             "name" : dataFactory.getObject('productDetails').name
           } ],
           customer_details : {
-            "first_name": dataFactory.getObject('customerDetails').full_name,
+            "first_name": dataFactory.getObject('customerDetails').full_name.split(' ').slice(0, -1).join(' '),
+            "last_name": dataFactory.getObject('customerDetails').full_name.split(' ').slice(-1).join(' '),
             "phone": '+62' + dataFactory.getObject('customerDetails').phone_number,
             "email": dataFactory.getObject('customerDetails').email,
             "shipping_address": shippingDetails
           }
-        },
+          
+        },serviceDetails),
         {
           headers: {
             'Content-Type': 'application/json',

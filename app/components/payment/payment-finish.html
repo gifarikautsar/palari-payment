@@ -4,25 +4,25 @@
     <div class="circular active">
       <i class="fa fa-2x fa-shopping-cart" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">CHECKOUT</span>
+    <span class="progress-label active">CHECKOUT</span>
   </div>
   <div class="step-wrapper">
     <div class="circular active">
       <i class="fa fa-2x fa-truck" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">SHIPPING DETAILS</span>
+    <span class="progress-label active">SHIPPING DETAILS</span>
   </div>
   <div class="step-wrapper">
     <div class="circular active">
       <i class="fa fa-2x fa-credit-card" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">PAYMENT DETAILS</span>
+    <span class="progress-label active">PAYMENT DETAILS</span>
   </div>
   <div class="step-wrapper">  
     <div class="circular active">
       <i class="fa fa-2x fa-check" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">PAYMENT CONFIRM</span>
+    <span class="progress-label active">PAYMENT CONFIRM</span>
   </div>
   <div class="line-wrapper">
     <span class="progress-line line-active-3"></span>
@@ -120,13 +120,6 @@
         </div>
     </div>
   </div>
-  
-<!--   <div class="tab middle">
-    <div class="inner-wrapper">
-        <p align="justify">Thank you for purchasing our product. Please transfer the total amount transaction to Virtual Account number below.</p>
-        <span class="text-label big text-center">{{ transactionDetails.permata_va_number}}</span>
-    </div>
-  </div> -->
 
   <div class="tab middle" ng-init="productToggle = false">
     <h5 ng-click="productToggle = !productToggle">PURCHASED PRODUCTS<i class="fa pull-right" ng-class="productToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
@@ -134,7 +127,7 @@
       <!-- Row 1 -->
       <div class="row item">
         <div class="col-md-5 col-xs-5">
-          <img class="item-image" src="productDetails.image_url[0]">
+          <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
         </div>
         <div class="col-md-7 col-xs-7">
           <span class="text-label medium text-right">{{productDetails.name}}</span>

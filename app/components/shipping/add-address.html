@@ -3,13 +3,13 @@
     <div class="circular active">
       <i class="fa fa-2x fa-shopping-cart" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">CHECKOUT</span>
+    <span class="progress-label active">CHECKOUT</span>
   </div>
   <div class="step-wrapper">
     <div class="circular active">
       <i class="fa fa-2x fa-truck" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">SHIPPING DETAILS</span>
+    <span class="progress-label active">SHIPPING DETAILS</span>
   </div>
   <div class="step-wrapper">
     <div class="circular">
@@ -96,7 +96,6 @@
               <span class="text-label">CITY</span>
                 <div class="right-inner-addon">
                   <select name="city" ng-model="shippingDetails.city" ng-change="getDistrictList()" ng-options="city.nama_kota for city in cities.kota | orderBy: nama_kota" ng-disabled="!shippingDetails.province" required>
-                    <option value="" selected="selected">Choose your city...</option>                   
                   </select>
                   <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
                   <div ng-show="shippingForm.$submitted || shippingForm.city.$touched">
@@ -108,7 +107,6 @@
               <span class="text-label">DISTRICT</span>
                 <div class="right-inner-addon">
                   <select name="district" ng-model="shippingDetails.district" ng-options="district.nama_kecamatan for district in districts.kecamatan | orderBy: nama_kecamatan"  ng-disabled="!shippingDetails.city" required>
-                    <option value="" selected="selected">Choose your district...</option>
                   </select>
                   <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
                   <div ng-show="shippingForm.$submitted || shippingForm.district.$touched">

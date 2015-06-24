@@ -4,22 +4,22 @@
     <div class="circular active">
       <i class="fa fa-2x fa-shopping-cart" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">CHECKOUT</span>
+    <span class="progress-label active">CHECKOUT</span>
   </div>
   <div class="step-wrapper">
     <div class="circular active">
       <i class="fa fa-2x fa-truck" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">SHIPPING DETAILS</span>
+    <span class="progress-label active">SHIPPING DETAILS</span>
   </div>
   <div class="step-wrapper">
     <div class="circular active">
       <i class="fa fa-2x fa-credit-card" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
-    <span class="progress-label">PAYMENT DETAILS</span>
+    <span class="progress-label active">PAYMENT DETAILS</span>
   </div>
   <div class="step-wrapper">  
-    <div class="circular ">
+    <div class="circular">
       <i class="fa fa-2x fa-check" style="color: #FFFFFF; margin-top: 10px;"></i>
     </div>
     <span class="progress-label">PAYMENT CONFIRM</span>
@@ -70,7 +70,7 @@
             <span class="text-label text-left">Delivery Fee</span>        
           </div>
           <div class="col-md-7 col-xs-7">
-            <span class="text-label text-right">{{ shippingDetails.shippingCost | mycurrency}}</span>        
+            <span class="text-label text-right">{{ shippingDetails.shippingCost | mycurrency }}</span>        
           </div>
         </div>
         <hr class="no-margin" ng-show="purchasedProducts.length != 1"/>
@@ -93,7 +93,7 @@
         <span class="text-label medium" ng-cloak>{{ shippingDetails.full_name }}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
-        <i class="fa fa-3x pull-right" ng-class="shipmentToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
+        <i class="fa fa-2x pull-right" ng-class="shipmentToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
       </div>
     </div>
 
