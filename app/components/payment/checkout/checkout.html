@@ -1,40 +1,3 @@
-<!-- Header Section -->
-<div class="progress-wrapper text-center">
-  <div class="step-wrapper">
-    <div class="circular active">
-      <i class="fa fa-2x fa-shopping-cart" style="color: #FFFFFF; margin-top: 10px;"></i>
-    </div>
-    <span class="progress-label active">CHECKOUT</span>
-  </div>
-  <div class="step-wrapper">
-    <div class="circular">
-      <i class="fa fa-2x fa-truck" style="color: #FFFFFF; margin-top: 10px;"></i>
-    </div>
-    <span class="progress-label">SHIPPING DETAILS</span>
-  </div>
-  <div class="step-wrapper">
-    <div class="circular">
-      <i class="fa fa-2x fa-credit-card" style="color: #FFFFFF; margin-top: 10px;"></i>
-    </div>
-    <span class="progress-label">PAYMENT DETAILS</span>
-  </div>
-  <div class="step-wrapper">  
-    <div class="circular">
-      <i class="fa fa-2x fa-check" style="color: #FFFFFF; margin-top: 10px;"></i>
-    </div>
-    <span class="progress-label">PAYMENT CONFIRM</span>
-  </div>
-  <div class="line-wrapper">
-    <span class="progress-line"></span>
-  </div>
-</div>
-
-<header class="wrapper">
-    <div class="inner-wrapper">
-      <img src="/assets/img/dummy-data/storelogo.png" alt="Store Logo">
-    </div>
-</header>
-
 <form name="checkoutForm">
   <div class="wrapper tab" ng-init="getProduct()">    
       <h5>Purchased Items</h5> 
@@ -45,6 +8,7 @@
           </div>
           <div class="col-md-7 col-xs-7">
             <span class="text-label medium text-right">{{productDetails.name}}</span>
+            <p class="text-label text-right">{{productDetails.description}}</p>
             <span class="text-label text-right">{{productDetails.price | mycurrency}}</span>
             <span class="text-label text-right" style="color: #3c763d"><strong>{{ productDetails.limitless ? 'Stock Available' : 'Available Stock : ' + productDetails.quantity }}</strong></span>
           </div>

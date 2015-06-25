@@ -1,4 +1,5 @@
 paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state', '$stateParams', '$window', 'dataFactory', function($scope, $http, $log, $state, $stateParams, $window, dataFactory){
+  $scope.$parent.state = 1;
   $scope.productDetails = {};
   $scope.productDetails.qty = 1;
   $scope.productId = $stateParams.productId;
@@ -37,7 +38,7 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
 
   $scope.checkout = function(){
     dataFactory.setObject('productDetails', $scope.productDetails);
-    $state.transitionTo('shippingDetails', { arg: 'arg' });  
+    $state.transitionTo('payment.shippingDetails', { arg: 'arg' });  
   }
 
 }]);

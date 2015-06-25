@@ -1,0 +1,202 @@
+<form name="form" ng-submit="onSubmit()">
+
+  <div class="wrapper" ng-init="amountToggle = false">
+      <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
+        <div class=" col-xs-7 col-md-8 no-padding">
+          <span class="text-label">TOTAL AMOUNT</span>
+          <span class="text-label medium" ng-cloak>{{ productDetails.totalAmount | mycurrency}}</span>
+        </div>
+        <div class=" col-xs-5 col-md-4 no-padding">
+          <i class="fa fa-2x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px"></i>
+        </div>
+      </div>
+
+    <!-- Purchased Items -->
+    <div class="hidden-content animate-show" ng-show="amountToggle">
+      <div class="inner-wrapper" ng-cloak>
+
+        <!-- Row 1 -->
+        <div class="row">
+          <div class="col-md-5 col-xs-5">
+            <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
+          </div>
+          <div class="col-md-7 col-xs-7">
+            <span class="text-label medium text-right">{{ productDetails.name }}</span>
+            <span class="text-label text-right">{{ productDetails.price | mycurrency}}</span>
+            <span class="text-label text-right">Quantity : {{ productDetails.qty }}</span>
+          </div>
+        </div>
+        
+        <hr/>
+        
+        <!-- Row 3 -->
+        <div class="row">
+          <div class="col-md-8 col-xs-6">
+            <span class="text-label medium">TOTAL</span>
+          </div>
+          <div class="col-md-4 col-xs-6">
+            <span class="text-label medium text-right">{{productDetails.totalAmount | mycurrency}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapper tab">
+    <ng-form name="customerForm">
+      <div class="tab">    
+        <h5>Customer Details</h5> 
+        <div class="inner-wrapper inner-content">
+          <div class="error-box animate-blink" ng-show="errorMessage">
+            <div class="error-message">{{ errorMessage }}</div>
+          </div>
+          <p align="justify">Welcome to BBM Pay! It seems this is your first time purchasing product from our system. Please complete the information below.</p>
+              <div class="form-group">
+                <span class="text-label">FULL NAME</span>
+                <div class="right-inner-addon">
+                  <input type="text" class="form-control" name="fullname" ng-model="customerDetails.full_name" required>
+                  <div ng-show="customerForm.$submitted || customerForm.fullname.$touched">
+                    <i class="glyphicon glyphicon-ok" ng-show="customerForm.fullname.$valid"></i>
+                    <i class="glyphicon glyphicon-remove" ng-show="!customerForm.fullname.$valid"></i>
+                    <span class="error-message" ng-show="customerForm.fullname.$error.required">Full Name is required.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <span class="text-label">EMAIL ADDRESS</span>
+                <div class="right-inner-addon">
+                  <input type="text" class="form-control" name="email" ng-model="customerDetails.email" validation-type="email" required>
+                  <div ng-show="customerForm.$submitted || customerForm.email.$touched">
+                    <i class="glyphicon glyphicon-ok" ng-show="customerForm.email.$valid"></i>
+                    <i class="glyphicon glyphicon-remove" ng-show="!customerForm.email.$valid"></i>
+                    <span class="error-message" ng-show="customerForm.email.$error.required">Email is required.</span>
+                    <span class="error-message" ng-show="customerForm.email.$error.email">Please enter a valid email address.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <span class="text-label">PHONE NUMBER</span>
+                <div class="right-inner-addon">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">+62</span>
+                    <input type="text" class="form-control" name="phonenumber" maxlength="11" ng-model="customerDetails.phone_number" validation-type="phonenumber" required>
+                  </div>
+                  <div ng-show="customerForm.$submitted || customerForm.phonenumber.$touched">
+                    <i class="glyphicon glyphicon-ok" ng-show="customerForm.phonenumber.$valid"></i>
+                    <i class="glyphicon glyphicon-remove" ng-show="!customerForm.phonenumber.$valid"></i>
+                    <span class="error-message" ng-show="customerForm.phonenumber.$error.required">Phone Number is required.</span>
+                    <span class="error-message" ng-show="customerForm.phonenumber.$error.phonenumber">Please enter a valid phone number.</span>
+                  </div>
+                </div>
+              </div>
+            <p align="justify">NOTE : Please use your active email since we'll send you the purchase notification via your email.</p>  
+          </div>
+      </div>
+    <ng-form>
+    <ng-form name="shippingForm">
+      <div class="tab middle" ng-show="productDetails.need_address" ng-init="changeAddressToggle = false">    
+        <h5>Shipping Details</h5> 
+        <div class="error-box animate-blink" ng-show="errorMessageShipping">
+            <div class="error-message">{{ errorMessageShipping }}</div>
+        </div>
+        <div class="inner-wrapper inner-content" ng-hide="shippingDetails != null">
+          <p align="justify">You haven't had any shipping details yet, please add one by clicking button below.</p>
+          <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn btn-default">ADD ADDRESS</a></small>
+        </div>
+        <div class="inner-wrapper inner-content" ng-hide="shippingDetails == null">
+          <span class="text-label big">{{shippingDetails.full_name}}</span>
+          <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
+          <small><a ng-click="changeAddressToggle = !changeAddressToggle" class="btn btn-default">CHANGE ADDRESS</a></small>
+
+          <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
+          
+          <div class="row no-margin ng-hide">
+            <p>Please choose your shipping provider.</p>
+
+            <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4 vertical-align" style="justify-content: flex-start">
+              <input type="radio" id="bni" class="css-checkbox" name="radio" ng-model="shippingProvider" value="bni" />   
+              <label for="bni" class="css-label pull-left"></label>
+              <span class="shipping-logo jne"></span>
+            </div>
+
+            <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4 vertical-align" style="justify-content: flex-start">
+              <input type="radio" id="mandiri" class="css-checkbox" name="radio" ng-model="shippingProvider" value="mandiri" />   
+              <label for="mandiri" class="css-label"></label>
+              <span class="shipping-logo tiki"></span>
+            </div>
+
+            <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4 vertical-align" style="justify-content: flex-start">
+              <input type="radio" id="cimb_clicks" class="css-checkbox" name="radio" ng-model="shippingProvider" value="cimb_clicks" />   
+              <label for="cimb_clicks" class="css-label"></label>
+              <span class="shipping-logo posindo"></span>
+            </div>
+             
+          </div>
+
+          <div class="animate-float-left" ng-init="getFare()">
+
+            <div class="vertical-align" style="justify-content: flex-start">
+              <span class="shipping-logo jne"></span>
+              <span class="vertical-line"></span>
+              <span class="text-label big" style="display: inline-block" ng-show="shippingDetails.servicePackage">{{ shippingDetails.insurance ? shippingDetails.servicePackage.service_fare_with_issurance : shippingDetails.servicePackage.service_fare | mycurrency}}</span>
+            </div>
+            
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group">  
+                  <span class="text-label animate-float-left">Shipping package :</span>
+                  <div class="right-inner-addon">
+                    <select name="servicePackage" ng-model="shippingDetails.servicePackage" ng-options="servicePackage.service_name for servicePackage in servicePackageList" required>
+                      
+                    </select>
+                    <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                    <div ng-show="form.shippingForm.$submitted || form.shippingForm.city.$touched">
+                      <span class="error-message" ng-show="form.shippingForm.city.$error.required">Please select your package.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group" ng-class="{ 'disabled': !shippingDetails.servicePackage }">  
+                  <span class="text-label animate-float-left">Insurance :</span>
+                  <div class="right-inner-addon">
+                    <select name="insurance" ng-model="shippingDetails.insurance" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" ng-disabled="!shippingDetails.servicePackage" required>
+
+                    </select>
+                    <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                    <div ng-show="form.shippingForm.$submitted || form.shippingForm.city.$touched">
+                      <span class="error-message" ng-show="form.shippingForm.city.$error.required">Please select insurance.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </ng-form>
+  </div>
+
+  <div class="wrapper">
+      <div class="inner-wrapper">
+          <a ui-sref="payment.checkout({productId: '{{productDetails.id}}'})" class="btn btn-default pull-left" style="width: 48%">BACK</a>
+          <input type="submit" class="btn btn-primary pull-right" style="width: 48%" value="NEXT" />
+      </div>
+  </div>
+
+  <div class="dialog-box absolute-center" ng-show="changeAddressToggle">
+    <span class="text-label medium text-center" style="margin-bottom: 20px">SELECT SHIPPING ADDRESS</span>
+    <div class="inner-wrapper" style="background: #FFFFFF; height: 200px; overflow: scroll; margin-bottom: 20px;">
+
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
+      <a class="btn-light-gray btn pull-left" style="width: 95% !important" ng-click="changeAddressToggle = false">CANCEL</a>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
+      <a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >ADD ADDRESS</a>
+    </div>
+  </div>
+
+</form>
