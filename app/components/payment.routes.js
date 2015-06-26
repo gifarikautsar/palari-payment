@@ -1,46 +1,52 @@
 routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
 	$stateProvider
-		.state('checkout', {
-			url: '/payment/:productId',
-			templateUrl: 'app/components/checkout/checkout.html',
-			controller: 'checkoutController'			
-		})
-		.state('shippingDetails', {
-			url: '/shipping',
-			templateUrl: 'app/components/shipping/shipping-details.html',
-			controller: 'shippingController'
-		})
-		.state('addAddress', {
-			url: '/add-address',
-			templateUrl: 'app/components/shipping/add-address.html',
-			controller: 'addAddressController'
-		})
-		.state('paymentDetails', {
-			url: '/payment-details',
-			templateUrl: 'app/components/payment/payment-details.html',
+		.state('payment', {
+			templateUrl: 'app/components/payment/payment.html',
 			controller: 'paymentController'
 		})
-		.state('paymentDetails.creditCard', {
-			templateUrl: 'app/components/payment/payment-type/credit-card.html',
+		.state('payment.checkout', {
+			url: '/checkout/:productId',
+			templateUrl: 'app/components/payment/checkout/checkout.html',
+			controller: 'checkoutController'			
+		})
+		.state('payment.shippingDetails', {
+			url: '/shipping',
+			templateUrl: 'app/components/payment/shipping/shipping-details.html',
+			controller: 'shippingController'
+		})
+		.state('payment.addAddress', {
+			url: '/add-address',
+			templateUrl: 'app/components/payment/shipping/add-address.html',
+			controller: 'addAddressController'
+		})
+		.state('payment.paymentDetails', {
+			url: '/payment-details',
+			templateUrl: 'app/components/payment/payment-details/payment-details.html',
+			controller: 'paymentDetailsController'
+		})
+		.state('payment.paymentDetails.creditCard', {
+			templateUrl: 'app/components/payment/payment-details/payment-type/credit-card.html',
 			controller: 'creditCardController'
 		})
-		.state('paymentDetails.bankTransfer', {
-			templateUrl: 'app/components/payment/payment-type/bank-transfer.html',
+		.state('payment.paymentDetails.bankTransfer', {
+			templateUrl: 'app/components/payment/payment-details/payment-type/bank-transfer.html',
 			controller: 'bankTransferController'
-
 		})	
-		.state('paymentDetails.bbmMoney', {
-			templateUrl: 'app/components/payment/payment-type/bbm-money.html'
+		.state('payment.paymentDetails.bbmMoney', {
+			templateUrl: 'app/components/payment/payment-details/payment-type/bbm-money.html'
 		})	
-		.state('paymentFinish', {
+		.state('payment.paymentFinish', {
 			url: '/payment-finish',
-			templateUrl: 'app/components/payment/payment-finish.html',
+			templateUrl: 'app/components/payment/payment-finish/payment-finish.html',
 			controller: 'paymentFinishController'		
 		})
-		.state('loading', {
+		.state('payment.loading', {
 			templateUrl: 'app/components/payment/loading.html',
-			controller: 'loadingController'
+			controller: 'loadingController',
+			params: {
+				paymentStatus: null
+			}
 		})
 		.state('404', {
 			url: '/404',

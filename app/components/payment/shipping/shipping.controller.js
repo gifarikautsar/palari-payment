@@ -1,8 +1,8 @@
 paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state', 'dataFactory', 'shippingService', function($scope, $http, $log, $state, dataFactory, shippingService){
+  $scope.$parent.state = 2;
   $scope.productDetails = dataFactory.getObject('productDetails');
   $scope.shippingDetails = dataFactory.getObject('shippingDetails');
   $scope.customerDetails = dataFactory.getObject('customerDetails');
-  $scope.shippingPackage = "0";
   
   $scope.addAddress = function(){
     dataFactory.setObject('customerDetails', $scope.customerDetails);
@@ -27,8 +27,7 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
       )
       .success(function(data){
         console.log(data);
-        $scope.shippingDetails.shippingCost = data.expedition[0].expedition_service;
-        console.log($scope.shippingDetails.shippingCost);
+        $scope.servicePackageList = data.expedition[0].expedition_service;
       })
       .error(function(data){
         $scope.error = data.description;
@@ -38,18 +37,22 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   }
 
   $scope.onSubmit = function(){
-    if ($scope.customerForm.$valid){
+    console.log('helo');
+    if ($scope.customerForm.$valid && $scope.shippingForm.$valid){
       if ($scope.productDetails.need_address && ($scope.shippingDetails == null)){
        $scope.errorMessageShipping = "Please set your shipping address and shipping method before proceeding to the next step.";
       } 
       else {
-        $scope.shippingDetails.shippingCost = $scope.shippingDetails.shippingCost[$scope.shippingPackage].service_fare;
+        if ($scope.shippingDetails.insurance) {
+          $scope.shippingDetails.shippingCost = $scope.shippingDetails.servicePackage.service_fare_with_issurance;
+        } 
+        else {
+          $scope.shippingDetails.shippingCost = $scope.shippingDetails.servicePackage.service_fare;
+        }
+        console.log($scope.shippingDetails);
         dataFactory.setObject('customerDetails', $scope.customerDetails);
         dataFactory.setObject('shippingDetails', $scope.shippingDetails);
-        console.log($scope.customerDetails);
-        console.log(dataFactory.getObject('customerDetails'));
-        console.log(dataFactory.getObject('shippingDetails'));
-        $state.transitionTo('paymentDetails', { arg: 'arg'});
+        $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
       }
     }
     else {
@@ -95,7 +98,7 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
   $scope.onSubmit = function(){
     if ($scope.shippingForm.$valid){
       dataFactory.setObject('shippingDetails', $scope.shippingDetails);
-      $state.transitionTo('shippingDetails', { arg: 'arg' });
+      $state.transitionTo('payment.shippingDetails', { arg: 'arg' });
     }
   };
 }]);
