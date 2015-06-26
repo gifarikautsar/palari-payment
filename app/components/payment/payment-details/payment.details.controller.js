@@ -72,6 +72,9 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     card_exp_date: '12/2018'
   };
 
+  var shippingDetails = {};
+  var serviceDetails = {};
+
   var card = function() {
     var shippingCost = (dataFactory.getObject('productDetails').need_address ? dataFactory.getObject('shippingDetails').shippingCost : 0);
     return {
@@ -104,7 +107,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
       console.log("NOT 3-D SECURE");
       // Success 3-D Secure or success normal
       console.log($scope.paymentStatus);
-        $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
+      $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
       $scope.chargeTransaction(response);
     }
     else {
@@ -137,8 +140,6 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
   }
 
   $scope.chargeTransaction = function(response) {
-    var shippingDetails = {};
-    var serviceDetails = {};
     if (dataFactory.getObject('productDetails').need_address){
       shippingDetails = {
         "full_name": dataFactory.getObject('shippingDetails').full_name,
@@ -199,6 +200,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
           }
         ).success(function(data, status, headers, config){
             console.log(data);
+            dataFactory.setObject('customerDetails', $scope.$parent.customerDetails);
             $state.transitionTo('payment.paymentFinish', {'data': data})
            
         }).error(function(data, status, headers, config){
@@ -231,10 +233,10 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
 
 paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$state', 'dataFactory', function($scope, $http, $log, $state, dataFactory){
 
+  var shippingDetails = {};
+  var serviceDetails = {};
 
   $scope.chargeBankTransfer = function(){
-    var shippingDetails = {};
-    var serviceDetails = {};
     if (dataFactory.getObject('productDetails').need_address){
       shippingDetails = {
         "first_name": dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
@@ -291,23 +293,3 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
   }
 
 }]);
-// paymentApp.directive('loading', function ($http) {
-//   return {
-//       restrict: 'A',
-//       link: function (scope, elm, attrs)
-//       {
-//           scope.isLoading = function () {
-//               return $http.pendingRequests.length > 0;
-//           };
-
-//           scope.$watch(scope.isLoading, function (v)
-//           {
-//               if(v){
-//                   $(elm).show();
-//               }else{
-//                   $(elm).hide();
-//               }
-//           });
-//       }
-//   };
-// });

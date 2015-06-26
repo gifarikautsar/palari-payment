@@ -4,4 +4,13 @@ paymentApp.controller('paymentFinishController', ['$scope','$http', '$log', '$st
   $scope.shippingDetails = dataFactory.getObject('shippingDetails');
   $scope.customerDetails = dataFactory.getObject('customerDetails');
   $scope.productDetails = dataFactory.getObject('productDetails');
+
+  if ($scope.customerDetails.expressPayment) {
+  	console.log('token saved');
+  	dataFactory.setObjectLS('bbmPayToken', {
+  		shippingDetails: $scope.shippingDetails,
+  		customerDetails: $scope.customerDetails
+  	})
+  }
+
 }]);

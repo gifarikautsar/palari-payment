@@ -59,52 +59,22 @@ servicesApp.service('shippingService', function($http){
 servicesApp.factory('dataFactory', ['$window', function($window){
   return {
     set: function(key, value) {
-      $window.localStorage[key] = value;
+      $window.sessionStorage[key] = value;
     },
     get: function(key) {
-      return $window.localStorage[key] || null;
+      return $window.sessionStorage[key] || null;
     },
     setObject: function(key, value) {
-      $window.localStorage[key] = JSON.stringify(value);
+      $window.sessionStorage[key] = JSON.stringify(value);
     },
     getObject: function(key) {
+      return JSON.parse($window.sessionStorage[key] || null);
+    },
+    setObjectLS: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getObjectLS: function(key) {
       return JSON.parse($window.localStorage[key] || null);
     }
   }
 }]);
-
-// servicesApp.service('dataFactory', function(){
-//   var productDetails = null;
-//   var shippingDetails = null;
-//   var customerDetails = null;
-//   var creditCard = null;
-
-//   return {
-//     getProductDetails: function () {
-//       return productDetails;
-//     },
-//     setProductDetails: function (value) {
-//       productDetails = value;
-//     },
-//     getShippingDetails: function () {
-//       return shippingDetails;
-//     },
-//     setShippingDetails: function (value) {
-//       shippingDetails = value;
-//     },
-//     getCustomerDetails: function () {
-//       return customerDetails;
-//     },
-//     setCustomerDetails: function (value) {
-//       customerDetails = value;
-//     },
-//     getCreditCard: function () {
-//       return creditCard;
-//     },
-//     setCreditCard: function (value) {
-//       creditCard = value;
-//     }
-
-//   }
-// })
-
