@@ -72,47 +72,39 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     card_exp_date: '12/2018'
   };
 
-  $scope.errorMessage = dataFactory.get('errorMessage');
-
-  $scope.getToken = function(){
-    dataFactory.setObject('creditCard', {
+  var card = function() {
+    var shippingCost = (dataFactory.getObject('productDetails').need_address ? dataFactory.getObject('shippingDetails').shippingCost : 0);
+    return {
       'card_number': $scope.creditCard.card_number,
       'card_cvv': $scope.creditCard.card_cvv,
       'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
       'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
       'secure': true,
-      'gross_amount': dataFactory.getObject('productDetails').totalAmount + dataFactory.getObject('shippingDetails').shippingCost
-    });
-    dataFactory.getObject('creditCard');
-    dataFactory.set('paymentType', 'Credit Card');
-    $state.transitionTo('payment.loading', { arg: 'arg'});
+      'gross_amount': dataFactory.getObject('productDetails').totalAmount + shippingCost
+    }
   }
 
-}]);
+  $scope.errorMessage = dataFactory.get('errorMessage');
 
-paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataFactory', function($scope, $http, $log, $state, $stateParams, dataFactory){
-  $scope.paymentStatus = $stateParams.paymentStatus;
-
-  var card = function(){
-    return dataFactory.getObject('creditCard');
+  $scope.getToken = function(){
+    $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
+    $scope.getClientKey();
+    setTimeout(function(){
+      Veritrans.token(card, callback);
+    }, 1000);
   }
-  
+
   function callback(response) {
     console.log(response);
     if (response.redirect_url) {
       console.log("3D SECURE");
-      $scope.$apply(function(){
-        $scope.response = response;
-        $scope.paymentStatus = '3d-secure-loading';
-      });
+      $state.transitionTo('payment.loading', { paymentStatus: '3d-secure-loading', response: response});        
     }
     else if (response.status_code == "200") {
       console.log("NOT 3-D SECURE");
       // Success 3-D Secure or success normal
       console.log($scope.paymentStatus);
-      $scope.$apply(function(){
-        $scope.paymentStatus = 'charge-loading';
-      });
+        $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
       $scope.chargeTransaction(response);
     }
     else {
@@ -221,18 +213,11 @@ paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state',
       });
   }
 
-  $scope.loadInit = function(){
-    if (dataFactory.get('paymentType') == 'Credit Card'){
-      $scope.getClientKey();
-      console.log(dataFactory.getObject('creditCard'));
-      setTimeout(function(){
-        Veritrans.token(card, callback);
-      }, 1000);
-    }
-    else if (dataFactory.get('paymentType') == 'Bank Transfer'){
-    }
-    
-  }
+}]);
+
+paymentApp.controller('loadingController', ['$scope', '$http', '$log', '$state', '$stateParams', 'dataFactory', function($scope, $http, $log, $state, $stateParams, dataFactory){
+  $scope.paymentStatus = $stateParams.paymentStatus;
+  $scope.response = $stateParams.response;
 
   $scope.loadFinish = function(){
     setTimeout(function() {

@@ -37,27 +37,32 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   }
 
   $scope.onSubmit = function(){
-    console.log('helo');
-    if ($scope.customerForm.$valid && $scope.shippingForm.$valid){
-      if ($scope.productDetails.need_address && ($scope.shippingDetails == null)){
-       $scope.errorMessageShipping = "Please set your shipping address and shipping method before proceeding to the next step.";
-      } 
-      else {
-        if ($scope.shippingDetails.insurance) {
-          $scope.shippingDetails.shippingCost = $scope.shippingDetails.servicePackage.service_fare_with_issurance;
-        } 
-        else {
-          $scope.shippingDetails.shippingCost = $scope.shippingDetails.servicePackage.service_fare;
+    if ($scope.customerForm.$valid){
+      if ($scope.productDetails.need_address){
+        if ($scope.shippingDetails != null) {
+          if ($scope.shippingDetails.insurance) {
+            $scope.shippingDetails.shippingCost = $scope.shippingDetails.servicePackage.service_fare_with_issurance;
+          } 
+          else {
+            $scope.shippingDetails.shippingCost = $scope.shippingDetails.servicePackage.service_fare;
+          }
+          dataFactory.setObject('customerDetails', $scope.customerDetails);
+          dataFactory.setObject('shippingDetails', $scope.shippingDetails);
+          $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
         }
-        console.log($scope.shippingDetails);
+        else {
+          $scope.errorMessageShipping = "Please set your shipping address and shipping method before proceeding to the next step.";   
+        }
+      }
+      else {
         dataFactory.setObject('customerDetails', $scope.customerDetails);
-        dataFactory.setObject('shippingDetails', $scope.shippingDetails);
         $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
       }
     }
     else {
       $scope.errorMessage = "Invalid form. Please correct your information details below before proceeding to the next step.";
     }
+
   }
 
 }]);

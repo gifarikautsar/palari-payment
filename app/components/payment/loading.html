@@ -2,14 +2,18 @@
   <div class="wrapper" ng-show="paymentStatus !== '3d-secure'">
 
     <div class="tab">
-      <h5 class="text-center" ng-if="paymentStatus == 'charge-loading'">PROCESSING YOUR PAYMENT</h5>
       <h5 class="text-center" ng-if="paymentStatus == '3d-secure-loading'">REDIRECTING TO 3D SECURE</h5>
+      <h5 class="text-center" ng-if="paymentStatus == 'charge-loading'">PROCESSING YOUR PAYMENT</h5>
       <div class="inner-wrapper">
+        <span class="bbm-pay-logo center-block"></span>
         <span class="loading-gif"></span>
         <div style="text-align: center; padding-bottom: 40px;">
           <span class="3d-secure-label" ng-if="paymentStatus == '3d-secure-loading'">Please wait while your payment being processed using 3D Secure service to enhance your payment experience!</span>
           <span class="3d-secure-label" ng-if="paymentStatus == 'charge-loading'">Please wait while your payment is being processed!</span>
         </div>
+        <span class="center-block text-center">Powered by :</span>
+        <span class="veritrans-logo center-block"></span>
+        
       </div>
     </div>
 

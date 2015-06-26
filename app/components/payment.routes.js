@@ -35,7 +35,7 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		})	
 		.state('payment.paymentDetails.bbmMoney', {
 			templateUrl: 'app/components/payment/payment-details/payment-type/bbm-money.html'
-		})	
+		})
 		.state('payment.paymentFinish', {
 			url: '/payment-finish',
 			templateUrl: 'app/components/payment/payment-finish/payment-finish.html',
@@ -45,7 +45,8 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 			templateUrl: 'app/components/payment/loading.html',
 			controller: 'loadingController',
 			params: {
-				paymentStatus: null
+				paymentStatus: null,
+				response: null
 			}
 		})
 		.state('404', {
