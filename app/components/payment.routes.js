@@ -45,7 +45,8 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 			templateUrl: 'app/components/payment/loading.html',
 			controller: 'loadingController',
 			params: {
-				paymentStatus: null
+				paymentStatus: null,
+				response: null
 			}
 		})
 		.state('404', {

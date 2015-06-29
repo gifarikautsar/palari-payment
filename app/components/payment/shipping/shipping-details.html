@@ -93,7 +93,7 @@
           </div>
       </div>
     <ng-form>
-    <ng-form name="shippingForm">
+    <ng-form name="shippingForm" ng-if="productDetails.need_address">
       <div class="tab middle" ng-show="productDetails.need_address" ng-init="changeAddressToggle = false">    
         <h5>Shipping Details</h5> 
         <div class="error-box animate-blink" ng-show="errorMessageShipping">

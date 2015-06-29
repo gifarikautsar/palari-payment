@@ -28,7 +28,7 @@
             <span class="text-label text-right">Quantity : {{ productDetails.qty }}</span>
           </div>
         </div>
-        <div class="row item">
+        <div class="row item" ng-if="productDetails.need_address">
           <div class="col-md-5 col-xs-5">
             <span class="text-label text-left">Delivery Fee</span>
           </div>

@@ -1,10 +1,13 @@
 <div class="wrapper">
 
   <div class="tab">
-    <h5 class="text-center">PAYMENT DETAILS</h5>
+    <h5 class="text-center">PAYMENT CONFIRMATION</h5>
     <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'credit_card'">
       <span class="text-label pull-left">PAYMENT TYPE : {{ transactionDetails.payment_type }}</span>
       <span class="text-label pull-right">STATUS : {{ transactionDetails.transaction_status }}</span>
+    </div>
+    <div class="inner-wrapper">
+      <button class="btn btn-dark-gray" style="width: 100%">Back to BBM  <i class="fa fa-arrow-circle-right"></i> </button>
     </div>
     <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'bank_transfer'">
         <p align="center">Thank you for purchasing our product. Please transfer the total amount transaction to Virtual Account number below.</p>
