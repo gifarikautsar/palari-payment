@@ -1,15 +1,24 @@
 paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state', 'dataFactory', 'shippingService', function($scope, $http, $log, $state, dataFactory, shippingService){
   $scope.$parent.state = 2;
   $scope.productDetails = dataFactory.getObject('productDetails');
-  $scope.shippingDetails = dataFactory.getObject('shippingDetails');
+  $scope.arrayOfShippingDetails = dataFactory.getObject('arrayOfShippingDetails');
   $scope.customerDetails = dataFactory.getObject('customerDetails');
+  $scope.selectedShippingDetails = dataFactory.getObject('selectedShippingDetails');
+  $scope.serviceDetails = {}
   
+  if ($scope.arrayOfShippingDetails) {
+    $scope.shippingDetails = $scope.arrayOfShippingDetails[$scope.selectedShippingDetails];
+    console.log($scope.selectedShippingDetails)
+  }
+
   $scope.addAddress = function(){
     dataFactory.setObject('customerDetails', $scope.customerDetails);
     console.log($scope.customerDetails); 
   }
 
-  $scope.getFare = function() {
+  $scope.getFare = function(shippingDetails) {
+    console.log('tes');
+    console.log(shippingDetails);
     if ($scope.shippingDetails){
       $http.post(
         //url
@@ -17,7 +26,7 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
         //data
         {
           "product_id": $scope.productDetails.id,
-          "destination_district_id": $scope.shippingDetails.district.id,
+          "destination_district_id": shippingDetails.district.id,
           "quantity": $scope.productDetails.qty
         },
         //config
@@ -26,8 +35,14 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
         }
       )
       .success(function(data){
-        console.log(data);
-        $scope.servicePackageList = data.expedition[0].expedition_service;
+        if (data.expedition) {
+          console.log(data);
+          $scope.servicePackageList = data.expedition[0].expedition_service;
+          $scope.errorMessageShipping = null;  
+        }
+        else {
+          $scope.errorMessageShipping = "Destination address is not available. Please choose another address.";
+        }
       })
       .error(function(data){
         $scope.error = data.description;
@@ -39,15 +54,17 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   $scope.onSubmit = function(){
     if ($scope.customerForm.$valid){
       if ($scope.productDetails.need_address){
-        if ($scope.shippingDetails != null) {
-          if ($scope.shippingDetails.insurance) {
-            $scope.shippingDetails.shippingCost = $scope.shippingDetails.servicePackage.service_fare_with_issurance;
+        if ($scope.arrayOfShippingDetails != null) {
+          if ($scope.serviceDetails.insurance) {
+            $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare_with_issurance;
           } 
           else {
-            $scope.shippingDetails.shippingCost = $scope.shippingDetails.servicePackage.service_fare;
+            $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare;
           }
           dataFactory.setObject('customerDetails', $scope.customerDetails);
           dataFactory.setObject('shippingDetails', $scope.shippingDetails);
+          dataFactory.setObject('serviceDetails', $scope.serviceDetails);
+          dataFactory.set('selectedShippingDetails', $scope.selectedShippingDetails);
           $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
         }
         else {
@@ -68,10 +85,15 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
 }]);
 
 paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$state', 'dataFactory', 'shippingService', function($scope, $http, $log, $state, dataFactory, shippingService){
-  $scope.shippingDetails = {};
+
+  $scope.shippingDetails = {
+    full_name: dataFactory.getObject('customerDetails').full_name,
+    phone_number: dataFactory.getObject('customerDetails').phone_number
+  };
   $scope.provinces = {};
   $scope.cities = {};
   $scope.districts = {};
+  $scope.arrayOfShippingDetails = dataFactory.getObject('arrayOfShippingDetails') || [];
 
   $scope.getProvinceList = function() {
     $scope.shippingDetails.city = '';
@@ -97,7 +119,9 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
 
   $scope.onSubmit = function(){
     if ($scope.shippingForm.$valid){
-      dataFactory.setObject('shippingDetails', $scope.shippingDetails);
+      $scope.arrayOfShippingDetails.push($scope.shippingDetails);
+      dataFactory.set('selectedShippingDetails', $scope.arrayOfShippingDetails.indexOf($scope.shippingDetails));
+      dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
       $state.transitionTo('payment.shippingDetails', { arg: 'arg' });
     }
   };

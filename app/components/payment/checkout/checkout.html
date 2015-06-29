@@ -34,7 +34,7 @@
   <div class="wrapper">
       <div class="inner-wrapper">
           <button ng-click="checkout()" class="btn btn-primary" style="width: 100%" ng-if="productDetails.quantity > 0">CHECKOUT</button>
-          <button ng-click="checkout()" class="btn btn-danger" style="width: 100%" ng-if="productDetails.quantity == 0" ng-disabled="productDetails.quantity == 0">OUT OF STOCK</button>
+          <button ng-click="checkout()" class="btn btn-danger" style="width: 100%" ng-if="productDetails.quantity == 0" ng-disabled="true">OUT OF STOCK</button>
       </div>
   </div>
 </form>

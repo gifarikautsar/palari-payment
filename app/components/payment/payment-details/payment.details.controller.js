@@ -21,10 +21,6 @@ paymentApp.config(function($sceDelegateProvider, $httpProvider) {
 
 //Factory
 paymentApp.value('PaymentTypes', [{
-    display_name: "BBM Money",
-    payment_type: "bbm_money",
-    image_class: "bbm-logo"
-  }, {
     display_name: "Credit Card",
     payment_type: "credit_card",
     image_class: "fa fa-lg fa-credit-card"
@@ -41,6 +37,7 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
   $scope.shippingDetails = dataFactory.getObject('shippingDetails');
   $scope.productDetails = dataFactory.getObject('productDetails');
   $scope.customerDetails = dataFactory.getObject('customerDetails');
+  $scope.serviceDetails = dataFactory.getObject('serviceDetails');
 
   $scope.paymentType = {
     display_name: "Credit Card",
@@ -49,15 +46,11 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
   }; 
 
   $scope.go = function (paymentType) {
-    console.log('go ' + paymentType);
     if (paymentType === 'credit_card') {
       $state.transitionTo('payment.paymentDetails.creditCard', {arg : 'arg'});
     }
     else if (paymentType === 'permata'){
       $state.transitionTo('payment.paymentDetails.bankTransfer', {arg : 'arg'});
-    }
-    else if (paymentType === 'paymentDetails.bbmMoney'){
-      $state.transitionTo('payment.paymentDetails.bbmMoney', {arg : 'arg'});
     }
     else {
 
@@ -76,7 +69,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
   var serviceDetails = {};
 
   var card = function() {
-    var shippingCost = (dataFactory.getObject('productDetails').need_address ? dataFactory.getObject('shippingDetails').shippingCost : 0);
+    var shippingCost = (dataFactory.getObject('productDetails').need_address ? dataFactory.getObject('serviceDetails').shippingCost : 0);
     return {
       'card_number': $scope.creditCard.card_number,
       'card_cvv': $scope.creditCard.card_cvv,
@@ -148,8 +141,8 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
         "district_id": dataFactory.getObject('shippingDetails').district.id
       };
       serviceDetails = {
-        "include_shipping_insurance": dataFactory.getObject('shippingDetails').insurance,
-        "shipping_service_id": dataFactory.getObject('shippingDetails').servicePackage.service_id 
+        "include_shipping_insurance": dataFactory.getObject('serviceDetails').insurance,
+        "shipping_service_id": dataFactory.getObject('serviceDetails').servicePackage.service_id 
       };
     }
 
@@ -246,8 +239,8 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
         "district_id": dataFactory.getObject('shippingDetails').district.id
       };
       serviceDetails = {
-        "include_shipping_insurance": dataFactory.getObject('shippingDetails').insurance,
-        "shipping_service_id": dataFactory.getObject('shippingDetails').servicePackage.service_id 
+        "include_shipping_insurance": dataFactory.getObject('serviceDetails').insurance,
+        "shipping_service_id": dataFactory.getObject('serviceDetails').servicePackage.service_id 
       };
     }
     dataFactory.set('paymentType', 'Bank Transfer');
@@ -282,9 +275,27 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
       ).success(function(data, status, headers, config) {
         console.log(data)
         dataFactory.setObject('transactionDetails', data);
-        setTimeout(function() {
-            $state.transitionTo('payment.paymentFinish', { arg: 'arg' });
-        }, 1000);    
+
+        //Confirm Transaction
+        $http.post(
+          phinisiEndpoint + '/merchant/payment/confirm', 
+          {
+            order_id : data.order_id
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          }
+        ).success(function(data, status, headers, config){
+            console.log(data);
+            $state.transitionTo('payment.paymentFinish', {'data': data})
+           
+        }).error(function(data, status, headers, config){
+            console.log(data);
+            $state.transitionTo('500', { arg: 'arg' });
+        });
       }).
       error(function(data, status, headers, config) {
         console.log(response);
