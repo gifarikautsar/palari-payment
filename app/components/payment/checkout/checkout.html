@@ -10,7 +10,8 @@
             <span class="text-label medium text-right">{{productDetails.name}}</span>
             <p class="text-label text-right">{{productDetails.description}}</p>
             <span class="text-label text-right">{{productDetails.price | mycurrency}}</span>
-            <span class="text-label text-right" style="color: #3c763d"><strong>{{ productDetails.limitless ? 'Stock Available' : 'Available Stock : ' + productDetails.quantity }}</strong></span>
+            <span class="text-label text-right text-success" ng-if="productDetails.quantity > 0"><strong>{{ productDetails.limitless ? 'Stock Available' : 'Available Stock : ' + productDetails.quantity }}</strong></span>
+            <span class="text-label text-right text-danger" ng-if="productDetails.quantity == 0"><strong>This product is out of stock</strong></span>
           </div>
         </div>
         <hr/>
@@ -25,14 +26,15 @@
         </div>
         <div class="inner-wrapper inner-content" style="margin-top: 20px">
             <span class="text-label pull-left">TOTAL</span>
-            <span class="text-label text-right">{{productDetails.totalAmount | mycurrency}}</span>
+            <span class="text-label text-right">{{productDetails.price * productDetails.qty | mycurrency}}</span>
         </div>
       </div>
   </div>
 
   <div class="wrapper">
       <div class="inner-wrapper">
-          <a ng-click="checkout()" class="btn btn-primary" style="width: 100%">CHECKOUT</a>
+          <button ng-click="checkout()" class="btn btn-primary" style="width: 100%" ng-if="productDetails.quantity > 0">CHECKOUT</button>
+          <button ng-click="checkout()" class="btn btn-danger" style="width: 100%" ng-if="productDetails.quantity == 0" ng-disabled="productDetails.quantity == 0">OUT OF STOCK</button>
       </div>
   </div>
 </form>

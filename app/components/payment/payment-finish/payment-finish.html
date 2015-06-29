@@ -1,141 +1,143 @@
-<div class="wrapper">
-
-  <div class="tab">
-    <h5 class="text-center">PAYMENT CONFIRMATION</h5>
-    <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'credit_card'">
-      <span class="text-label pull-left">PAYMENT TYPE : {{ transactionDetails.payment_type }}</span>
-      <span class="text-label pull-right">STATUS : {{ transactionDetails.transaction_status }}</span>
-    </div>
-    <div class="inner-wrapper">
-      <button class="btn btn-dark-gray" style="width: 100%">Back to BBM  <i class="fa fa-arrow-circle-right"></i> </button>
-    </div>
-    <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'bank_transfer'">
-        <p align="center">Thank you for purchasing our product. Please transfer the total amount transaction to Virtual Account number below.</p>
-        <span class="text-label big text-center">{{ transactionDetails.permata_va_number}}</span>
-        <p align="center">with a total amount of</p>
-        <span class="text-label medium text-center">{{ productDetails.totalAmount + shippingDetails.shippingCost | mycurrency }}</span>
-        <p>Payment instruction for :</p>
-        <div class="row no-margin text-center">
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding" ng-click="instruction = 1">
-            <div ng-class="instruction == 1 ? 'bg-orange' : 'bg-gray'" style="padding-top: 5px; padding-bottom: 5px;">
-              <span class="text-label">BCA</span>
-              <hr style="width: 90%; margin-top: 2px; margin-bottom: 2px" />
-              <span class="text-label">Prima</span>
-            </div>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding" ng-click="instruction = 2">
-            <div ng-class="instruction == 2 ? 'bg-orange' : 'bg-gray'" style="padding-top: 5px; padding-bottom: 5px;">
-              <span class="text-label">Mandiri</span>
-              <hr style="width: 90%; margin-top: 2px; margin-bottom: 2px" />
-              <span class="text-label">ATM Bersama</span>
-            </div>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding" ng-click="instruction = 3">
-            <div ng-class="instruction == 3 ? 'bg-orange' : 'bg-gray'" style="padding-top: 5px; padding-bottom: 5px;">
-              <span class="text-label">Permata</span>
-              <hr style="width: 90%; margin-top: 2px; margin-bottom: 2px" />
-              <span class="text-label">Alto</span>
-            </div>
-          </div>
-        </div>
-        <br/>
-        <div class="row no-margin animate-show" ng-show="instruction == 1">
-          <span class="text-label">How to pay via ATM BCA/PRIMA network:</span><br/>
-          <ol>
-            <li>Enter your PIN.</li>
-            <li>On the main menu, choose <strong>'Other Transaction'.</strong></li>
-            <li>Choose <strong>'Transfer'</strong>.</li>
-            <li>Choose <strong>'Other Bank Account'</strong>.</li>
-            <li>Enter <strong>'013'</strong> for Bank Permata then press <strong>'Correct'</strong>.</li>
-            <li>Enter the amount to be paid, then choose <strong>'Correct'</strong>. Note, if the amount entered is not the same as the invoiced amount, the transaction will be denied.</li>
-            <li>Enter (the 16 digit account number) then press <strong>'Correct'</strong>.</li>
-            <li>Amount to be paid & account number will appear on the payment confirmation page. If the information is correct, press <strong>'Correct'</strong>.</li>
-            <li>Transaction Success.</li>
-          </ol>
-        </div>
-        <div class="row no-margin animate-show" ng-show="instruction == 2">
-          <span class="text-label">How to pay via ATM Mandiri/ATM Bersama network:</span><br/>
-          <ol>
-            <li>Enter your PIN.</li>
-            <li>On the main menu, choose <strong>'Others'</strong>.</li>
-            <li>Choose <strong>'Transfer'</strong>.</li>
-            <li>Choose <strong>'Online Transfer'</strong>.</li>
-            <li>Enter the number <strong>013 (code 013 and 16 digit account number).</strong></li>
-            <li>The reference number can be left blank, and then choose <strong>'Correct'</strong>.</li>
-            <li>Enter the amount to be paid, then choose <strong>'Correct'</strong>. Note, if the amount entered is not the same as the invoiced amount, the transaction will be denied.</li>
-            <li>Amount to be paid & account number will appear on the payment confirmation page. If the information is correct, press <strong>'Correct'</strong>.</li>
-            <li>Transaction Success.</li>
-          </ol>
-        </div>
-        <div class="row no-margin animate-show" ng-show="instruction == 3">
-          <span class="text-label">How to pay via ATM BCA/PRIMA network:</span><br/>
-          <ol>
-            <li>Enter your PIN.</li>
-            <li>On the main menu, choose <strong>'Other Transaction'</strong>.</li>
-            <li>Choose <strong>'Payment'</strong>.</li>
-            <li>Choose <strong>'Other Payment'</strong>.</li>
-            <li>Choose <strong>'Virtual Account'</strong>.</li>
-            <li>Please input the 16 digit Account Number</li>
-            <li>Amount to be paid & account number will appear on the payment confirmation page. If the information is correct, press <strong>'Correct'</strong>.</li>
-            <li>Choose your payment account and then press <strong>'Correct'</strong>.</li>
-          </ol>
-        </div>
-        <div>
-
-        </div>
-    </div>
+<div class="wrapper tab">
+  <h5 class="text-center">PAYMENT CONFIRMATION</h5>
+  <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'credit_card'">
+    <span class="text-label pull-left">PAYMENT TYPE : {{ transactionDetails.payment_type }}</span>
+    <span class="text-label pull-right">STATUS : {{ transactionDetails.transaction_status }}</span>
   </div>
+  <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'bank_transfer'">
+      <p align="center">Thank you for purchasing our product. Please transfer the total amount transaction to Virtual Account number below.</p>
+      <span class="text-label big text-center">{{ transactionDetails.permata_va_number}}</span>
+      <p align="center">with a total amount of</p>
+      <span class="text-label medium text-center">{{ productDetails.totalAmount + shippingDetails.shippingCost | mycurrency }}</span>
+      <p>Payment instruction for :</p>
+      <div class="row no-margin text-center">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding" ng-click="instruction = 1">
+          <div ng-class="instruction == 1 ? 'bg-orange' : 'bg-gray'" style="padding-top: 5px; padding-bottom: 5px;">
+            <span class="text-label">BCA</span>
+            <hr style="width: 90%; margin-top: 2px; margin-bottom: 2px" />
+            <span class="text-label">Prima</span>
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding" ng-click="instruction = 2">
+          <div ng-class="instruction == 2 ? 'bg-orange' : 'bg-gray'" style="padding-top: 5px; padding-bottom: 5px;">
+            <span class="text-label">Mandiri</span>
+            <hr style="width: 90%; margin-top: 2px; margin-bottom: 2px" />
+            <span class="text-label">ATM Bersama</span>
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding" ng-click="instruction = 3">
+          <div ng-class="instruction == 3 ? 'bg-orange' : 'bg-gray'" style="padding-top: 5px; padding-bottom: 5px;">
+            <span class="text-label">Permata</span>
+            <hr style="width: 90%; margin-top: 2px; margin-bottom: 2px" />
+            <span class="text-label">Alto</span>
+          </div>
+        </div>
+      </div>
+      <br/>
+      <div class="row no-margin animate-show" ng-show="instruction == 1">
+        <span class="text-label">How to pay via ATM BCA/PRIMA network:</span><br/>
+        <ol>
+          <li>Enter your PIN.</li>
+          <li>On the main menu, choose <strong>'Other Transaction'.</strong></li>
+          <li>Choose <strong>'Transfer'</strong>.</li>
+          <li>Choose <strong>'Other Bank Account'</strong>.</li>
+          <li>Enter <strong>'013'</strong> for Bank Permata then press <strong>'Correct'</strong>.</li>
+          <li>Enter the amount to be paid, then choose <strong>'Correct'</strong>. Note, if the amount entered is not the same as the invoiced amount, the transaction will be denied.</li>
+          <li>Enter (the 16 digit account number) then press <strong>'Correct'</strong>.</li>
+          <li>Amount to be paid & account number will appear on the payment confirmation page. If the information is correct, press <strong>'Correct'</strong>.</li>
+          <li>Transaction Success.</li>
+        </ol>
+      </div>
+      <div class="row no-margin animate-show" ng-show="instruction == 2">
+        <span class="text-label">How to pay via ATM Mandiri/ATM Bersama network:</span><br/>
+        <ol>
+          <li>Enter your PIN.</li>
+          <li>On the main menu, choose <strong>'Others'</strong>.</li>
+          <li>Choose <strong>'Transfer'</strong>.</li>
+          <li>Choose <strong>'Online Transfer'</strong>.</li>
+          <li>Enter the number <strong>013 (code 013 and 16 digit account number).</strong></li>
+          <li>The reference number can be left blank, and then choose <strong>'Correct'</strong>.</li>
+          <li>Enter the amount to be paid, then choose <strong>'Correct'</strong>. Note, if the amount entered is not the same as the invoiced amount, the transaction will be denied.</li>
+          <li>Amount to be paid & account number will appear on the payment confirmation page. If the information is correct, press <strong>'Correct'</strong>.</li>
+          <li>Transaction Success.</li>
+        </ol>
+      </div>
+      <div class="row no-margin animate-show" ng-show="instruction == 3">
+        <span class="text-label">How to pay via ATM BCA/PRIMA network:</span><br/>
+        <ol>
+          <li>Enter your PIN.</li>
+          <li>On the main menu, choose <strong>'Other Transaction'</strong>.</li>
+          <li>Choose <strong>'Payment'</strong>.</li>
+          <li>Choose <strong>'Other Payment'</strong>.</li>
+          <li>Choose <strong>'Virtual Account'</strong>.</li>
+          <li>Please input the 16 digit Account Number</li>
+          <li>Amount to be paid & account number will appear on the payment confirmation page. If the information is correct, press <strong>'Correct'</strong>.</li>
+          <li>Choose your payment account and then press <strong>'Correct'</strong>.</li>
+        </ol>
+      </div>
+      <div>
 
-  <div class="tab middle" ng-init="productToggle = false">
-    <h5 ng-click="productToggle = !productToggle">PURCHASED PRODUCTS<i class="fa pull-right" ng-class="productToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
-    <div class="inner-wrapper animate-show" ng-show="productToggle">
-      <!-- Row 1 -->
-      <div class="row item">
-        <div class="col-md-5 col-xs-5">
-          <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
-        </div>
-        <div class="col-md-7 col-xs-7">
-          <span class="text-label medium text-right">{{productDetails.name}}</span>
-          <span class="text-label text-right">{{productDetails.price | mycurrency}}</span>
-        </div>
       </div>
+  </div>
+</div>
 
-      <div class="row item">
-        <div class="col-md-5 col-xs-5">
-          <span class="text-label text-left">Delivery Fee</span>        
-        </div>
-        <div class="col-md-7 col-xs-7">
-          <span class="text-label text-right">{{ shippingDetails.shippingCost | mycurrency}}</span>        
-        </div>
+<div class="wrapper tab" ng-init="productToggle = false">
+  <h5 ng-click="productToggle = !productToggle">PURCHASED PRODUCTS<i class="fa pull-right" ng-class="productToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
+  <div class="inner-wrapper animate-show" ng-show="productToggle">
+    <!-- Row 1 -->
+    <div class="row item">
+      <div class="col-md-5 col-xs-5">
+        <img class="item-image" src={{productDetails.image_url[0]}} alt={{productDetails.name}}>
       </div>
-      
-      <hr class="hr-product" ng-show="purchasedProducts.length != 1"/>
-      
-      <!-- Row 3 -->
-      <div class="row item" ng-show="purchasedProducts.length != 1">
-        <div class="col-md-8 col-xs-6">
-          <span class="text-label">Total</span>
-        </div>
-        <div class="col-md-4 col-xs-6">
-          <span class="text-label text-right">{{ productDetails.totalAmount + shippingDetails.shippingCost | mycurrency }}</span>
-        </div>
+      <div class="col-md-7 col-xs-7">
+        <span class="text-label medium text-right">{{productDetails.name}}</span>
+        <span class="text-label text-right">{{productDetails.price | mycurrency}}</span>
       </div>
+    </div>
+
+    <div class="row item">
+      <div class="col-md-5 col-xs-5">
+        <span class="text-label text-left">Delivery Fee</span>        
+      </div>
+      <div class="col-md-7 col-xs-7">
+        <span class="text-label text-right">{{ shippingDetails.shippingCost | mycurrency}}</span>        
+      </div>
+    </div>
     
+    <hr class="hr-product" ng-show="purchasedProducts.length != 1"/>
+    
+    <!-- Row 3 -->
+    <div class="row item" ng-show="purchasedProducts.length != 1">
+      <div class="col-md-8 col-xs-6">
+        <span class="text-label">Total</span>
+      </div>
+      <div class="col-md-4 col-xs-6">
+        <span class="text-label text-right">{{ productDetails.totalAmount + shippingDetails.shippingCost | mycurrency }}</span>
+      </div>
     </div>
-
-  </div>
-
-  <div class="tab middle" ng-show="productDetails.need_address" ng-init="shippingToggle = false">
-    <h5 ng-click="shippingToggle = !shippingToggle">SHIPPING INFORMATION<i class="fa pull-right" ng-class="shippingToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
-    <div class="inner-wrapper animate-show" ng-show="shippingToggle">
-      
-      <p><span class="text-label big">{{ shippingDetails.full_name}}</span>
-      {{ shippingDetails.address }} <br/>
-      {{ shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>
-      {{ "Phone : +62" + shippingDetails.phone_number }}</p>
-                  
-    </div>
-
+  
   </div>
 
 </div>
+
+<div class="wrapper tab" ng-show="productDetails.need_address" ng-init="shippingToggle = false">
+  <h5 ng-click="shippingToggle = !shippingToggle">SHIPPING INFORMATION<i class="fa pull-right" ng-class="shippingToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
+  <div class="inner-wrapper animate-show" ng-show="shippingToggle">
+    
+    <p><span class="text-label big">{{ shippingDetails.full_name}}</span>
+    {{ shippingDetails.address }} <br/>
+    {{ shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>
+    {{ "Phone : +62" + shippingDetails.phone_number }}</p>
+                
+  </div>
+
+</div>
+
+<div class="wrapper">
+  <div class="inner-wrapper">
+      <button class="btn btn-dark-gray" style="width: 100%"><i class="fa fa-arrow-circle-left"></i> Back to BBM</button>
+  </div>  
+</div>
+
+
+

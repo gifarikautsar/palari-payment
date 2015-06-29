@@ -13,4 +13,9 @@ paymentApp.controller('paymentFinishController', ['$scope','$http', '$log', '$st
   	})
   }
 
+  console.log('customerDetails : ' + $scope.customerDetails);
+  console.log('shippingDetails : ' + $scope.shippingDetails);
+  console.log('transactionDetails : ' + $scope.transactionDetails);
+
+
 }]);
