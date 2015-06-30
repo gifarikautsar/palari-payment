@@ -89,25 +89,31 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group">
+                <input type="checkbox" name="expressPayment" ng-model="customerDetails.expressPayment">
+                <span>I want to enable express payment for future transaction</span> 
+               
+              </div>
             <p align="justify">NOTE : Please use your active email since we'll send you the purchase notification via your email.</p>  
           </div>
       </div>
     <ng-form>
-    <ng-form name="shippingForm" ng-if="productDetails.need_address">
-      <div class="tab middle" ng-show="productDetails.need_address" ng-init="changeAddressToggle = false">    
-        <h5>Shipping Details</h5> 
-        <div class="error-box animate-blink" ng-show="errorMessageShipping">
-            <div class="error-message">{{ errorMessageShipping }}</div>
+    <ng-form name="shippingForm" ng-if="productDetails.need_address" ng-init="changeAddressToggle = false">
+      <div class="tab middle" ng-show="productDetails.need_address">    
+        <h5>Shipping Details</h5>
+        <div class="inner-wrapper inner-content">
+          <div class="error-box animate-blink" ng-show="errorMessageShipping">
+              <div class="error-message">{{ errorMessageShipping }}</div>
+          </div>
         </div>
-        <div class="inner-wrapper inner-content" ng-hide="shippingDetails != null">
+        <div class="inner-wrapper inner-content" ng-hide="arrayOfShippingDetails != null">
           <p align="justify">You haven't had any shipping details yet, please add one by clicking button below.</p>
           <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn btn-default">ADD ADDRESS</a></small>
         </div>
-        <div class="inner-wrapper inner-content" ng-hide="shippingDetails == null">
+        <div class="inner-wrapper inner-content" ng-hide="arrayOfShippingDetails == null">
           <span class="text-label big">{{shippingDetails.full_name}}</span>
           <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
-          <small><a ng-click="changeAddressToggle = !changeAddressToggle" class="btn btn-default">CHANGE ADDRESS</a></small>
-
+          <small><button type="button" ng-click="changeAddressToggle = !changeAddressToggle" class="btn btn-default">CHANGE ADDRESS</button></small>
           <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
           
           <div class="row no-margin ng-hide">
@@ -133,12 +139,12 @@
              
           </div>
 
-          <div class="animate-float-left" ng-init="getFare()">
+          <div class="animate-float-left" ng-init="getFare(shippingDetails)">
 
             <div class="vertical-align" style="justify-content: flex-start">
               <span class="shipping-logo jne"></span>
               <span class="vertical-line"></span>
-              <span class="text-label big" style="display: inline-block" ng-show="shippingDetails.servicePackage">{{ shippingDetails.insurance ? shippingDetails.servicePackage.service_fare_with_issurance : shippingDetails.servicePackage.service_fare | mycurrency}}</span>
+              <span class="text-label big" style="display: inline-block" ng-show="serviceDetails.servicePackage">{{ serviceDetails.insurance ? serviceDetails.servicePackage.service_fare_with_issurance : serviceDetails.servicePackage.service_fare | mycurrency}}</span>
             </div>
             
             <div class="row">
@@ -146,7 +152,7 @@
                 <div class="form-group">  
                   <span class="text-label animate-float-left">Shipping package :</span>
                   <div class="right-inner-addon">
-                    <select name="servicePackage" ng-model="shippingDetails.servicePackage" ng-options="servicePackage.service_name for servicePackage in servicePackageList" required>
+                    <select name="servicePackage" ng-model="serviceDetails.servicePackage" ng-options="servicePackage.service_name for servicePackage in servicePackageList" required>
                       
                     </select>
                     <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
@@ -157,10 +163,11 @@
                 </div>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div class="form-group" ng-class="{ 'disabled': !shippingDetails.servicePackage }">  
-                  <span class="text-label animate-float-left">Insurance :</span>
+                <div class="form-group" ng-class="{ 'disabled': !serviceDetails.servicePackage }">  
+                  <span class="text-label animate-float-left">Insurance :
+                  </span>
                   <div class="right-inner-addon">
-                    <select name="insurance" ng-model="shippingDetails.insurance" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" ng-disabled="!shippingDetails.servicePackage" required>
+                    <select name="insurance" ng-model="serviceDetails.insurance" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" ng-disabled="!serviceDetails.servicePackage" required>
 
                     </select>
                     <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
@@ -175,7 +182,24 @@
           </div>
 
         </div>
-      </div>
+
+        </div>
+         <div class="dialog-box absolute-center" ng-show="changeAddressToggle">
+          <span class="text-label medium text-center" style="margin-bottom: 20px">SELECT SHIPPING ADDRESS</span>
+          <div class="inner-wrapper" style="background: #FFFFFF; height: 200px; overflow: scroll; margin-bottom: 20px;">
+            <div class="shipping-list-wrapper" ng-repeat="shippingDetails in arrayOfShippingDetails" ng-click="$parent.changeAddressToggle = false; $parent.shippingDetails = shippingDetails; $parent.selectedShippingDetails = arrayOfShippingDetails.indexOf(shippingDetails); getFare($parent.shippingDetails);">
+              <span class="text-label big">{{shippingDetails.full_name}}</span>
+              <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
+            <button class="btn-light-gray btn pull-left" style="width: 95% !important" ng-click="changeAddressToggle = false">CANCEL</button>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
+            <a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >ADD ADDRESS</a>
+          </div>
+        </div>
+
     </ng-form>
   </div>
 
@@ -184,19 +208,6 @@
           <a ui-sref="payment.checkout({productId: '{{productDetails.id}}'})" class="btn btn-default pull-left" style="width: 48%">BACK</a>
           <input type="submit" class="btn btn-primary pull-right" style="width: 48%" value="NEXT" />
       </div>
-  </div>
-
-  <div class="dialog-box absolute-center" ng-show="changeAddressToggle">
-    <span class="text-label medium text-center" style="margin-bottom: 20px">SELECT SHIPPING ADDRESS</span>
-    <div class="inner-wrapper" style="background: #FFFFFF; height: 200px; overflow: scroll; margin-bottom: 20px;">
-
-    </div>
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
-      <a class="btn-light-gray btn pull-left" style="width: 95% !important" ng-click="changeAddressToggle = false">CANCEL</a>
-    </div>
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
-      <a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >ADD ADDRESS</a>
-    </div>
   </div>
 
 </form>
