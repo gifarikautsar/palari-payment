@@ -112,7 +112,7 @@
         </div>
         <div class="inner-wrapper inner-content" ng-hide="arrayOfShippingDetails == null">
           <span class="text-label big">{{shippingDetails.full_name}}</span>
-          <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
+          <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
           <small><button type="button" ng-click="changeAddressToggle = !changeAddressToggle" class="btn btn-default">CHANGE ADDRESS</button></small>
           <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
           

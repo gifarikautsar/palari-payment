@@ -15,7 +15,7 @@
           </div>
         </div>
         <hr/>
-        <div class="row">
+        <div class="row" ng-if="productDetails.quantity > 0">
           <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
             <span class="text-label">Quantity</span>
           </div>
@@ -24,7 +24,7 @@
             </number>
           </div>
         </div>
-        <div class="inner-wrapper inner-content" style="margin-top: 20px">
+        <div class="inner-wrapper inner-content" style="margin-top: 20px" ng-if="productDetails.quantity > 0">
             <span class="text-label pull-left">TOTAL</span>
             <span class="text-label text-right">{{productDetails.price * productDetails.qty | mycurrency}}</span>
         </div>

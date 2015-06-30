@@ -75,6 +75,18 @@
                   </div>
               </div>
             </div>
+            <div class="form-group">
+                <span class="text-label">POSTAL CODE</span>
+                <div class="right-inner-addon">
+                  <input type="text" class="form-control" name="postalcode" ng-model="shippingDetails.postal_code" validation-type="postalcode" required>
+                  <div ng-show="shippingForm.$submitted || shippingForm.postalcode.$touched">
+                    <i class="glyphicon glyphicon-ok" ng-show="shippingForm.postalcode.$valid"></i>
+                    <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.postalcode.$valid"></i>
+                    <span class="error-message" ng-show="shippingForm.postalcode.$error.required">Postal Code is required.</span>
+                    <span class="error-message" ng-show="shippingForm.postalcode.$error.postalcode">Postal Code must be a number consist of 5 character.</span>
+                  </div>
+                </div>
+            </div>
         
       </div>
   </div>

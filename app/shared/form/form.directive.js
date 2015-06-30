@@ -3,6 +3,7 @@ var phoneNumberRegex = /^[0-9]{5,12}$/;
 var decimalRegex = /^(?:\d*\.)?\d+$/;
 var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 var emailRegex = /^[\w._%+-]+@[a-zA-Z_]+?(\.[a-zA-Z]{2,4}){1,2}$/;
+var postalCodeRegex = /^\d{5}$/;
 
 var formApp = angular.module('formApp', []);
 
@@ -84,6 +85,21 @@ formApp.directive('validationType', function() {
           // it is invalid
           return false;
         }        
+      }
+      else if (attrs.validationType == 'postalcode'){
+        ctrl.$validators.postalcode = function(modelValue, viewValue) {
+          if (ctrl.$isEmpty(modelValue)) {
+            // consider empty models to be valid
+            return true;
+          }
+
+          if (postalCodeRegex.test(viewValue)) {
+            // it is valid
+            return true; 
+          }
+          // it is invalid
+          return false;
+        }    
       }
     }
   }

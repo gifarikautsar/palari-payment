@@ -106,7 +106,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     else {
       // Failed request token
       dataFactory.set('errorMessage', response.status_message)
-      $state.transitionTo('paymentDetails', { arg: 'arg'})
+      $state.transitionTo('payment.paymentDetails', { arg: 'arg'})
     }
     console.log($scope.response);
     console.log($scope.paymentStatus);

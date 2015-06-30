@@ -68,7 +68,7 @@
           <span class="vertical-line"></span>
           <span class="text-label big" style="display: inline-block"> {{ serviceDetails.shippingCost | mycurrency }} </span>
         </div>
-        <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}<br/>Tel. +62{{ shippingDetails.phone_number }}</p>
+        <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/><br/>Tel. +62{{ shippingDetails.phone_number }}</p>
         <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn btn-default">CHANGE ADDRESS</a></small>
       </div>
     </div>
