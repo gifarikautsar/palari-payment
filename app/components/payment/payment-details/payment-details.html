@@ -5,8 +5,8 @@
 
     <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
       <div class=" col-xs-7 col-md-8 no-padding">
-        <span class="text-label">TOTAL AMOUNT</span>
-        <span class="text-label medium" ng-cloak>{{ productDetails.totalAmount + serviceDetails.shippingCost | mycurrency}}</span>
+        <span class="text-label">TOTAL PEMBAYARAN</span>
+        <span class="text-label medium" ng-cloak>{{ productDetails.price + serviceDetails.shippingCost | mycurrency}}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
         <i class="fa fa-2x pull-right" ng-class="amountToggle ? 'fa-angle-up' : 'fa-angle-down'" style="margin-right:20px;"></i>
@@ -25,26 +25,25 @@
           <div class="col-md-7 col-xs-7">
             <span class="text-label medium text-right">{{ productDetails.name }}</span>
             <span class="text-label text-right">{{ productDetails.price | mycurrency}}</span>
-            <span class="text-label text-right">Quantity : {{ productDetails.qty }}</span>
+            
           </div>
         </div>
         <div class="row item" ng-if="productDetails.need_address">
           <div class="col-md-5 col-xs-5">
-            <span class="text-label text-left">Delivery Fee</span>        
+            <span class="text-label text-left text-orange">Biaya Pengiriman</span>        
           </div>
           <div class="col-md-7 col-xs-7">
-            <span class="text-label text-right">{{ serviceDetails.shippingCost | mycurrency }}</span>        
+            <span class="text-label text-right text-orange">{{ serviceDetails.shippingCost | mycurrency }}</span>        
           </div>
         </div>
-        <hr class="no-margin" ng-show="purchasedProducts.length != 1"/>
         
         <!-- Row 3 -->
-        <div class="row item" ng-show="purchasedProducts.length != 1">
+        <div class="row item">
           <div class="col-md-8 col-xs-6">
             <span class="text-label">Total</span>
           </div>
           <div class="col-md-4 col-xs-6">
-            <span class="text-label text-right">{{ productDetails.totalAmount + serviceDetails.shippingCost | mycurrency }}</span>
+            <span class="text-label text-right">{{ productDetails.price + serviceDetails.shippingCost | mycurrency }}</span>
           </div>
         </div>
       </div>
@@ -52,7 +51,7 @@
     <!-- Shipment Section -->
     <div class="inner-wrapper middle vertical-align" ng-click="shipmentToggle = !shipmentToggle" ng-show="productDetails.need_address">
       <div class=" col-xs-7 col-md-8 no-padding">
-        <span class="text-label">SHIP TO</span>
+        <span class="text-label">KIRIM KE</span>
         <span class="text-label medium" ng-cloak>{{ shippingDetails.full_name }}</span>
       </div>
       <div class=" col-xs-5 col-md-4 no-padding">
@@ -64,12 +63,17 @@
     <div class="hidden-content animate-show" ng-show="shipmentToggle" ng-show="productDetails.need_address">
       <div class="inner-wrapper" ng-cloak>
         <div class="vertical-align" style="justify-content: flex-start">
-          <span class="shipping-logo jne"></span>
-          <span class="vertical-line"></span>
-          <span class="text-label big" style="display: inline-block"> {{ serviceDetails.shippingCost | mycurrency }} </span>
+          <div style="display: inline-block">
+            <span class="shipping-logo jne"></span>
+            <span class="vertical-line"></span>
+          </div>
+          <div style="display: inline-block">
+            <span class="text-label">Biaya Pengiriman</span> 
+            <span class="text-label big" ng-show="serviceDetails.servicePackage">{{ serviceDetails.insurance ? serviceDetails.servicePackage.service_fare_with_issurance : serviceDetails.servicePackage.service_fare | mycurrency}}</span>
+          </div>
         </div>
-        <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/><br/>Tel. +62{{ shippingDetails.phone_number }}</p>
-        <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn btn-default">CHANGE ADDRESS</a></small>
+        <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/>Tel. +62{{ shippingDetails.phone_number }}</p>
+        <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn btn-default">GANTI ALAMAT</a></small>
       </div>
     </div>
   </div>

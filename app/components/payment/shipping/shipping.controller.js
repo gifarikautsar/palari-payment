@@ -35,14 +35,11 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
         }
       )
       .success(function(data){
-        if (data.expedition) {
-          console.log(data);
-          $scope.servicePackageList = data.expedition[0].expedition_service;
-          $scope.errorMessageShipping = null;  
-        }
-        else {
-          $scope.errorMessageShipping = "Destination address is not available. Please choose another address.";
-        }
+        console.log(data);
+        $scope.servicePackageList = data.expedition[0].expedition_service;
+        $scope.serviceDetails.servicePackage = $scope.servicePackageList[0];
+        $scope.errorMessageShipping = null;  
+       
       })
       .error(function(data){
         $scope.error = data.description;
@@ -90,6 +87,7 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
     full_name: dataFactory.getObject('customerDetails').full_name,
     phone_number: dataFactory.getObject('customerDetails').phone_number
   };
+  $scope.productDetails = dataFactory.getObject('productDetails');
   $scope.provinces = {};
   $scope.cities = {};
   $scope.districts = {};
@@ -119,11 +117,38 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
 
   $scope.onSubmit = function(){
     if ($scope.shippingForm.$valid){
-      $scope.arrayOfShippingDetails.push($scope.shippingDetails);
-      dataFactory.set('selectedShippingDetails', $scope.arrayOfShippingDetails.indexOf($scope.shippingDetails));
-      dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
-      $state.transitionTo('payment.shippingDetails', { arg: 'arg' });
+      $http.post(
+        //url
+        phinisiEndpoint + '/package/fare',
+        //data
+        {
+          "product_id": $scope.productDetails.id,
+          "destination_district_id": $scope.shippingDetails.district.id,
+          "quantity": $scope.productDetails.qty
+        },
+        //config
+        {
+          headers :{ 'Content-Type': 'application/json','Accept': 'application/json'}
+        }
+      )
+      .success(function(data){
+        if (data.expedition) {
+          $scope.arrayOfShippingDetails.push($scope.shippingDetails);
+          dataFactory.set('selectedShippingDetails', $scope.arrayOfShippingDetails.indexOf($scope.shippingDetails));
+          dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
+          $state.transitionTo('payment.shippingDetails', { arg: 'arg' });  
+        }
+        else {
+          $scope.errorMessageShipping = "Alamat tujuan tidak didukung. Silahkan pilih alamat yang lain.";
+        }
+      })
+      .error(function(data){
+        $scope.error = data.description;
+        $state.transitionTo('500', { arg: 'arg'});        
+      })
+
     }
   };
+
 
 }]);

@@ -1,12 +1,12 @@
 paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state', '$stateParams', '$window', 'dataFactory', function($scope, $http, $log, $state, $stateParams, $window, dataFactory){
   $scope.$parent.state = 1;
   $scope.productDetails = {};
-  $scope.productDetails.qty = 1;
   $scope.productId = $stateParams.productId;
+  $scope.productDetails.qty = 1;
   
   $scope.getProduct = function(){
-    $window.sessionStorage.clear();
-    $window.localStorage.clear();
+    // $window.sessionStorage.clear();
+    // $window.localStorage.clear();
     $http.get(
       //url
       phinisiEndpoint + '/customer/product/' + $scope.productId,
@@ -18,7 +18,6 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
     .success(function(data){
       if (data.merchant_id){
         $scope.productDetails = data;
-        $log.debug($scope.productDetails);
         $scope.$parent.productDetails = $scope.productDetails;
       }
       else {
@@ -29,10 +28,6 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
       $state.transitionTo('500', { arg: 'arg'});        
     });
   };
-
-  $scope.$watch("productDetails.qty", function(){
-    $scope.productDetails.totalAmount = $scope.productDetails.price * $scope.productDetails.qty;
-  })
 
   $scope.checkout = function(){
     var token = dataFactory.getObjectLS('bbmPayToken');
