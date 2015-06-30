@@ -6,22 +6,22 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 			controller: 'paymentController'
 		})
 		.state('payment.checkout', {
-			url: '/checkout/:productId',
+			url: '/customer/checkout/:productId',
 			templateUrl: 'app/components/payment/checkout/checkout.html',
 			controller: 'checkoutController'
 		})
 		.state('payment.shippingDetails', {
-			url: '/shipping',
+			url: '/customer/shipping',
 			templateUrl: 'app/components/payment/shipping/shipping-details.html',
 			controller: 'shippingController'
 		})
 		.state('payment.addAddress', {
-			url: '/add-address',
+			url: '/customer/add-address',
 			templateUrl: 'app/components/payment/shipping/add-address.html',
 			controller: 'addAddressController'
 		})
 		.state('payment.paymentDetails', {
-			url: '/payment-details',
+			url: '/customer/payment-details',
 			templateUrl: 'app/components/payment/payment-details/payment-details.html',
 			controller: 'paymentDetailsController'
 		})
@@ -37,7 +37,7 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 			templateUrl: 'app/components/payment/payment-details/payment-type/bbm-money.html'
 		})
 		.state('payment.paymentFinish', {
-			url: '/payment-finish',
+			url: '/customer/payment-finish',
 			templateUrl: 'app/components/payment/payment-finish/payment-finish.html',
 			controller: 'paymentFinishController'
 		})
