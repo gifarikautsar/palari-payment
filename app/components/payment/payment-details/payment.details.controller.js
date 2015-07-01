@@ -40,7 +40,7 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
   $scope.serviceDetails = dataFactory.getObject('serviceDetails');
 
   $scope.paymentType = {
-    display_name: "Credit Card",
+    display_name: "Kartu Kredit",
     payment_type: "credit_card",
     image_class: "fa fa-lg fa-credit-card"
   }; 
@@ -245,6 +245,7 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
     }
     dataFactory.set('paymentType', 'Bank Transfer');
     $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
+    console.log(dataFactory.getObject('productDetails').qty);
     $http.post(
         //url
         phinisiEndpoint + '/charge',

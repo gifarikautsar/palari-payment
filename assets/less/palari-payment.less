@@ -7,7 +7,8 @@
 @dark-gray        : #858585;
 @very-dark-gray   : #636363;
 @black            : #000000;
-@orange : #F7931D;
+@orange           : #F7931D;
+@green            : #3c763d;
 
 
 @font-face {
@@ -35,9 +36,6 @@ body {
 .no-margin {
   margin: 0 !important;
 }
-.form-control {
-  border-radius: 0px;
-}
 .border-left {
   border-left: 1px solid #CCCCCC;
 }
@@ -49,6 +47,9 @@ body {
   border-right: 1px solid #858585;
   margin: 0 20px;
   height: 75px;
+}
+.disabled {
+  opacity: 0.5;
 }
 
 /* enable absolute positioning */
@@ -117,6 +118,10 @@ header {
   width: 100%;
   height: auto;
 }
+.row.item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 
 /* Wrapper */
 .body-wrapper {
@@ -139,12 +144,6 @@ header {
   padding: 0 1px;
   color: @very-light-gray;
 }
-.dark-gray-wrapper{
-  background: @light-gray;
-  margin: 20px 10px 10px 10px;
-  padding: 5px 20px;
-  overflow: auto;
-}
 .inner-wrapper {
   padding: 0.5em 0.8em;
 }
@@ -155,10 +154,8 @@ header {
 .inner-wrapper:after {
   content: " ";
   /* 1 */
-
   display: table;
   /* 2 */
-
 }
 .inner-wrapper:after {
   clear: both;
@@ -190,14 +187,6 @@ header {
   font-weight: bold; 
   text-align: center;
 }
-.payment-options,
-.shipping-information {
-  background-color: @very-light-gray;
-  border-bottom: 1px solid @light-gray;
-}
-.payment-options .row {
-  margin-bottom: 10px;
-}
 
 /* Button Style */
 .btn-blue {
@@ -222,7 +211,6 @@ header {
   background: @dark-gray;
   border-color: @dark-gray;
 }
-
 .btn-light-gray {
   background: @light-gray;
   color:black;
@@ -232,7 +220,6 @@ header {
   background: @light-gray;
   border-color: @light-gray;
 }
-
 .btn-orange {
   color: @white;
   background: @orange;
@@ -285,6 +272,11 @@ header {
   .virtual-account-process{
     background-image: url(../img/va_process.png);
   }
+}
+
+/* Form Style */
+.form-control {
+  border-radius: 0px;
 }
 
 /* Text Field */
@@ -380,7 +372,6 @@ input[type="radio"]:checked + label span {
   -moz-transition: border 0.2s linear;
   transition: border 0.2s linear;
 }
-
 input[type=radio].css-checkbox {
   position:absolute; 
   z-index:-1000; 
@@ -548,7 +539,6 @@ label.css-label {
 .error-message {
   color: @red;
 }
-
 .error-box {
   width: 100%;
   border: 1px solid @red;
@@ -695,14 +685,12 @@ label.css-label {
     -moz-animation-timing-function:ease-in-out;
 }
 
-.disabled {
-  opacity: 0.5;
-}
-
+/* Iframe Style */
 iframe {
   border: 0;
 }
 
+/* Dialog Box Style*/
 .dialog-box {
   background: @black;
   opacity: 0.9;
@@ -714,14 +702,12 @@ iframe {
   z-index: 9999;
 
 }
-
 .absolute-center {
   /*overflow: auto;*/
   margin: auto;
   position: absolute;
   top: 100px; left: 0; right: 0;
 }
-
 .bg-orange {
   background-color: @orange;
   color: @white;
@@ -731,14 +717,31 @@ iframe {
   background-color: @very-light-gray;
   color: @black;
 }
+.bg-green {
+  background-color: @green;
+  color: @white;
+}
+.bg-red {
+  background-color: @red;
+  color: @white;
+}
+.shipping-list-wrapper {
+  width: 100%;
+  padding: 10px;
+  height: auto;
+  color: @black;
+  background: @white;
+  border-bottom: 1px solid @very-dark-gray;
+  cursor: pointer;
+}
 
+/* Progress Tracker  Style*/
 .progress-wrapper {
   position: relative;
   width: 100%;
   margin: 0 auto;
   min-height: 100px;
 }
-
 .step-wrapper {
   position: relative;
   z-index: 3;
@@ -747,7 +750,6 @@ iframe {
   display: inline-block;
   float: left;
 }
-
 .line-wrapper {
   width: 75%;
   position: relative;
@@ -759,7 +761,6 @@ iframe {
   z-index: 1;
   min-height: 20px;
 }
-
 .circular {
   width: 50px;
   height: 50px;
@@ -772,11 +773,9 @@ iframe {
   text-align: center;
   margin: 0 auto;
 }
-
 .circular.active {
   background: #337ab7;
 }
-
 .progress-label {
   display: block;
   text-align: center;
@@ -786,7 +785,6 @@ iframe {
 .progress-label.active {
   color: @very-dark-gray;
 }
-
 .progress-line {
   width: 100%;
   position: absolute;
@@ -795,7 +793,6 @@ iframe {
   z-index: 1;
   border-bottom: 4px solid @very-light-gray;
 }
-
 .line-active-1 {
   width: 33%;
   position: absolute;
@@ -819,19 +816,4 @@ iframe {
   left: 0;
   z-index: 2;
   border-bottom: 4px solid #337ab7;
-}
-
-.shipping-list-wrapper {
-  width: 100%;
-  padding: 10px;
-  height: auto;
-  color: @black;
-  background: @white;
-  border-bottom: 1px solid @very-dark-gray;
-  cursor: pointer;
-}
-
-.row.item {
-  padding-top: 5px;
-  padding-bottom: 5px;
 }

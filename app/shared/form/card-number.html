@@ -3,6 +3,6 @@
   <i class="cc-icon pull-right" ng-class="{default:'card-default', visa:'card-visa', mastercard:'card-mastercard', invalid:'card-invalid'}[status]"></i>
   <div ng-show="creditCardForm.$submitted || creditCardForm.cardnumber.$touched">
     <span class="error-message" ng-show="status == 'default'">Please complete your credit card number</span>
-    <span class="error-message" ng-show="status == 'invalid'">Credit Card Number is Invalid</span>
+    <span class="error-message" ng-show="!creditCardForm.cardnumber.$error.cardnumber">Credit Card Number is Invalid</span>
   </div>
 </div>

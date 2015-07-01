@@ -2,7 +2,6 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
   $scope.$parent.state = 1;
   $scope.productDetails = {};
   $scope.productId = $stateParams.productId;
-  $scope.productDetails.qty = 1;
   
   $scope.getProduct = function(){
     // $window.sessionStorage.clear();
@@ -40,6 +39,7 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
     else {
       console.log('empty');
     }
+    $scope.productDetails.qty = 1;
     dataFactory.setObject('productDetails', $scope.productDetails);
     $state.transitionTo('payment.shippingDetails', { arg: 'arg' });  
   }
