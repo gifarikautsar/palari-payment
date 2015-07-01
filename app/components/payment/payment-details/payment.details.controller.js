@@ -245,6 +245,7 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
     }
     dataFactory.set('paymentType', 'Bank Transfer');
     $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
+    console.log(dataFactory.getObject('productDetails').qty);
     $http.post(
         //url
         phinisiEndpoint + '/charge',

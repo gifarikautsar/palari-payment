@@ -47,7 +47,7 @@
             <div class="form-group" ng-init="getProvinceList()">
               <span class="text-label">PROVINSI</span>
                 <div class="right-inner-addon">
-                  <select name="province" ng-model="shippingDetails.province" ng-change="getCityList()" ng-options="province.nama_propinsi for province in provinces | orderBy: nama_propinsi" required>
+                  <select name="province" ng-model="shippingDetails.province" ng-change="getCityList()" ng-options="province.nama_propinsi for province in provinces | orderBy: 'nama_propinsi'" required>
                     
                   </select>
                   <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
@@ -59,7 +59,7 @@
             <div class="form-group" ng-class="{ 'disabled': !shippingDetails.province }">
               <span class="text-label">KOTA</span>
                 <div class="right-inner-addon">
-                  <select name="city" ng-model="shippingDetails.city" ng-change="getDistrictList()" ng-options="city.nama_kota for city in cities.kota | orderBy: nama_kota" ng-disabled="!shippingDetails.province" required>
+                  <select name="city" ng-model="shippingDetails.city" ng-change="getDistrictList()" ng-options="city.nama_kota for city in cities.kota | orderBy: 'nama_kota'" ng-disabled="!shippingDetails.province" required>
                   </select>
                   <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
                   <div ng-show="shippingForm.$submitted || shippingForm.city.$touched">
@@ -70,7 +70,7 @@
             <div class="form-group" ng-class="{ 'disabled': !shippingDetails.city }">
               <span class="text-label">KECAMATAN</span>
                 <div class="right-inner-addon">
-                  <select name="district" ng-model="shippingDetails.district" ng-options="district.nama_kecamatan for district in districts.kecamatan | orderBy: nama_kecamatan"  ng-disabled="!shippingDetails.city" required>
+                  <select name="district" ng-model="shippingDetails.district" ng-options="district.nama_kecamatan for district in districts.kecamatan | orderBy: 'nama_kecamatan'"  ng-disabled="!shippingDetails.city" required>
                   </select>
                   <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
                   <div ng-show="shippingForm.$submitted || shippingForm.district.$touched">

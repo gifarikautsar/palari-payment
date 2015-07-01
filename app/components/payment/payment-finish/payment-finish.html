@@ -6,11 +6,11 @@
     <span class="text-label text-success pull-right" ng-if="transactionDetails.transaction_status == deny">STATUS : GAGAL</span>
   </div>
   <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'bank_transfer'">
-      <p align="center">Thank you for purchasing our product. Please transfer the total amount transaction to Virtual Account number below.</p>
+      <p align="center">Terima kasih telah memesan produk kami. Silahkan untuk menggunakan nomor Virtual Account berikut untuk pembayaran.</p>
       <span class="text-label big text-center">{{ transactionDetails.permata_va_number}}</span>
-      <p align="center">with a total amount of</p>
+      <p align="center">dengan total pembayaran sejumlah</p>
       <span class="text-label medium text-center">{{ productDetails.totalAmount + serviceDetails.shippingCost | mycurrency }}</span>
-      <p>Payment instruction for :</p>
+      <p>Instruksi pembayaran untuk :</p>
       <div class="row no-margin text-center">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding" ng-click="instruction = 1">
           <div ng-class="instruction == 1 ? 'bg-orange' : 'bg-gray'" style="padding-top: 5px; padding-bottom: 5px;">
@@ -83,7 +83,7 @@
 </div>
 
 <div class="wrapper tab" ng-init="productToggle = false">
-  <h5 ng-click="productToggle = !productToggle">PURCHASED PRODUCTS<i class="fa pull-right" ng-class="productToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
+  <h5 ng-click="productToggle = !productToggle">INFORMASI PEMBELIAN<i class="fa pull-right" ng-class="productToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
   <div class="inner-wrapper animate-show" ng-show="productToggle">
     <!-- Row 1 -->
     <div class="row item">
@@ -98,17 +98,17 @@
 
     <div class="row item">
       <div class="col-md-5 col-xs-5">
-        <span class="text-label text-left">Delivery Fee</span>        
+        <span class="text-label text-left">Biaya Pengiriman</span>        
       </div>
       <div class="col-md-7 col-xs-7">
         <span class="text-label text-right">{{ serviceDetails.shippingCost | mycurrency}}</span>        
       </div>
     </div>
     
-    <hr class="hr-product" ng-show="purchasedProducts.length != 1"/>
+    <hr class="hr-product"/>
     
     <!-- Row 3 -->
-    <div class="row item" ng-show="purchasedProducts.length != 1">
+    <div class="row item">
       <div class="col-md-8 col-xs-6">
         <span class="text-label">Total</span>
       </div>
@@ -122,7 +122,7 @@
 </div>
 
 <div class="wrapper tab" ng-show="productDetails.need_address" ng-init="shippingToggle = false">
-  <h5 ng-click="shippingToggle = !shippingToggle">SHIPPING INFORMATION<i class="fa pull-right" ng-class="shippingToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
+  <h5 ng-click="shippingToggle = !shippingToggle">INFORMASI PENGIRIMAN<i class="fa pull-right" ng-class="shippingToggle ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
   <div class="inner-wrapper animate-show" ng-show="shippingToggle">
     
     <p><span class="text-label big">{{ shippingDetails.full_name}}</span>
