@@ -99,7 +99,6 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     else if (response.status_code == "200") {
       console.log("NOT 3-D SECURE");
       // Success 3-D Secure or success normal
-      console.log($scope.paymentStatus);
       $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
       $scope.chargeTransaction(response);
     }
@@ -108,8 +107,6 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
       dataFactory.set('errorMessage', response.status_message)
       $state.transitionTo('payment.paymentDetails', { arg: 'arg'})
     }
-    console.log($scope.response);
-    console.log($scope.paymentStatus);
     console.log("callback");
   }
 
@@ -203,7 +200,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
 
       }).
       error(function(data, status, headers, config) {
-        console.log(response);
+        console.log(data);
         $state.transitionTo('500', { arg: 'arg' });
       });
   }
@@ -232,20 +229,19 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
   $scope.chargeBankTransfer = function(){
     if (dataFactory.getObject('productDetails').need_address){
       shippingDetails = {
-        "first_name": dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
-        "last_name": dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
-        "address": dataFactory.getObject('shippingDetails').address,
-        "phone": '+62' + dataFactory.getObject('shippingDetails').phone_number,
-        "district_id": dataFactory.getObject('shippingDetails').district.id
+        first_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
+        last_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
+        address: dataFactory.getObject('shippingDetails').address,
+        phone: '+62' + dataFactory.getObject('shippingDetails').phone_number,
+        district_id: dataFactory.getObject('shippingDetails').district.id
       };
       serviceDetails = {
-        "include_shipping_insurance": dataFactory.getObject('serviceDetails').insurance,
-        "shipping_service_id": dataFactory.getObject('serviceDetails').servicePackage.service_id 
+        include_shipping_insurance: dataFactory.getObject('serviceDetails').insurance,
+        shipping_service_id: dataFactory.getObject('serviceDetails').servicePackage.service_id 
       };
     }
     dataFactory.set('paymentType', 'Bank Transfer');
     $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
-    console.log(dataFactory.getObject('productDetails').qty);
     $http.post(
         //url
         phinisiEndpoint + '/charge',
@@ -253,17 +249,17 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
         angular.extend({
           payment_type : "bank_transfer",
           item_details : [ {
-            "id" : dataFactory.getObject('productDetails').id,
-            "price" : dataFactory.getObject('productDetails').price,
-            "quantity" : dataFactory.getObject('productDetails').qty,
-            "name" : dataFactory.getObject('productDetails').name
+            id : dataFactory.getObject('productDetails').id,
+            price : dataFactory.getObject('productDetails').price,
+            quantity : dataFactory.getObject('productDetails').qty,
+            name : dataFactory.getObject('productDetails').name
           } ],
           customer_details : {
-            "first_name": dataFactory.getObject('customerDetails').full_name.split(' ').slice(0, -1).join(' '),
-            "last_name": dataFactory.getObject('customerDetails').full_name.split(' ').slice(-1).join(' '),
-            "phone": '+62' + dataFactory.getObject('customerDetails').phone_number,
-            "email": dataFactory.getObject('customerDetails').email,
-            "shipping_address": shippingDetails
+            first_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(0, -1).join(' '),
+            last_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(-1).join(' '),
+            phone: '+62' + dataFactory.getObject('customerDetails').phone_number,
+            email: dataFactory.getObject('customerDetails').email,
+            shipping_address: shippingDetails
           }
           
         },serviceDetails),
@@ -299,7 +295,7 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
         });
       }).
       error(function(data, status, headers, config) {
-        console.log(response);
+        console.log(data);
         $state.transitionTo('500', { arg: 'arg' });
       });
   }
