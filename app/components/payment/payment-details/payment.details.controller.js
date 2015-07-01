@@ -40,7 +40,7 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
   $scope.serviceDetails = dataFactory.getObject('serviceDetails');
 
   $scope.paymentType = {
-    display_name: "Credit Card",
+    display_name: "Kartu Kredit",
     payment_type: "credit_card",
     image_class: "fa fa-lg fa-credit-card"
   }; 

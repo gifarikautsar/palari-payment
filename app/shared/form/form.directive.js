@@ -107,20 +107,21 @@ formApp.directive('validationType', function() {
 
 formApp.directive('cardNumber', function(creditCardService){
   return{
+    require: 'ngModel',
     restrict: "E",
     templateUrl: "../app/shared/form/card-number.html",
     scope: {
       ngModel: '=',
     },
-    link: function(scope, element, attrs) {
+    link: function(scope, element, attrs, ctrl) {
       scope.status = 'default';
 
-      scope.$watch('ngModel', function(val){
+      scope.$watch('ngModel', function(newValue, oldValue){
         console.log(scope.status);
-        if (val != undefined){
-          var cardType = creditCardService.numberValidation(val).cardType;
-          var valid = creditCardService.numberValidation(val).valid;
-          if (val.length == 16) {
+        if (newValue != undefined){
+          var cardType = creditCardService.numberValidation(newValue).cardType;
+          var valid = creditCardService.numberValidation(newValue).valid;
+          if (newValue.length == 16) {
             if (valid === 'valid'){
               if (cardType === 'Visa'){
                 scope.status = 'visa';
@@ -133,12 +134,25 @@ formApp.directive('cardNumber', function(creditCardService){
             } else if (valid === 'not valid'){
               scope.status = 'invalid';
             }      
-          } else {
+          } else if (newValue.length < 16) {
             scope.status = 'default';
+          }
+          else {
+            scope.ngModel = oldValue;
           }
         }
 
+        if (scope.status == 'default' || scope.status == 'invalid'){
+          console.log('default or invalid');
+          ctrl.$setValidity('cardnumber', false);
+        }
+        else {
+          console.log('visa or mastercard');
+          ctrl.$setValidity('cardnumber', true);
+        }
+
       });
+
 
 
     }
