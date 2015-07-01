@@ -21,7 +21,7 @@ paymentApp.config(function($sceDelegateProvider, $httpProvider) {
 
 //Factory
 paymentApp.value('PaymentTypes', [{
-    display_name: "Credit Card",
+    display_name: "Kartu Kredit",
     payment_type: "credit_card",
     image_class: "fa fa-lg fa-credit-card"
   },{
@@ -76,7 +76,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
       'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
       'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
       'secure': true,
-      'gross_amount': dataFactory.getObject('productDetails').totalAmount + shippingCost
+      'gross_amount': dataFactory.getObject('productDetails').price + shippingCost
     }
   }
 

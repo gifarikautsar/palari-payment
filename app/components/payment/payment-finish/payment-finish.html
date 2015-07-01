@@ -1,9 +1,9 @@
 <div class="wrapper tab">
-  <h5 class="text-center">PAYMENT CONFIRMATION</h5>
+  <h5 class="text-center">KONFIRMASI PEMBAYARAN</h5>
   <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'credit_card'">
-    <span class="text-label pull-left">PAYMENT TYPE : {{ transactionDetails.payment_type }}</span>
-    <span class="text-label pull-right">STATUS : {{ transactionDetails.transaction_status }}</span>
-
+    <span class="text-label pull-left">JENIS PEMBAYARAN : KARTU KREDIT</span>
+    <span class="text-label text-success pull-right" ng-if="transactionDetails.transaction_status == capture">STATUS : BERHASIL</span>
+    <span class="text-label text-success pull-right" ng-if="transactionDetails.transaction_status == deny">STATUS : GAGAL</span>
   </div>
   <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'bank_transfer'">
       <p align="center">Thank you for purchasing our product. Please transfer the total amount transaction to Virtual Account number below.</p>
