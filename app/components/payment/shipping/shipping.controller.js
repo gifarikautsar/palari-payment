@@ -49,7 +49,7 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   }
 
   $scope.onSubmit = function(){
-    if ($scope.customerForm.$valid){
+    if ($scope.form.customerForm.$valid){
       if ($scope.productDetails.need_address){
         if ($scope.arrayOfShippingDetails != null) {
           if ($scope.serviceDetails.insurance) {
@@ -65,7 +65,7 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
           $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
         }
         else {
-          $scope.errorMessageShipping = "Please set your shipping address and shipping method before proceeding to the next step.";   
+          $scope.errorMessageShipping = "Silahkan pilih alamat tujuan Anda terlebih dahulu!";   
         }
       }
       else {
@@ -74,7 +74,7 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
       }
     }
     else {
-      $scope.errorMessage = "Invalid form. Please correct your information details below before proceeding to the next step.";
+      $scope.errorMessage = "Form tidak valid. Silahkan pastikan bahwa form telah terisi dengan benar sebelum melanjutkan ke tahap berikutnya.";
     }
 
   }

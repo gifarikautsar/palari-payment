@@ -1,4 +1,4 @@
-<form name="form" ng-submit="onSubmit()">
+<form name="form" ng-submit="onSubmit()" novalidate>
 
   <div class="wrapper" ng-init="amountToggle = false">
       <div class="inner-wrapper vertical-align" ng-click="amountToggle = !amountToggle">
@@ -87,7 +87,7 @@
 
           </div>
       </div>
-    <ng-form>
+    </ng-form>
     <ng-form name="shippingForm" ng-if="productDetails.need_address" ng-init="changeAddressToggle = false">
       <div class="tab middle" ng-show="productDetails.need_address">    
         <h5>INFORMASI PENGIRIMAN</h5>
@@ -97,7 +97,7 @@
           </div>
         </div>
         <div class="inner-wrapper inner-content" ng-hide="arrayOfShippingDetails != null">
-          <p align="justify">You haven't had any shipping details yet, please add one by clicking button below.</p>
+          <p align="justify">Anda belum menyantumkan alamat pengiriman. Silahkan tambah alamat melalui tombol berikut.</p>
           <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn btn-default">TAMBAH ALAMAT</a></small>
         </div>
         <div class="inner-wrapper inner-content" ng-hide="arrayOfShippingDetails == null">
@@ -146,7 +146,7 @@
             <div class="row">
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div class="form-group">  
-                  <span class="text-label animate-show">Shipping package :</span>
+                  <span class="text-label animate-show">Paket Pengiriman :</span>
                   <div class="right-inner-addon">
                     <select name="servicePackage" ng-model="serviceDetails.servicePackage" ng-options="servicePackage.service_name for servicePackage in servicePackageList" required>
                       
@@ -160,7 +160,7 @@
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div class="form-group" ng-class="{ 'disabled': !serviceDetails.servicePackage }">  
-                  <span class="text-label animate-float-left">Insurance :
+                  <span class="text-label animate-float-left">Asuransi :
                   </span>
                   <div class="right-inner-addon">
                     <select name="insurance" ng-init="serviceDetails.insurance = false" ng-model="serviceDetails.insurance" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" ng-disabled="!serviceDetails.servicePackage" required>
@@ -181,7 +181,7 @@
 
         </div>
          <div class="dialog-box absolute-center" ng-show="changeAddressToggle">
-          <span class="text-label medium text-center" style="margin-bottom: 20px">SELECT SHIPPING ADDRESS</span>
+          <span class="text-label medium text-center" style="margin-bottom: 20px">PILIH ALAMAT LAIN</span>
           <div class="inner-wrapper" style="background: #FFFFFF; height: 200px; overflow: scroll; margin-bottom: 20px;">
             <div class="shipping-list-wrapper" ng-repeat="shippingDetails in arrayOfShippingDetails" ng-click="$parent.changeAddressToggle = false; $parent.shippingDetails = shippingDetails; $parent.selectedShippingDetails = arrayOfShippingDetails.indexOf(shippingDetails); getFare($parent.shippingDetails);">
               <span class="text-label big">{{shippingDetails.full_name}}</span>
@@ -189,10 +189,10 @@
             </div>
           </div>
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
-            <button type="button" class="btn-light-gray btn pull-left" style="width: 95% !important" ng-click="changeAddressToggle = false">CANCEL</button>
+            <button type="button" class="btn-light-gray btn pull-left" style="width: 95% !important" ng-click="changeAddressToggle = false">BATAL</button>
           </div>
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
-            <a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >ADD ADDRESS</a>
+            <a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >TAMBAH ALAMAT</a>
           </div>
         </div>
 
@@ -201,8 +201,8 @@
 
   <div class="wrapper">
       <div class="inner-wrapper">
-          <a ui-sref="payment.checkout({productId: '{{productDetails.id}}'})" class="btn btn-default pull-left" style="width: 48%">BACK</a>
-          <input type="submit" class="btn btn-primary pull-right" style="width: 48%" value="NEXT" />
+          <a ui-sref="payment.checkout({productId: '{{productDetails.id}}'})" class="btn btn-default pull-left" style="width: 48%">KEMBALI</a>
+          <input type="submit" class="btn btn-primary pull-right" style="width: 48%" value="LANJUT" />
       </div>
   </div>
 
