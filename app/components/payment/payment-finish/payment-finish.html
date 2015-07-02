@@ -2,8 +2,8 @@
   <h5 class="text-center">KONFIRMASI PEMBAYARAN</h5>
   <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'credit_card'" ng-class="transactionDetails.transaction_status == 'capture' ? 'bg-green' : 'bg-red'">
     <span class="text-label pull-left">Jenis Pembayaran : Kartu Kredit</span>
-    <span class="text-label pull-right" ng-if="transactionDetails.transaction_status == 'capture'">Status Pembayaran : Sukses</span>
-    <span class="text-label pull-right" ng-if="transactionDetails.transaction_status == 'deny'">Status Pembayaran : Gagal</span>
+    <span class="text-label pull-right" ng-if="transactionDetails.transaction_status == 'capture'">Status : Sukses</span>
+    <span class="text-label pull-right" ng-if="transactionDetails.transaction_status == 'deny'">Status : Gagal</span>
   </div>
   <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'bank_transfer'">
       <p align="center">Terima kasih telah memesan produk kami. Silahkan untuk menggunakan nomor Virtual Account berikut untuk pembayaran.</p>
