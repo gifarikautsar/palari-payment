@@ -97,6 +97,11 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
   $scope.districts = {};
   $scope.arrayOfShippingDetails = dataFactory.getObject('arrayOfShippingDetails') || [];
 
+  $scope.$watch('shippingService.getAreaList()', function(newVal) {
+    $scope.provinces = newVal;
+    console.log(newVal);
+  });
+
   $scope.getProvinceList = function() {
     $scope.shippingDetails.city = '';
     $scope.shippingDetails.district = '';
@@ -153,6 +158,5 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
 
     }
   };
-
 
 }]);

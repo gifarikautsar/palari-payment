@@ -2,7 +2,6 @@ var servicesApp = angular.module('servicesApp', []);
 
 //Service
 servicesApp.service('creditCardService', function(){
-
   this.numberValidation = function (ccnumber) {
     var len = ccnumber.length;
     var cardType, valid;
@@ -36,7 +35,6 @@ servicesApp.service('creditCardService', function(){
       valid: valid
     }
   }
-
 });
 
 servicesApp.service('shippingService', function($http){
@@ -52,7 +50,6 @@ servicesApp.service('shippingService', function($http){
         }
       );
     }
-
   }
 });
 

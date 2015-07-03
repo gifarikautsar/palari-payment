@@ -49,7 +49,7 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
       }; 
     }
     else {
-      $scope.paymentType = [{
+      $scope.paymentType = {
         display_name: "Kartu Kredit",
         payment_type: "credit_card",
         image_class: "fa fa-lg fa-credit-card"

@@ -8,7 +8,7 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('payment.checkout', {
 			url: '/customer/checkout/:productId',
 			templateUrl: 'app/components/payment/checkout/checkout.html',
-			controller: 'checkoutController'			
+			controller: 'checkoutController'
 		})
 		.state('payment.shippingDetails', {
 			url: '/customer/shipping',
@@ -32,14 +32,14 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('payment.paymentDetails.bankTransfer', {
 			templateUrl: 'app/components/payment/payment-details/payment-type/bank-transfer.html',
 			controller: 'bankTransferController'
-		})	
+		})
 		.state('payment.paymentDetails.bbmMoney', {
 			templateUrl: 'app/components/payment/payment-details/payment-type/bbm-money.html'
 		})
 		.state('payment.paymentFinish', {
 			url: '/customer/payment-finish',
 			templateUrl: 'app/components/payment/payment-finish/payment-finish.html',
-			controller: 'paymentFinishController'		
+			controller: 'paymentFinishController'
 		})
 		.state('payment.loading', {
 			templateUrl: 'app/components/payment/loading.html',
