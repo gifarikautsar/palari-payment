@@ -80,7 +80,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <input type="checkbox" name="expressPayment" ng-model="customerDetails.expressPayment" ng-checked="true">
+                <input type="checkbox" name="expressPayment" ng-init="customerDetails.expressPayment = true" ng-model="customerDetails.expressPayment">
                 <span>Saya ingin menyimpan <strong>informasi pelanggan</strong> dan <strong>informasi pengiriman</strong> untuk transaksi selanjutnya</span> 
                
               </div>
@@ -103,7 +103,7 @@
         <div class="inner-wrapper inner-content" ng-hide="arrayOfShippingDetails == null">
           <span class="text-label big">{{shippingDetails.full_name}}</span>
           <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
-          <small><button type="button" ng-click="changeAddressToggle = !changeAddressToggle" class="btn btn-default">GANTI ALAMAT</button></small>
+          <small><button type="button" ng-click="changeAddressToggle = !changeAddressToggle; gotoTop();" class="btn btn-default">GANTI ALAMAT</button></small>
           
           <div class="row no-margin ng-hide">
             <p>Please choose your shipping provider.</p>
@@ -180,19 +180,20 @@
         </div>
 
         </div>
-         <div class="dialog-box absolute-center" ng-show="changeAddressToggle">
+         <div id="dialog-box" class="dialog-box absolute-center" ng-show="changeAddressToggle">
           <span class="text-label medium text-center" style="margin-bottom: 20px">PILIH ALAMAT LAIN</span>
           <div class="inner-wrapper" style="background: #FFFFFF; height: 200px; overflow: scroll; margin-bottom: 20px;">
             <div class="shipping-list-wrapper" ng-repeat="shippingDetails in arrayOfShippingDetails" ng-click="$parent.changeAddressToggle = false; $parent.shippingDetails = shippingDetails; $parent.selectedShippingDetails = arrayOfShippingDetails.indexOf(shippingDetails); getFare($parent.shippingDetails);">
               <span class="text-label big">{{shippingDetails.full_name}}</span>
+              <i class="fa fa-2x fa-check pull-right text-success" ng-if="shippingDetails == arrayOfShippingDetails[selectedShippingDetails]"></i>
               <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
             </div>
           </div>
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
-            <button type="button" class="btn-light-gray btn pull-left" style="width: 95% !important" ng-click="changeAddressToggle = false">BATAL</button>
+            <small><button type="button" class="btn-light-gray btn pull-left" style="width: 95% !important" ng-click="changeAddressToggle = false">BATAL</button></small>
           </div>
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 no-padding">
-            <a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >TAMBAH ALAMAT</a>
+            <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >TAMBAH ALAMAT</a></small>
           </div>
         </div>
 

@@ -1,10 +1,10 @@
-paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state', 'dataFactory', 'shippingService', function($scope, $http, $log, $state, dataFactory, shippingService){
+paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state', 'dataFactory', 'shippingService', '$location', '$anchorScroll', function($scope, $http, $log, $state, dataFactory, shippingService, $location, $anchorScroll){
   $scope.$parent.state = 2;
   $scope.productDetails = dataFactory.getObject('productDetails');
   $scope.arrayOfShippingDetails = dataFactory.getObject('arrayOfShippingDetails');
   $scope.customerDetails = dataFactory.getObject('customerDetails');
   $scope.selectedShippingDetails = dataFactory.getObject('selectedShippingDetails');
-  $scope.serviceDetails = {}
+  $scope.serviceDetails = {};
   
   if ($scope.arrayOfShippingDetails) {
     $scope.shippingDetails = $scope.arrayOfShippingDetails[$scope.selectedShippingDetails];
@@ -17,8 +17,6 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   }
 
   $scope.getFare = function(shippingDetails) {
-    console.log('tes');
-    console.log(shippingDetails);
     if ($scope.shippingDetails){
       $http.post(
         //url
@@ -48,7 +46,13 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
     }
   }
 
+  $scope.gotoTop = function() {
+    $location.hash('progress-tracker');
+    $anchorScroll();
+  }
+
   $scope.onSubmit = function(){
+    console.log($scope.customerDetails);
     if ($scope.form.customerForm.$valid){
       if ($scope.productDetails.need_address){
         if ($scope.arrayOfShippingDetails != null) {

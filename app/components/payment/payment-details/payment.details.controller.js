@@ -17,6 +17,7 @@ paymentApp.config(function($sceDelegateProvider, $httpProvider) {
   // $httpProvider.defaults.useXDomain = true;
   // $httpProvider.defaults.withCredentials = true;
   // delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    $httpProvider.defaults.headers.common['Content-Type'] = 'application/json';
 });
 
 //Factory
@@ -39,11 +40,22 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
   $scope.customerDetails = dataFactory.getObject('customerDetails');
   $scope.serviceDetails = dataFactory.getObject('serviceDetails');
 
-  $scope.paymentType = {
-    display_name: "Kartu Kredit",
-    payment_type: "credit_card",
-    image_class: "fa fa-lg fa-credit-card"
-  }; 
+  $scope.setDefaultPayment = function() {
+    if (dataFactory.get('paymentType') == 'bank_transfer'){
+      $scope.paymentType = { 
+        display_name: "Bank Transfer",
+        payment_type: "permata",
+        image_class: "fa fa-lg fa-diamond"
+      }; 
+    }
+    else {
+      $scope.paymentType = [{
+        display_name: "Kartu Kredit",
+        payment_type: "credit_card",
+        image_class: "fa fa-lg fa-credit-card"
+      }; 
+    }
+  }
 
   $scope.go = function (paymentType) {
     if (paymentType === 'credit_card') {
