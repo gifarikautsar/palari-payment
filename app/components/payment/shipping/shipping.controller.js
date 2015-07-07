@@ -1,10 +1,16 @@
 paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state', 'dataFactory', 'shippingService', '$location', '$anchorScroll', function($scope, $http, $log, $state, dataFactory, shippingService, $location, $anchorScroll){
   $scope.$parent.state = 2;
   $scope.productDetails = dataFactory.getObject('productDetails');
-  $scope.arrayOfShippingDetails = dataFactory.getObject('arrayOfShippingDetails');
+  $scope.arrayOfShippingDetails = dataFactory.getObject('arrayOfShippingDetails') || [];
   $scope.customerDetails = dataFactory.getObject('customerDetails');
   $scope.selectedShippingDetails = dataFactory.getObject('selectedShippingDetails');
   $scope.serviceDetails = {};
+  $scope.shippingDetails = {};
+  $scope.servicePackageList = {};
+
+  $scope.provinces = {};
+  $scope.cities = {};
+  $scope.districts = {};
   
   if ($scope.arrayOfShippingDetails) {
     $scope.shippingDetails = $scope.arrayOfShippingDetails[$scope.selectedShippingDetails];
@@ -16,7 +22,29 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
     console.log($scope.customerDetails); 
   }
 
+  $scope.getProvinceList = function() {
+    shippingService.getAreaList('province', '').success(function(data){
+      $scope.provinces = data;
+    });
+    console.log($scope.provinces);
+  }
+
+  $scope.getCityList = function() {
+    $scope.shippingDetails.city = '';
+    $scope.shippingDetails.district = '';
+    shippingService.getAreaList('city', $scope.shippingDetails.province.id).success(function(data){
+      $scope.cities = data;
+    });
+  }
+
+  $scope.getDistrictList = function() {
+    shippingService.getAreaList('district', $scope.shippingDetails.city.id).success(function(data){
+      $scope.districts = data;
+    });
+  }
+
   $scope.getFare = function(shippingDetails) {
+    console.log(shippingDetails);
     if ($scope.shippingDetails){
       $http.post(
         //url
@@ -96,11 +124,6 @@ paymentApp.controller('addAddressController', ['$scope', '$http', '$log', '$stat
   $scope.cities = {};
   $scope.districts = {};
   $scope.arrayOfShippingDetails = dataFactory.getObject('arrayOfShippingDetails') || [];
-
-  $scope.$watch('shippingService.getAreaList()', function(newVal) {
-    $scope.provinces = newVal;
-    console.log(newVal);
-  });
 
   $scope.getProvinceList = function() {
     $scope.shippingDetails.city = '';

@@ -88,19 +88,103 @@
           </div>
       </div>
     </ng-form>
+
     <ng-form name="shippingForm" ng-if="productDetails.need_address" ng-init="changeAddressToggle = false">
-      <div class="tab middle" ng-show="productDetails.need_address">    
+      <div class="tab middle">    
         <h5>INFORMASI PENGIRIMAN</h5>
         <div class="inner-wrapper inner-content" ng-show="errorMessageShipping">
           <div class="error-box animate-blink">
               <div class="error-message">{{ errorMessageShipping }}</div>
           </div>
         </div>
-        <div class="inner-wrapper inner-content" ng-hide="arrayOfShippingDetails != null">
-          <p align="justify">Anda belum menyantumkan alamat pengiriman. Silahkan tambah alamat melalui tombol berikut.</p>
-          <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn btn-default">TAMBAH ALAMAT</a></small>
+        <div class="inner-wrapper inner-content" ng-if="arrayOfShippingDetails.length == 0">
+            <div class="form-group">
+              <span class="text-label">NAMA PENERIMA</span>
+              <div class="right-inner-addon">
+                <input type="text" class="form-control" name="firstname" ng-model="$parent.$parent.shippingDetails.full_name" required>
+                <div ng-show="shippingForm.$submitted || shippingForm.firstname.$touched">
+                  <i class="glyphicon glyphicon-ok" ng-show="shippingForm.firstname.$valid"></i>
+                  <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.firstname.$valid"></i>
+                  <span class="error-message" ng-show="shippingForm.firstname.$error.required">Nama harus diisi.</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <span class="text-label">NO. TELP / HP PENERIMA</span>
+              <div class="right-inner-addon">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">+62</span>
+                  <input type="text" class="form-control" name="phonenumber" maxlength="11" ng-model="$parent.$parent.shippingDetails.phone_number" validation-type="phonenumber" required>
+                </div>
+                <div ng-show="shippingForm.$submitted || shippingForm.phonenumber.$touched">
+                  <i class="glyphicon glyphicon-ok" ng-show="shippingForm.phonenumber.$valid"></i>
+                  <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.phonenumber.$valid"></i>
+                  <span class="error-message" ng-show="shippingForm.phonenumber.$error.required">No. Telp / HP harus diisi</span>
+                  <span class="error-message" ng-show="shippingForm.phonenumber.$error.phonenumber">No. Telp / HP tidak valid.</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <span class="text-label">ALAMAT TUJUAN</span>
+              <div class="right-inner-addon">
+                <textarea rows="4" class="form-control" name="address" ng-model="$parent.$parent.shippingDetails.address" required></textarea>
+                <div ng-show="shippingForm.$submitted || shippingForm.address.$touched">
+                  <i class="glyphicon glyphicon-ok" ng-show="shippingForm.address.$valid"></i>
+                  <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.address.$valid"></i>
+                  <span class="error-message" ng-show="shippingForm.address.$error.required">Alamat harus diisi.</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" ng-init="getProvinceList()">
+              <span class="text-label">PROVINSI</span>
+                <div class="right-inner-addon">
+                  <select name="province" ng-model="$parent.$parent.shippingDetails.province" ng-change="getCityList()" ng-options="province.nama_propinsi for province in provinces | orderBy: 'nama_propinsi'" required>
+                    
+                  </select>
+                  <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="shippingForm.$submitted || shippingForm.province.$touched">
+                    <span class="error-message" ng-show="shippingForm.province.$error.required">Pilih provinsi tujuan Anda.</span>
+                  </div>
+              </div>
+            </div>
+            <div class="form-group" ng-class="{ 'disabled': !$parent.$parent.shippingDetails.province }">
+              <span class="text-label">KOTA</span>
+                <div class="right-inner-addon">
+                  <select name="city" ng-model="$parent.$parent.shippingDetails.city" ng-change="getDistrictList()" ng-options="city.nama_kota for city in cities.kota | orderBy: 'nama_kota'" ng-disabled="!$parent.$parent.shippingDetails.province" required>
+                  </select>
+                  <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="shippingForm.$submitted || shippingForm.city.$touched">
+                    <span class="error-message" ng-show="shippingForm.city.$error.required">Pilih kota tujuan Anda.</span>
+                  </div>
+              </div>
+            </div>
+            <div class="form-group" ng-class="{ 'disabled': !$parent.$parent.shippingDetails.city }">
+              <span class="text-label">KECAMATAN</span>
+                <div class="right-inner-addon">
+                  <select name="district" ng-model="$parent.$parent.shippingDetails.district" ng-change="getFare($parent.$parent.shippingDetails)" ng-options="district.nama_kecamatan for district in districts.kecamatan | orderBy: 'nama_kecamatan'"  ng-disabled="!$parent.$parent.shippingDetails.city" required>
+                  </select>
+                  <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="shippingForm.$submitted || shippingForm.district.$touched">
+                    <span class="error-message" ng-show="shippingForm.district.$error.required">Pilih kecamatan tujuan Anda.</span>
+                  </div>
+              </div>
+            </div>
+            <div class="form-group">
+                <span class="text-label">KODE POS</span>
+                <div class="right-inner-addon">
+                  <input type="text" class="form-control" name="postalcode" ng-model="$parent.$parent.shippingDetails.postal_code" validation-type="postalcode" required>
+                  <div ng-show="shippingForm.$submitted || shippingForm.postalcode.$touched">
+                    <i class="glyphicon glyphicon-ok" ng-show="shippingForm.postalcode.$valid"></i>
+                    <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.postalcode.$valid"></i>
+                    <span class="error-message" ng-show="shippingForm.postalcode.$error.required">Kode Pos harus diisi.</span>
+                    <span class="error-message" ng-show="shippingForm.postalcode.$error.postalcode">Kode Pos harus terdiri dari 5 digit angka.</span>
+                  </div>
+                </div>
+            </div>
+
         </div>
-        <div class="inner-wrapper inner-content" ng-hide="arrayOfShippingDetails == null">
+
+        <div class="inner-wrapper inner-content" ng-show="arrayOfShippingDetails.length > 0">
           <span class="text-label big">{{shippingDetails.full_name}}</span>
           <p>{{shippingDetails.address}}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/>Tel. +62{{shippingDetails.phone_number}}</p>
           <small><button type="button" ng-click="changeAddressToggle = !changeAddressToggle; gotoTop();" class="btn btn-default">GANTI ALAMAT</button></small>
@@ -127,60 +211,65 @@
             </div>
              
           </div>
+        </div>
 
-          <div class="animate-show" ng-init="getFare(shippingDetails)" ng-show="servicePackageList">
-            <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
-          
-            <div class="vertical-align" style="justify-content: flex-start">
-              <div style="display: inline-block">
-                <span class="shipping-logo jne"></span>
-                <span class="vertical-line"></span>
-              </div>
-              <div style="display: inline-block">
-                <span class="text-label">Biaya Pengiriman</span> 
-                <span class="text-label big" ng-show="serviceDetails.servicePackage">{{ serviceDetails.insurance ? serviceDetails.servicePackage.service_fare_with_issurance : serviceDetails.servicePackage.service_fare | mycurrency}}</span>
-              </div>
-              
+        <div class="inner-wrapper inner-content animate-show" ng-show="servicePackageList">
+          <hr style="margin: 10px 0; border-top: 1px solid #858585"/>
+        
+          <div class="vertical-align" style="justify-content: flex-start">
+            <div style="display: inline-block">
+              <span class="shipping-logo jne"></span>
+              <span class="vertical-line"></span>
+            </div>
+            <div style="display: inline-block">
+              <span class="text-label">Biaya Pengiriman</span> 
+              <span class="text-label big" ng-show="serviceDetails.servicePackage">{{ serviceDetails.insurance ? serviceDetails.servicePackage.service_fare_with_issurance : serviceDetails.servicePackage.service_fare | mycurrency}}</span>
+              <span class="text-label big" ng-hide="serviceDetails.servicePackage">Rp -</span>
+              <span class="fa fa-2x fa-spinner fa-pulse" loading></span>
             </div>
             
-            <div class="row">
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div class="form-group">  
-                  <span class="text-label animate-show">Paket Pengiriman :</span>
-                  <div class="right-inner-addon">
-                    <select name="servicePackage" ng-model="serviceDetails.servicePackage" ng-options="servicePackage.service_name for servicePackage in servicePackageList" required>
-                      
-                    </select>
-                    <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
-                    <div ng-show="form.shippingForm.$submitted || form.shippingForm.city.$touched">
-                      <span class="error-message" ng-show="form.shippingForm.city.$error.required">Please select your package.</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div class="form-group" ng-class="{ 'disabled': !serviceDetails.servicePackage }">  
-                  <span class="text-label animate-float-left">Asuransi :
-                  </span>
-                  <div class="right-inner-addon">
-                    <select name="insurance" ng-init="serviceDetails.insurance = false" ng-model="serviceDetails.insurance" ng-options="o.v as o.n for o in [{ n: 'Yes', v: true }, { n: 'No', v: false }]" ng-disabled="!serviceDetails.servicePackage" required>
-
-                    </select>
-                    <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
-                    <div ng-show="form.shippingForm.$submitted || form.shippingForm.city.$touched">
-                      <span class="error-message" ng-show="form.shippingForm.city.$error.required">Please select insurance.</span>
-                    </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group" ng-class="{ 'disabled': !shippingDetails.district }">  
+                <span class="text-label animate-show">Paket Pengiriman :</span>
+                <div class="right-inner-addon">
+                  <select name="servicePackage" ng-model="serviceDetails.servicePackage" ng-options="servicePackage.service_name for servicePackage in servicePackageList" ng-disabled="!shippingDetails.district" required>
+                    
+                  </select>
+                  <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="form.shippingForm.$submitted || form.shippingForm.servicePackage.$touched">
+                    <span class="error-message" ng-show="form.shippingForm.servicePackage.$error.required">Please select your package.</span>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group" ng-class="{ 'disabled': !serviceDetails.servicePackage }">  
+                <span class="text-label animate-float-left">Asuransi :
+                </span>
+                <div class="right-inner-addon">
+                  <select name="insurance" ng-init="serviceDetails.insurance = false" ng-model="serviceDetails.insurance" ng-options="o.v as o.n for o in [{ n: 'Ya', v: true }, { n: 'Tidak', v: false }]" ng-disabled="!serviceDetails.servicePackage" required>
 
+                  </select>
+                  <i class="glyphicon glyphicon-triangle-bottom border-left"></i>
+                  <div ng-show="form.shippingForm.$submitted || form.shippingForm.insurance.$touched">
+                    <span class="error-message" ng-show="form.shippingForm.insurance.$error.required">Please select insurance.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-
         </div>
+        
+      </div>
 
-        </div>
-         <div id="dialog-box" class="dialog-box absolute-center" ng-show="changeAddressToggle">
+
+
+
+
+<!--          <div id="dialog-box" class="dialog-box absolute-center" ng-show="changeAddressToggle">
           <span class="text-label medium text-center" style="margin-bottom: 20px">PILIH ALAMAT LAIN</span>
           <div class="inner-wrapper" style="background: #FFFFFF; height: 200px; overflow: scroll; margin-bottom: 20px;">
             <div class="shipping-list-wrapper" ng-repeat="shippingDetails in arrayOfShippingDetails" ng-click="$parent.changeAddressToggle = false; $parent.shippingDetails = shippingDetails; $parent.selectedShippingDetails = arrayOfShippingDetails.indexOf(shippingDetails); getFare($parent.shippingDetails);">
@@ -196,7 +285,7 @@
             <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn-orange btn pull-right" style="width: 95% !important" >TAMBAH ALAMAT</a></small>
           </div>
         </div>
-
+ -->
     </ng-form>
   </div>
 
