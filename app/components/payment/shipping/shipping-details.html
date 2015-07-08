@@ -336,7 +336,7 @@
               <div class="form-group" ng-class="{ 'disabled': !serviceDetails.servicePackage }">  
                 <span class="text-label animate-float-left">Asuransi :
                 </span>
-                <div class="right-inner-addon">
+                <div class="right-inner-addon" ng-show="productDetails.insurance_type == 'OPTIONAL'">
                   <select name="insurance" ng-init="serviceDetails.insurance = false" ng-model="serviceDetails.insurance" ng-options="o.v as o.n for o in [{ n: 'Ya', v: true }, { n: 'Tidak', v: false }]" ng-disabled="!serviceDetails.servicePackage" required>
 
                   </select>
@@ -345,6 +345,8 @@
                     <span class="error-message" ng-show="form.shippingForm.insurance.$error.required">Please select insurance.</span>
                   </div>
                 </div>
+                <span ng-if="productDetails.insurance_type == 'NEEDED'" class="text-label medium">Wajib</span>
+                <span ng-if="productDetails.insurance_type == 'NOT_NEEDED'" class="text-label medium">Tidak Didukung</span>
               </div>
             </div>
           </div>

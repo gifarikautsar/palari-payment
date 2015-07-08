@@ -16,6 +16,13 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
     $scope.selectedShippingDetails = 0;
   }
 
+  if ($scope.productDetails.insurance_type == "NOT_NEEDED"){
+    $scope.serviceDetails.insurance = false;
+  }
+  else if ($scope.productDetails.insurance_type == 'NEEDED'){
+    $scope.serviceDetails.insurance = true;
+  }
+  
   $scope.editShippingDetails = function(index){
     dataFactory.setObject('shippingDetails', $scope.arrayOfShippingDetails[index]);
     console.log($scope.arrayOfShippingDetails[index]);
