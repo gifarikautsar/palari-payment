@@ -56,6 +56,10 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 		.state('500', {
 			url: '/500',
 			templateUrl: 'app/components/errors/500.html'
+		})
+		.state('timeout', {
+			url: '/timeout',
+			templateUrl: 'app/components/errors/timeout.html'
 		});
 
 });

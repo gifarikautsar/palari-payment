@@ -1,1 +1,1 @@
-var paymentApp = angular.module("paymentApp", ['ngAnimate', 'angularPayments', 'routesApp', 'servicesApp', 'filterApp', 'formApp', 'dropdownApp', 'ngMaterial']);
+var paymentApp = angular.module("paymentApp", ['ngAnimate', 'angularPayments', 'routesApp', 'servicesApp', 'filterApp', 'formApp', 'dropdownApp', 'ngMaterial', 'ngIdle']);
