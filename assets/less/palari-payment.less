@@ -359,6 +359,12 @@ select {
 
 /* Radio Button */
 input[type="radio"] {
+  vertical-align: top;
+}
+input[type="radio"] + label {
+  padding-left: 20px;
+}
+/*input[type="radio"] {
     display:none;
 }
 input[type="radio"] + label span {
@@ -407,7 +413,7 @@ label.css-label {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
+}*/
 
 /* Icon Style */
 .cc-icon {
@@ -556,7 +562,7 @@ label.css-label {
   -ms-transition: all 0.5s ease-in;
   -o-transition: all 0.5s ease-in;
   transition: all 0.5s ease-in;
-  max-height: 500px;
+  max-height: 1000px;
 }
 .animate-show.ng-hide {
   -webkit-transition: all 0.5s ease-out;
