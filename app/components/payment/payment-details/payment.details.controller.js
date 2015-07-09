@@ -39,6 +39,7 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
   $scope.productDetails = dataFactory.getObject('productDetails');
   $scope.customerDetails = dataFactory.getObject('customerDetails');
   $scope.serviceDetails = dataFactory.getObject('serviceDetails');
+  $scope.arrayOfShippingDetails = dataFactory.getObject('arrayOfShippingDetails');
 
   $scope.setDefaultPayment = function() {
     if (dataFactory.get('paymentType') == 'bank_transfer'){
@@ -55,6 +56,7 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
         image_class: "fa fa-lg fa-credit-card"
       }; 
     }
+    $scope.go($scope.paymentType.payment_type);
   }
 
   $scope.go = function (paymentType) {

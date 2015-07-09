@@ -11,7 +11,7 @@
       <p align="center">Terima kasih telah memesan produk kami. Silahkan untuk menggunakan nomor Virtual Account berikut untuk pembayaran.</p>
       <span class="text-label big text-center">{{ transactionDetails.permata_va_number}}</span>
       <p align="center">dengan total pembayaran sejumlah</p>
-      <span class="text-label medium text-center">{{ productDetails.totalAmount + serviceDetails.shippingCost | mycurrency }}</span>
+      <span class="text-label medium text-center">{{ productDetails.price + serviceDetails.shippingCost | mycurrency }}</span>
       <p>Instruksi pembayaran untuk :</p>
       <div class="row no-margin text-center">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 no-padding" ng-click="instruction = 1">
@@ -116,7 +116,7 @@
         <span class="text-label">Total</span>
       </div>
       <div class="col-md-4 col-xs-6">
-        <span class="text-label text-right">{{ productDetails.totalAmount + serviceDetails.shippingCost | mycurrency }}</span>
+        <span class="text-label text-right">{{ productDetails.price + serviceDetails.shippingCost | mycurrency }}</span>
       </div>
     </div>
   

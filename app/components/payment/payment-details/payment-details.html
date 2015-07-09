@@ -1,5 +1,5 @@
 <!-- Payment Form -->
-<div ng-init="go('credit_card'); getProductDetails(); setDefaultPayment();">
+<div ng-init=" setDefaultPayment();">
   <div class="wrapper" ng-init="amountToggle = false; shipmentToggle = false">
     <!-- Total Amount Section -->
 
@@ -78,7 +78,7 @@
           </div>
         </div>
         <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/>Tel. +62{{ shippingDetails.phone_number }}</p>
-        <small><a ui-sref="payment.addAddress" ng-click="addAddress()" class="btn btn-default">GANTI ALAMAT</a></small>
+        <small><a ui-sref="payment.shippingDetails" class="btn btn-default">GANTI ALAMAT</a></small>
       </div>
     </div>
   </div>

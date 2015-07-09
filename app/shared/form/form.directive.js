@@ -266,3 +266,32 @@ formApp.directive('number', function() {
   }
 })
 
+formApp.directive('loading', function ($http) {
+  return {
+      restrict: 'A',
+      link: function (scope, elm, attrs, ctrl)
+      {
+          scope.isLoading = function () {
+              return $http.pendingRequests.length > 0;
+          };
+
+          scope.$watch(scope.isLoading, function (v) {
+            if (attrs.loading == 'true'){
+              if(v){
+                  $(elm).show();
+              }else{
+                  $(elm).hide();
+              }
+            }
+            else if (attrs.loading == 'false'){
+              if(v){
+                  $(elm).hide();
+              }else{
+                  $(elm).show();
+              }
+            }  
+          });
+            
+      }
+  };
+});
