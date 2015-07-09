@@ -76,6 +76,18 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     card_cvv: '123',
     card_exp_date: '12/2018'
   };
+  $scope.saved = false;
+  $scope.saved_token = dataFactory.get('saved_token_id');
+  $scope.fourDigits = dataFactory.get('cardLastDigit');
+
+  $scope.checkSaved = function(){
+    if(($scope.saved_token && $scope.fourDigits) && $scope.saved_token !==null && $scope.fourDigits != null && $scope.saved_token!== 'undefined' && $scope.fourDigits!== 'undefined'){
+      $scope.saved = true;
+    }
+    else{
+      $scope.saved = false;
+    }
+  }
 
   var shippingDetails = {};
   var serviceDetails = {};
@@ -95,11 +107,19 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
   $scope.errorMessage = dataFactory.get('errorMessage');
 
   $scope.getToken = function(){
-    $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
-    $scope.getClientKey();
-    setTimeout(function(){
-      Veritrans.token(card, callback);
-    }, 1000);
+    if($scope.save){
+      response = {
+       token_id : saved_token
+      }
+      $scope.chargeTransaction(response);
+    }
+    else{
+      $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
+      $scope.getClientKey();
+      setTimeout(function(){
+        Veritrans.token(card, callback);
+      }, 1000);
+    }
   }
 
   function callback(response) {
@@ -169,7 +189,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
           } ],
           credit_card : {
             token_id : response.token_id,
-            save_token_id : false
+            save_token_id : dataFactory.getObject('customerDetails').expressPayment
           },
           customer_details : {
             "first_name": dataFactory.getObject('customerDetails').full_name,
@@ -185,9 +205,9 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
           }
         }
       ).success(function(data, status, headers, config) {
-        console.log(data);
+        console.log('Charging-------' + data);
         dataFactory.setObject('transactionDetails', data);
-
+        dataFactory.set('cardLastDigit', $scope.creditCard.card_number.substr($scope.creditCard.card_number.length-4,$scope.creditCard.card_number.length));
         //Confirm Transaction
         $http.post(
           phinisiEndpoint + '/merchant/payment/confirm', 

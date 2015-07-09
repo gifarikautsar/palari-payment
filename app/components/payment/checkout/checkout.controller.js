@@ -35,6 +35,8 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
       dataFactory.setObject('customerDetails', token.customerDetails);
       dataFactory.setObject('selectedShippingDetails', token.selectedShippingDetails);
       dataFactory.setObject('arrayOfShippingDetails', token.arrayOfShippingDetails);
+      dataFactory.set('cardLastDigit', token.cardLastDigit);
+      dataFactory.set('saved_token_id', token.saved_token_id);
       dataFactory.set('paymentType', token.paymentType);
     }
     else {
