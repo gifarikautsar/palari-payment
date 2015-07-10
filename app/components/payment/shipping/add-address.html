@@ -1,6 +1,6 @@
 <form name="shippingForm" ng-submit="onSubmit()">
   <div class="wrapper tab">    
-      <h5>TAMBAH ALAMAT BARU</h5> 
+      <h5>UBAH INFORMASI PENGIRIMAN</h5> 
       <div class="inner-wrapper inner-content">
         <div class="error-box animate-blink" ng-show="errorMessageShipping">
             <div class="error-message">{{ errorMessageShipping }}</div>
@@ -17,6 +17,19 @@
                   <span class="error-message" ng-show="shippingForm.firstname.$error.required">Nama harus diisi.</span>
                 </div>
               </div>
+            </div>
+            <div class="form-group">
+              <span class="text-label">EMAIL</span>
+              <div class="right-inner-addon">
+                <input type="text" class="form-control" name="email" ng-model="$parent.shippingDetails.email" validation-type="email" required>
+                <div ng-show="shippingForm.$submitted || shippingForm.email.$touched">
+                  <i class="glyphicon glyphicon-ok" ng-show="shippingForm.email.$valid"></i>
+                  <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.email.$valid"></i>
+                  <span class="error-message" ng-show="shippingForm.email.$error.required">Email harus diisi.</span>
+                  <span class="error-message" ng-show="shippingForm.email.$error.email">Email tidak valid. Contoh email yang benar : danny@gmail.com.</span>
+                </div>
+              </div>
+              <p align="justify">Gunakan alamat email yang aktif untuk menerima notifikasi pembayaran dan pengiriman barang.</p>  
             </div>
             <div class="form-group">
               <span class="text-label">NO. TELP / HP PENERIMA</span>
@@ -81,7 +94,7 @@
             <div class="form-group">
                 <span class="text-label">KODE POS</span>
                 <div class="right-inner-addon">
-                  <input type="text" class="form-control" name="postalcode" ng-model="shippingDetails.postal_code" validation-type="postalcode" required>
+                  <input type="text" class="form-control" name="postalcode" ng-model="shippingDetails.postal_code" validation-type="postalcode" maxlength="5" required>
                   <div ng-show="shippingForm.$submitted || shippingForm.postalcode.$touched">
                     <i class="glyphicon glyphicon-ok" ng-show="shippingForm.postalcode.$valid"></i>
                     <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.postalcode.$valid"></i>

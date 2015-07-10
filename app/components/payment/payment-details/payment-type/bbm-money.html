@@ -1,13 +1,27 @@
-<!-- Virtual Account -->
-<div class="virtual-account-section animate-show">
-  <div class="row">
-    <div class="col-xs-12 col-md-12 col-lg-12">
-      <span class="small-text-label">VIRTUAL ACCOUNT PAYMENT PROCESS</span>
+<form name="bbmMoneyForm" ng-submit="chargeBbmMoney()">
+  <div class="wrapper tab animate-show">
+    <div class="tab">
+
+      <h5>Instruksi Pembayaran</h5>
+      <div class="inner-wrapper inner-content">
+        <ol>
+          <li>Silahkan tekan 'Konfirmasi Pembayaran'</li>
+          <li>Buka atau install aplikasi BBM<sup>TM</sup> Money di ponsel Anda</li>
+          <li>Pastikan Anda memiliki cukup uang di dalamnya, atau segera isi ulang saldo Anda</li>
+          <li>Login ke akun BBM<sup>TM</sup> Money Anda dan pilih 'Kirim ke Perusahaan'</li>
+          <li>Pilih 'Belanja Online' pada menu biller lalu masukkan Kode Pembayaran ke dalam tempat 'Kode Pembayaran'</li>
+          <li>Masukkan nominal dengan angka sejumlah ke dalam tempat 'Jumlah'</li>
+          <li>Tekan 'Bayar' dan konfirmasi</li>
+        </ol>
+      </div>
+    
+    </div>
+
+  </div>
+  <div class="wrapper">
+    <div class="inner-wrapper">
+        <input type="submit" class="btn btn-primary" style="width: 100%" value="KONFIRMASI PEMBAYARAN" />
     </div>
   </div>
-  <div class="row">
-    <div class="col-xs-12 col-md-12 col-lg-12">
-      <img src="../assets/img/va_process.png" class="virtual-account-process"></img>
-    </div>
-  </div>
-</div>
+  
+</form>

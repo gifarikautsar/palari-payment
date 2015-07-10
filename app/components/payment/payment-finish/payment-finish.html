@@ -81,6 +81,24 @@
 
       </div>
   </div>
+  <div class="inner-wrapper" ng-if="transactionDetails.payment_type == 'bbm_money'">
+    <p align="center">Terima kasih telah memesan produk kami. Silahkan gunakan Kode Pembayaran berikut untuk pembayaran.</p>
+      <span class="text-label big text-center">{{ transactionDetails.permata_va_number}}</span>
+      <span class="text-label text-center">dengan total pembayaran sejumlah</span>
+      <span class="text-label medium text-center">{{ productDetails.price + serviceDetails.shippingCost | mycurrency }}</span>
+      <span class="text-label text-center">Jika Anda telah menginstall aplikasi BBM Money, silahkan tekan tombol berikut.</span>
+      <a ng-href="{{transactionDetails.bbm_money_url}}" class="btn btn-primary center-block">Pay with <i class="bbm-logo"></i>BBM Money</a>
+      <p>Instruksi pembayaran :</p>
+      <ol>
+        <li>Buka atau install aplikasi BBM<sup>TM</sup> Money di ponsel Anda</li>
+        <li>Pastikan Anda memiliki cukup uang di dalamnya, atau segera isi ulang saldo Anda</li>
+        <li>Login ke akun BBM<sup>TM</sup> Money Anda dan pilih 'Kirim ke Perusahaan'</li>
+        <li>Pilih 'Belanja Online' pada menu biller lalu masukkan {{transactionDetails.permata_va_number}} ke dalam tempat 'Kode Pembayaran'</li>
+        <li>Masukkan nominal dengan angka pas sejumlah {{ productDetails.price + serviceDetails.shippingCost | mycurrency }} ke dalam tempat 'Jumlah'</li>
+        <li>Tekan 'Bayar' dan konfirmasi</li>
+      </ol>
+      
+  </div>
 </div>
 
 <div class="wrapper tab" ng-init="productToggle = false">
@@ -130,14 +148,14 @@
     {{ shippingDetails.address }} <br/>
     {{ shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}, {{shippingDetails.province.nama_propinsi}}<br/>
     {{ "Phone : +62" + shippingDetails.phone_number }}</p>
-                
+    {{ "Email :" + shippingDetails.email }}</p>            
   </div>
 
 </div>
 
 <div class="wrapper">
   <div class="inner-wrapper">
-      <button class="btn btn-dark-gray" style="width: 100%"><i class="fa fa-arrow-circle-left"></i> Back to BBM</button>
+      <a href="bbmi://" class="btn btn-dark-gray" style="width: 100%"><i class="fa fa-arrow-circle-left"></i> Back to BBM</a>
   </div>  
 </div>
 
