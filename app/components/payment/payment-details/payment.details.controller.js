@@ -86,7 +86,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
 
   $scope.getToken = function(){
     $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
-    Veritrans.url = veritransEndpoint + '/';
+    Veritrans.url = veritransEndpoint + '/token';
     $scope.getClientKey();
     setTimeout(function(){
       Veritrans.token(card, callback);
