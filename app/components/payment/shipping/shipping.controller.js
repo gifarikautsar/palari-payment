@@ -7,6 +7,12 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   $scope.shippingDetails = {};
   $scope.servicePackageList = {};
 
+  if(!$scope.customerDetails){
+    $scope.customerDetails = {
+      expressPayment: true
+    }
+  }
+
   $scope.provinces = {};
   $scope.cities = {};
   $scope.districts = {};

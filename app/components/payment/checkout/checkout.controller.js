@@ -1,4 +1,4 @@
-paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state', '$stateParams', '$window', 'dataFactory', function($scope, $http, $log, $state, $stateParams, $window, dataFactory){
+paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state', '$stateParams', '$window', 'dataFactory', '$crypto', function($scope, $http, $log, $state, $stateParams, $window, dataFactory, $crypto){
   $scope.$parent.state = 1;
   $scope.productDetails = {};
   $scope.productId = $stateParams.productId;
@@ -31,6 +31,7 @@ paymentApp.controller('checkoutController', ['$scope', '$http', '$log', '$state'
   $scope.checkout = function(){
     var token = dataFactory.getObjectLS('bbmPayToken');
     if (token){
+      token = JSON.parse($crypto.decrypt(token));
       console.log(token);
       dataFactory.setObject('customerDetails', token.customerDetails);
       dataFactory.setObject('selectedShippingDetails', token.selectedShippingDetails);

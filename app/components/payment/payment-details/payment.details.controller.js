@@ -78,16 +78,19 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     card_cvv: '123',
     card_exp_date: '12/2018'
   };
-  $scope.saved = false;
+  $scope.useSavedToken = false;
+  $scope.haveSavedToken = false;
   $scope.saved_token = dataFactory.get('saved_token_id');
   $scope.fourDigits = dataFactory.get('cardLastDigit');
 
   $scope.checkSaved = function(){
     if(($scope.saved_token && $scope.fourDigits) && $scope.saved_token !==null && $scope.fourDigits != null && $scope.saved_token!== 'undefined' && $scope.fourDigits!== 'undefined'){
-      $scope.saved = true;
+      $scope.useSavedToken = true;
+      $scope.haveSavedToken = true;
     }
     else{
-      $scope.saved = false;
+      $scope.useSavedToken = false;
+      $scope.haveSavedToken = false;
     }
   }
 
@@ -96,26 +99,41 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
 
   var card = function() {
     var shippingCost = (dataFactory.getObject('productDetails').need_address ? dataFactory.getObject('serviceDetails').shippingCost : 0);
-    return {
-      'card_number': $scope.creditCard.card_number,
-      'card_cvv': $scope.creditCard.card_cvv,
-      'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
-      'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
-      'secure': true,
-      'gross_amount': dataFactory.getObject('productDetails').price + shippingCost
+    if($scope.useSavedToken){
+      return{
+        'token_id': $scope.saved_token,
+        'card_cvv': $scope.creditCard.card_cvv,
+        'two_click' : true,
+        'secure' : true,
+        'gross_amount': dataFactory.getObject('productDetails').price + shippingCost
+      }
+    }
+    else{
+      return {
+        'card_number': $scope.creditCard.card_number,
+        'card_cvv': $scope.creditCard.card_cvv,
+        'card_exp_month': $scope.creditCard.card_exp_date.substr(0, 2),
+        'card_exp_year': $scope.creditCard.card_exp_date.substr(3, 4),
+        'secure': true,
+        'gross_amount': dataFactory.getObject('productDetails').price + shippingCost
+      }
     }
   }
 
   $scope.errorMessage = dataFactory.get('errorMessage');
-
   $scope.getToken = function(){
-    if($scope.save){
-      response = {
-       token_id : saved_token
+    $scope.formValid = false;
+    if($scope.useSavedToken){
+      if ($scope.savedCreditCardForm.$valid) {
+        $scope.formValid = true;
       }
-      $scope.chargeTransaction(response);
     }
     else{
+      if($scope.creditCardForm.$valid){
+        $scope.formValid = true;
+      }
+    }
+    if($scope.formValid){
       $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
       $scope.getClientKey();
       setTimeout(function(){
@@ -207,9 +225,17 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
           }
         }
       ).success(function(data, status, headers, config) {
-        console.log('Charging-------' + data);
-        dataFactory.setObject('transactionDetails', data);
-        dataFactory.set('cardLastDigit', $scope.creditCard.card_number.substr($scope.creditCard.card_number.length-4,$scope.creditCard.card_number.length));
+        console.log('Charging-------');
+        console.log(data);
+        if($scope.useSavedToken){
+          dataFactory.set('cardLastDigit', $scope.fourDigits);  
+          dataFactory.set('saved_token_id', $scope.saved_token);
+        }
+        else{
+          dataFactory.set('cardLastDigit', $scope.creditCard.card_number.substr($scope.creditCard.card_number.length-4,$scope.creditCard.card_number.length));
+          dataFactory.set('saved_token_id', data.saved_token_id);
+          dataFactory.setObject('transactionDetails', data);
+        }
         //Confirm Transaction
         $http.post(
           phinisiEndpoint + '/merchant/payment/confirm', 

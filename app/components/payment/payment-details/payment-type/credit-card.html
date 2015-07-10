@@ -1,7 +1,5 @@
-{{saved_token}}
-{{fourDigits}}
 <!-- Credit Card -->
-<form name="creditCardForm" ng-submit="getToken()" ng-init="checkSaved()">    
+<form name="creditCardForm" ng-submit="getToken()" ng-init="checkSaved()" ng-hide="useSavedToken" novalidate>    
   <div class="wrapper tab animate-show">
     <div class="tab">
       <h5>INFORMASI KARTU KREDIT</h5>
@@ -14,21 +12,13 @@
             </div>
           </div>
         </div>  
-        <div class="form-group" style="overflow: auto" ng-hide="saved">
+        <div class="form-group" style="overflow: auto">
             <span class="small-text-label">NOMOR KARTU (VISA / MASTERCARD)</span>
-            <card-number ng-model="creditCard.card_number"> </card-number>
-        </div>
-        <div class="form-group col-xs-8 col-sm-8 col-md-8 no-padding" style="overflow: auto" ng-show="saved">
-            <span class="small-text-label">NOMOR KARTU (VISA / MASTERCARD)</span>
-            <br/>
-            <span style="font-size: 24px">**** **** **** {{fourDigits}}</span>
-        </div>
-        <div class="btn btn-very-light-gray col-xs-4 col-sm-4 col-md-4" ng-show="saved">
-          <div class="small-text-label" ng-click="saved=false;">CHANGE CARD</div>
+             <card-number ng-model="creditCard.card_number"> </card-number>
         </div>
 
         <div class="form-group col-xs-12 col-sm-12 col-md-12 no-padding" style="overflow: auto">
-            <div class="col-xs-4 col-sm-4 col-md-4 no-padding" ng-hide="saved">
+            <div class="col-xs-4 col-sm-4 col-md-4 no-padding">
             <span class="small-text-label">EXP. DATE</span>
             <div class="right-inner-addon"> 
               <input type="text" id="card_expiry_date" name="expdate" class="form-control" placeholder="MM/YYYY" ng-model="creditCard.card_exp_date" required payments-format="expiry" exp-date/>
@@ -40,7 +30,103 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-1 col-sm-1 col-md-1 no-padding" ng-hide="saved"></div>
+          <div class="col-xs-1 col-sm-1 col-md-1 no-padding"></div>
+          <div class="col-xs-4 col-sm-3 col-md-3 no-padding">
+            <span class="small-text-label">CVV</span>
+              <div class="right-inner-addon">   
+                <input id="card_cvv" name="cvv" class="form-control" type="password" placeholder="***" ng-model="creditCard.card_cvv" payments-format="cvc" required/>
+                <div ng-show="creditCardForm.$submitted || creditCardForm.cvv.$touched">
+                  <i class="glyphicon glyphicon-ok" ng-show="creditCardForm.cvv.$valid"></i>
+                  <i class="glyphicon glyphicon-remove" ng-show="!creditCardForm.cvv.$valid"></i>
+                  <span class="error-message" ng-show="creditCardForm.cvv.$error.required">CVV harus diisi.</span>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 no-padding" ng-show="!useSavedToken && haveSavedToken">
+              <a ng-click="useSavedToken=true;" class="link-blue text-left"><i class="fa fa-arrow-left"></i> CANCEL AND BACK</a>  
+          </div>
+        </div>
+     
+      </div>
+    </div>
+  <!-- Payment Options -->
+<!--     <div class="tab middle" ng-init="installmentToggle = false">
+      <h5 ng-click="installmentToggle = !installmentToggle">Installment Term <span style="color: #ff7400">(Optional)</span><i class="fa fa-lg pull-right" ng-class="button2Active ? 'fa-angle-up' : 'fa-angle-down'"></i></h5>
+      <div class="inner-wrapper inner-content animate-show" ng-show="installmentToggle">
+            <span class="text-label">Please select your bank</span>
+            <div class="row">
+
+              <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <input type="radio" id="bni" name="radio" ng-model="bankType" value="bni" />   
+                <label for="bni"><span class="bank-logo bank-bni"></span></label>
+              </div>
+
+              <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <input type="radio" id="mandiri" name="radio" ng-model="bankType" value="mandiri" />   
+                <label for="mandiri"><span class="bank-logo bank-mandiri"></span></label>
+              </div>
+
+              <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <input type="radio" id="cimb_clicks" name="radio" ng-model="bankType" value="cimb_clicks" />   
+                <label for="cimb_clicks"><span class="bank-logo bank-cimbniaga"></span></label>
+              </div>
+               
+            </div>
+
+            <span class="text-label animate-float-left" ng-show="bankType != ''">Please select your installment term</span>
+            <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 animate-float-left" ng-show="bankType != ''">
+
+              <div class="row">
+                <input type="radio" id="3-months" class="css-checkbox" name="radio2" ng-model="installment" value="3" />   
+                <label for="3-months" class="css-label">{{ totalPrice()/3 | mycurrency }} x 3 months </label>
+              </div>
+
+              <div class="row">
+                <input type="radio" id="6-months" class="css-checkbox" name="radio2" ng-model="installment" value="6" />   
+                <label for="6-months" class="css-label">{{ totalPrice()/6 | mycurrency }} x 6 months </label>
+              </div>
+
+              <div class="row">
+                <input type="radio" id="12-months" class="css-checkbox" name="radio2" ng-model="installment" value="12" />   
+                <label for="12-months" class="css-label">{{ totalPrice()/12 | mycurrency }} x 12 months</label>
+              </div>
+               
+            </div>
+
+      </div>
+    </div>
+ -->  </div>
+  <div class="wrapper">
+    <div class="inner-wrapper">
+        <input type="submit" class="btn btn-primary" style="width: 100%" value="KONFIRMASI PEMBAYARAN" />
+    </div>
+  </div>
+</form>
+
+<!-- Credit Card -->
+<form name="savedCreditCardForm" ng-submit="getToken()" ng-init="checkSaved()" ng-show="useSavedToken" novalidate>    
+  <div class="wrapper tab animate-show">
+    <div class="tab">
+      <h5>INFORMASI KARTU KREDIT</h5>
+
+      <div class="inner-wrapper inner-content animate-show">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 spacing-form animate-blink" ng-show="errorMessage">
+            <div class="error-box">
+              <span class="error-message">{{errorMessage}}</span>
+            </div>
+          </div>
+        </div>  
+        <div class="form-group col-xs-8 col-sm-8 col-md-8 no-padding" style="overflow: auto">
+            <span class="small-text-label">NOMOR KARTU (VISA / MASTERCARD)</span>
+            <br/>
+            <span style="font-size: 24px">**** **** **** {{fourDigits}}</span>
+        </div>
+        <div class="btn btn-very-light-gray col-xs-4 col-sm-4 col-md-4">
+          <div style="font-size: 12px" ng-click="useSavedToken=false;">CHANGE CARD</div>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 no-padding" style="overflow: auto">
           <div class="col-xs-4 col-sm-3 col-md-3 no-padding">
             <span class="small-text-label">CVV</span>
               <div class="right-inner-addon">   
