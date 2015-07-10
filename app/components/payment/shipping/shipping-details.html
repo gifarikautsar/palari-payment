@@ -31,7 +31,7 @@
     </div>
   </div>
   <div class="wrapper tab">
-    <ng-form name="customerForm" ng-if="arrayOfShippingDetails.length == 0">
+    <ng-form name="customerForm" ng-if="!productDetails.need_address">
       <div class="tab">    
         <h5>INFORMASI PELANGGAN</h5> 
         <div class="inner-wrapper inner-content">
@@ -97,7 +97,7 @@
         </div>
         <div class="inner-wrapper inner-content" ng-if="arrayOfShippingDetails.length == 0">
             <div class="form-group">
-              <span class="text-label">NAMA PENERIMA</span>
+              <span class="text-label">NAMA LENGKAP</span>
               <div class="right-inner-addon">
                 <input type="text" class="form-control" name="firstname" ng-model="$parent.$parent.shippingDetails.full_name" required>
                 <div ng-show="shippingForm.$submitted || shippingForm.firstname.$touched">
@@ -108,7 +108,20 @@
               </div>
             </div>
             <div class="form-group">
-              <span class="text-label">NO. TELP / HP PENERIMA</span>
+              <span class="text-label">ALAMAT EMAIL</span>
+              <div class="right-inner-addon">
+                <input type="text" class="form-control" name="email" ng-model="$parent.shippingDetails.email" validation-type="email" required>
+                <div ng-show="shippingForm.$submitted || shippingForm.email.$touched">
+                  <i class="glyphicon glyphicon-ok" ng-show="shippingForm.email.$valid"></i>
+                  <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.email.$valid"></i>
+                  <span class="error-message" ng-show="shippingForm.email.$error.required">Email harus diisi.</span>
+                  <span class="error-message" ng-show="shippingForm.email.$error.email">Email tidak valid. Contoh email yang benar : danny@gmail.com.</span>
+                </div>
+              </div>
+              <p align="justify">Gunakan alamat email yang aktif untuk menerima notifikasi pembayaran dan pengiriman barang.</p>  
+            </div>
+            <div class="form-group">
+              <span class="text-label">NO. TELP / HP</span>
               <div class="right-inner-addon">
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon1">+62</span>
@@ -170,7 +183,7 @@
             <div class="form-group">
                 <span class="text-label">KODE POS</span>
                 <div class="right-inner-addon">
-                  <input type="text" class="form-control" name="postalcode" ng-model="$parent.$parent.shippingDetails.postal_code" validation-type="postalcode" required>
+                  <input type="text" class="form-control" name="postalcode" ng-model="$parent.$parent.shippingDetails.postal_code" validation-type="postalcode" maxlength="5" required>
                   <div ng-show="shippingForm.$submitted || shippingForm.postalcode.$touched">
                     <i class="glyphicon glyphicon-ok" ng-show="shippingForm.postalcode.$valid"></i>
                     <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.postalcode.$valid"></i>
@@ -179,7 +192,10 @@
                   </div>
                 </div>
             </div>
-
+            <div class="form-group">
+              <input type="checkbox" name="expressPayment" ng-init="$parent.$parent.customerDetails.expressPayment = true" ng-model="$parent.$parent.customerDetails.expressPayment">
+              <span>Saya ingin menyimpan <strong>informasi pelanggan</strong> dan <strong>informasi pengiriman</strong> untuk transaksi selanjutnya</span>   
+            </div>
         </div>
 
         <div class="inner-wrapper inner-content" ng-if="arrayOfShippingDetails.length > 0" ng-init="getFare(shippingDetails)">
@@ -197,7 +213,7 @@
               <input type="radio" id="{{$index}}" name="radio" ng-model="$parent.$parent.$parent.selectedShippingDetails" ng-value="$index"/>   
               <label for="{{$index}}">
                 <span class="text-label big">{{shippingDetail.full_name}}</span>
-                <p>{{shippingDetail.address}}<br/>{{shippingDetail.district.nama_kecamatan}}, {{shippingDetail.city.nama_kota}}<br/>{{shippingDetail.province.nama_propinsi}}, Indonesia, {{shippingDetail.postal_code}}<br/>Tel. +62{{shippingDetail.phone_number}}</p>
+                <p>{{shippingDetail.address}}<br/>{{shippingDetail.district.nama_kecamatan}}, {{shippingDetail.city.nama_kota}}<br/>{{shippingDetail.province.nama_propinsi}}, Indonesia, {{shippingDetail.postal_code}}<br/>Tel. +62{{shippingDetail.phone_number}}<br/>Email. {{ shippingDetails.email }}</p>
                 <small><small><button type="button" class="btn btn-default" ng-click="editShippingDetails($index)">EDIT ADDRESS</button></small></small>
                 <small><small><button type="button" class="btn btn-default" ng-click="deleteShippingDetails($index)">DELETE ADDRESS</button></small></small>
               </label>
@@ -210,7 +226,7 @@
 
             <div class="animate-show" ng-show="selectedShippingDetails == -1">
               <div class="form-group">
-                <span class="text-label">NAMA PENERIMA</span>
+                <span class="text-label">NAMA LENGKAP</span>
                 <div class="right-inner-addon">
                   <input type="text" class="form-control" name="firstname" ng-model="$parent.$parent.shippingDetails.full_name" required>
                   <div ng-show="$parent.$parent.shippingForm.$submitted || shippingForm.firstname.$touched">
@@ -221,7 +237,20 @@
                 </div>
               </div>
               <div class="form-group">
-                <span class="text-label">NO. TELP / HP PENERIMA</span>
+                <span class="text-label">ALAMAT EMAIL</span>
+                <div class="right-inner-addon">
+                  <input type="text" class="form-control" name="email" ng-model="$parent.shippingDetails.email" validation-type="email" required>
+                  <div ng-show="shippingForm.$submitted || shippingForm.email.$touched">
+                    <i class="glyphicon glyphicon-ok" ng-show="shippingForm.email.$valid"></i>
+                    <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.email.$valid"></i>
+                    <span class="error-message" ng-show="shippingForm.email.$error.required">Email harus diisi.</span>
+                    <span class="error-message" ng-show="shippingForm.email.$error.email">Email tidak valid. Contoh email yang benar : danny@gmail.com.</span>
+                  </div>
+                </div>
+                <p align="justify">Gunakan alamat email yang aktif untuk menerima notifikasi pembayaran dan pengiriman barang.</p>  
+              </div>
+              <div class="form-group">
+                <span class="text-label">NO. TELP / HP</span>
                 <div class="right-inner-addon">
                   <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1">+62</span>
@@ -283,7 +312,7 @@
               <div class="form-group">
                   <span class="text-label">KODE POS</span>
                   <div class="right-inner-addon">
-                    <input type="text" class="form-control" name="postalcode" ng-model="$parent.$parent.shippingDetails.postal_code" validation-type="postalcode" required>
+                    <input type="text" class="form-control" name="postalcode" ng-model="$parent.$parent.shippingDetails.postal_code" maxlength="5" validation-type="postalcode" required>
                     <div ng-show="shippingForm.$submitted || shippingForm.postalcode.$touched">
                       <i class="glyphicon glyphicon-ok" ng-show="shippingForm.postalcode.$valid"></i>
                       <i class="glyphicon glyphicon-remove" ng-show="!shippingForm.postalcode.$valid"></i>
@@ -291,6 +320,10 @@
                       <span class="error-message" ng-show="shippingForm.postalcode.$error.postalcode">Kode Pos harus terdiri dari 5 digit angka.</span>
                     </div>
                   </div>
+              </div>
+              <div class="form-group">
+                <input type="checkbox" name="expressPayment" ng-init="$parent.$parent.customerDetails.expressPayment = true" ng-model="$parent.$parent.customerDetails.expressPayment">
+                <span>Saya ingin menyimpan <strong>informasi pelanggan</strong> dan <strong>informasi pengiriman</strong> untuk transaksi selanjutnya</span>   
               </div>
 
             </div>

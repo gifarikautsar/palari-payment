@@ -34,7 +34,8 @@ routesApp.config(function($stateProvider, $urlRouterProvider, $locationProvider)
 			controller: 'bankTransferController'
 		})
 		.state('payment.paymentDetails.bbmMoney', {
-			templateUrl: 'app/components/payment/payment-details/payment-type/bbm-money.html'
+			templateUrl: 'app/components/payment/payment-details/payment-type/bbm-money.html',
+			controller: 'bbmMoneyController'
 		})
 		.state('payment.paymentFinish', {
 			url: '/customer/payment-finish',

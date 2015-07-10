@@ -119,81 +119,95 @@ paymentApp.controller('shippingController', ['$scope', '$http', '$log', '$state'
   $scope.onSubmit = function(){
     if ($scope.arrayOfShippingDetails.length == 0){
       //First time user
-      if ($scope.form.customerForm.$valid){
-        // Customer Form valid
-        if ($scope.productDetails.need_address) {
-          // Product need address
-          if ($scope.form.shippingForm.$valid) {
-            // Shipping Form valid
-            if ($scope.serviceDetails.insurance) {
-              $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare_with_issurance;
-            } 
-            else {
-              $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare;
-            }
-            $scope.arrayOfShippingDetails.push($scope.shippingDetails);
-            dataFactory.setObject('customerDetails', $scope.customerDetails);
-            dataFactory.setObject('shippingDetails', $scope.shippingDetails);
-            dataFactory.setObject('serviceDetails', $scope.serviceDetails);
-            dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
-            $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
+      if ($scope.productDetails.need_address) {
+        // Product need address
+        if ($scope.form.shippingForm.$valid) {
+          // Shipping Form valid
+          if ($scope.serviceDetails.insurance) {
+            $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare_with_issurance;
+          } 
+          else {
+            $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare;
           }
-          else if ($scope.form.shippingForm.$invalid) {
-            // Add new address and shipping form not valid
-            $scope.errorMessageShipping = "Form tidak valid. Silahkan pastikan bahwa form telah terisi dengan benar sebelum melanjutkan ke tahap berikutnya.";
-          }
+          $scope.arrayOfShippingDetails.push($scope.shippingDetails);
+          dataFactory.setObject('customerDetails', $scope.customerDetails);
+          dataFactory.setObject('shippingDetails', $scope.shippingDetails);
+          dataFactory.setObject('serviceDetails', $scope.serviceDetails);
+          dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
+          $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
+        }
+        else if ($scope.form.shippingForm.$invalid) {
+          // Add new address and shipping form not valid
+          $scope.errorMessageShipping = "Form tidak valid. Silahkan pastikan bahwa form telah terisi dengan benar sebelum melanjutkan ke tahap berikutnya.";
+        }
+      }
+      else {
+        //Product doesn't need address
+        if ($scope.form.customerForm.$valid){
+          // Customer Form valid
+          dataFactory.setObject('customerDetails', $scope.customerDetails);
+          $state.transitionTo('payment.paymentDetails', { arg: 'arg'});  
         }
         else {
-          // Shipping Form invalid
-          dataFactory.setObject('customerDetails', $scope.customerDetails);
-          $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
-        }  
-      }
-      else if ($scope.form.customerForm.$invalid){
-        //CustomerForm is invalid
-        $scope.errorMessage = "Form tidak valid. Silahkan pastikan bahwa form telah terisi dengan benar sebelum melanjutkan ke tahap berikutnya.";
+          //CustomerForm is invalid
+          $scope.errorMessage = "Form tidak valid. Silahkan pastikan bahwa form telah terisi dengan benar sebelum melanjutkan ke tahap berikutnya.";
+        }
       }
     }
     else if ($scope.arrayOfShippingDetails.length > 0){
       //Second Time User
-      if ($scope.selectedShippingDetails > -1){
-        //Current Address or Saved Address
-        if ($scope.serviceDetails.insurance) {
-          $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare_with_issurance;
-        } 
-        else {
-          $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare;
+      if ($scope.productDetails.need_address){
+        if ($scope.selectedShippingDetails > -1){
+          //Current Address or Saved Address
+          if ($scope.serviceDetails.insurance) {
+            $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare_with_issurance;
+          } 
+          else {
+            $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare;
+          }
+          var currentIndex = $scope.arrayOfShippingDetails.indexOf($scope.shippingDetails);
+          var temp = $scope.arrayOfShippingDetails[0];
+          $scope.arrayOfShippingDetails[0] = $scope.arrayOfShippingDetails[currentIndex];
+          $scope.arrayOfShippingDetails[currentIndex] = temp;
+          console.log($scope.arrayOfShippingDetails);
+          dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
+          dataFactory.setObject('customerDetails', $scope.customerDetails);
+          dataFactory.setObject('shippingDetails', $scope.shippingDetails);
+          dataFactory.setObject('serviceDetails', $scope.serviceDetails);
+          $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
         }
-        var currentIndex = $scope.arrayOfShippingDetails.indexOf($scope.shippingDetails);
-        var temp = $scope.arrayOfShippingDetails[0];
-        $scope.arrayOfShippingDetails[0] = $scope.arrayOfShippingDetails[currentIndex];
-        $scope.arrayOfShippingDetails[currentIndex] = temp;
-        console.log($scope.arrayOfShippingDetails);
-        dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
-        dataFactory.setObject('customerDetails', $scope.customerDetails);
-        dataFactory.setObject('shippingDetails', $scope.shippingDetails);
-        dataFactory.setObject('serviceDetails', $scope.serviceDetails);
-        $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
-      }
-      else if ($scope.selectedShippingDetails == -1 && $scope.form.shippingForm.$valid){
-        //New Address
-        if ($scope.serviceDetails.insurance) {
-          $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare_with_issurance;
-        } 
-        else {
-          $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare;
+        else if ($scope.selectedShippingDetails == -1 && $scope.form.shippingForm.$valid){
+          //New Address
+          if ($scope.serviceDetails.insurance) {
+            $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare_with_issurance;
+          } 
+          else {
+            $scope.serviceDetails.shippingCost = $scope.serviceDetails.servicePackage.service_fare;
+          }
+          $scope.arrayOfShippingDetails.unshift($scope.shippingDetails); //put shippingDetails in the first index
+          console.log($scope.arrayOfShippingDetails);
+          dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
+          dataFactory.setObject('customerDetails', $scope.customerDetails);
+          dataFactory.setObject('shippingDetails', $scope.shippingDetails);
+          dataFactory.setObject('serviceDetails', $scope.serviceDetails);
+          $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
         }
-        $scope.arrayOfShippingDetails.unshift($scope.shippingDetails); //put shippingDetails in the first index
-        console.log($scope.arrayOfShippingDetails);
-        dataFactory.setObject('arrayOfShippingDetails', $scope.arrayOfShippingDetails);
-        dataFactory.setObject('customerDetails', $scope.customerDetails);
-        dataFactory.setObject('shippingDetails', $scope.shippingDetails);
-        dataFactory.setObject('serviceDetails', $scope.serviceDetails);
-        $state.transitionTo('payment.paymentDetails', { arg: 'arg'});
+        else if ($scope.selectedShippingDetails == -1 && $scope.form.shippingForm.$invalid){
+          //New Address and shipping form not valid
+          $scope.errorMessageShipping = "Form tidak valid. Silahkan pastikan bahwa form telah terisi dengan benar sebelum melanjutkan ke tahap berikutnya.";
+        }
       }
-      else if ($scope.selectedShippingDetails == -1 && $scope.form.shippingForm.$invalid){
-        //New Address and shipping form not valid
-        $scope.errorMessageShipping = "Form tidak valid. Silahkan pastikan bahwa form telah terisi dengan benar sebelum melanjutkan ke tahap berikutnya.";
+      else {
+        //Product doesn't need address
+        if ($scope.form.customerForm.$valid){
+          // Customer Form valid
+          dataFactory.setObject('customerDetails', $scope.customerDetails);
+          $state.transitionTo('payment.paymentDetails', { arg: 'arg'});  
+        }
+        else {
+          //CustomerForm is invalid
+          $scope.errorMessage = "Form tidak valid. Silahkan pastikan bahwa form telah terisi dengan benar sebelum melanjutkan ke tahap berikutnya.";
+        }
       } 
     }
   }

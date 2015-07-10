@@ -1,25 +1,3 @@
-paymentApp.config(function($sceDelegateProvider, $httpProvider) {
-  $sceDelegateProvider.resourceUrlWhitelist([
-    // Allow same origin resource loads.
-    'self',
-    // Allow loading from our assets domain.  Notice the difference between * and **.
-    'https://api.sandbox.veritrans.co.id/v2/**'
-  ]);
-
-  Veritrans.url = "https://api.sandbox.veritrans.co.id/v2/token";
-  
-  // The blacklist overrides the whitelist so the open redirect here is blocked.
-  // $sceDelegateProvider.resourceUrlBlacklist([
-  //   'http://myapp.example.com/clickThru**'
-  // ]);
-  // We need to setup some parameters for http requests
-  // These three lines are all you need for CORS support
-  // $httpProvider.defaults.useXDomain = true;
-  // $httpProvider.defaults.withCredentials = true;
-  // delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    $httpProvider.defaults.headers.common['Content-Type'] = 'application/json';
-});
-
 //Factory
 paymentApp.value('PaymentTypes', [{
     display_name: "Kartu Kredit",
@@ -29,6 +7,10 @@ paymentApp.value('PaymentTypes', [{
     display_name: "Bank Transfer",
     payment_type: "permata",
     image_class: "fa fa-lg fa-diamond"
+  },{
+    display_name: "BBM Money",
+    payment_type: "bbm_money",
+    image_class: "bbm-logo"
   } ]
 );
 
@@ -49,12 +31,18 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
         image_class: "fa fa-lg fa-diamond"
       }; 
     }
-    else {
+    else if (dataFactory.get('paymentType') == 'credit_card'){
       $scope.paymentType = {
         display_name: "Kartu Kredit",
         payment_type: "credit_card",
         image_class: "fa fa-lg fa-credit-card"
       }; 
+    } else {
+      $scope.paymentType = {
+        display_name: "BBM Money",
+        payment_type: "bbm_money",
+        image_class: "bbm-logo"
+      };
     }
     $scope.go($scope.paymentType.payment_type);
   }
@@ -67,7 +55,7 @@ paymentApp.controller('paymentDetailsController', ['$scope', '$http', '$log', '$
       $state.transitionTo('payment.paymentDetails.bankTransfer', {arg : 'arg'});
     }
     else {
-
+      $state.transitionTo('payment.paymentDetails.bbmMoney', {arg : 'arg'});
     }  
   };
 }]);
@@ -135,6 +123,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
     }
     if($scope.formValid){
       $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
+      Veritrans.url = veritransEndpoint + '/token';
       $scope.getClientKey();
       setTimeout(function(){
         Veritrans.token(card, callback);
@@ -183,15 +172,31 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
 
   $scope.chargeTransaction = function(response) {
     if (dataFactory.getObject('productDetails').need_address){
-      shippingDetails = {
-        "full_name": dataFactory.getObject('shippingDetails').full_name,
-        "address": dataFactory.getObject('shippingDetails').address,
-        "phone": dataFactory.getObject('shippingDetails').phone_number,
-        "district_id": dataFactory.getObject('shippingDetails').district.id
+      customerDetails = {
+        first_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
+        last_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
+        phone: '+62' + dataFactory.getObject('shippingDetails').phone_number,
+        email: dataFactory.getObject('shippingDetails').email,
+        shipping_address: {
+          first_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
+          last_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
+          address: dataFactory.getObject('shippingDetails').address,
+          phone: '+62' + dataFactory.getObject('shippingDetails').phone_number,
+          district_id: dataFactory.getObject('shippingDetails').district.id,
+          postal_code: dataFactory.getObject('shippingDetails').postal_code
+        }
       };
       serviceDetails = {
-        "include_shipping_insurance": dataFactory.getObject('serviceDetails').insurance,
-        "shipping_service_id": dataFactory.getObject('serviceDetails').servicePackage.service_id 
+        include_shipping_insurance: dataFactory.getObject('serviceDetails').insurance,
+        shipping_service_id: dataFactory.getObject('serviceDetails').servicePackage.service_id 
+      };
+    } else {
+      //Product doesn't need address
+      customerDetails = {
+        first_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(0, -1).join(' '),
+        last_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(-1).join(' '),
+        phone: '+62' + dataFactory.getObject('customerDetails').phone_number,
+        email: dataFactory.getObject('customerDetails').email
       };
     }
 
@@ -211,12 +216,7 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
             token_id : response.token_id,
             save_token_id : dataFactory.getObject('customerDetails').expressPayment
           },
-          customer_details : {
-            "first_name": dataFactory.getObject('customerDetails').full_name,
-            "email": dataFactory.getObject('customerDetails').email,
-            "phone": '+62' + dataFactory.getObject('customerDetails').phone_number,
-            "shipping_address": shippingDetails
-          }        
+          customer_details : customerDetails
         }, serviceDetails),
         {
           headers: {
@@ -286,18 +286,32 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
   var shippingDetails = {};
   var serviceDetails = {};
 
-  $scope.chargeBankTransfer = function(){
-    if (dataFactory.getObject('productDetails').need_address){
-      shippingDetails = {
+  $scope.chargeBankTransfer = function(){    if (dataFactory.getObject('productDetails').need_address){
+    customerDetails = {
         first_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
         last_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
-        address: dataFactory.getObject('shippingDetails').address,
         phone: '+62' + dataFactory.getObject('shippingDetails').phone_number,
-        district_id: dataFactory.getObject('shippingDetails').district.id
+        email: dataFactory.getObject('shippingDetails').email,
+        shipping_address: {
+          first_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
+          last_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
+          address: dataFactory.getObject('shippingDetails').address,
+          phone: '+62' + dataFactory.getObject('shippingDetails').phone_number,
+          district_id: dataFactory.getObject('shippingDetails').district.id,
+          postal_code: dataFactory.getObject('shippingDetails').postal_code
+        }
       };
       serviceDetails = {
         include_shipping_insurance: dataFactory.getObject('serviceDetails').insurance,
         shipping_service_id: dataFactory.getObject('serviceDetails').servicePackage.service_id 
+      };
+    } else {
+      //Product doesn't need address
+      customerDetails = {
+        first_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(0, -1).join(' '),
+        last_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(-1).join(' '),
+        phone: '+62' + dataFactory.getObject('customerDetails').phone_number,
+        email: dataFactory.getObject('customerDetails').email
       };
     }
     dataFactory.set('paymentType', 'Bank Transfer');
@@ -314,13 +328,96 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
             quantity : dataFactory.getObject('productDetails').qty,
             name : dataFactory.getObject('productDetails').name
           } ],
-          customer_details : {
-            first_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(0, -1).join(' '),
-            last_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(-1).join(' '),
-            phone: '+62' + dataFactory.getObject('customerDetails').phone_number,
-            email: dataFactory.getObject('customerDetails').email,
-            shipping_address: shippingDetails
+          customer_details : customerDetails
+        },serviceDetails),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           }
+        }
+      ).success(function(data, status, headers, config) {
+        console.log(data)
+        dataFactory.setObject('transactionDetails', data);
+
+        //Confirm Transaction
+        $http.post(
+          phinisiEndpoint + '/merchant/payment/confirm', 
+          {
+            order_id : data.order_id
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          }
+        ).success(function(data, status, headers, config){
+            console.log(data);
+            $state.transitionTo('payment.paymentFinish', {'data': data})
+           
+        }).error(function(data, status, headers, config){
+            console.log(data);
+            $state.transitionTo('500', { arg: 'arg' });
+        });
+      }).
+      error(function(data, status, headers, config) {
+        console.log(data);
+        $state.transitionTo('500', { arg: 'arg' });
+      });
+  }
+
+}]);
+
+paymentApp.controller('bbmMoneyController', ['$scope','$http', '$log', '$state', 'dataFactory', function($scope, $http, $log, $state, dataFactory){
+
+  var shippingDetails = {};
+  var serviceDetails = {};
+
+  $scope.chargeBbmMoney = function(){
+    if (dataFactory.getObject('productDetails').need_address){
+      customerDetails = {
+        first_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
+        last_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
+        phone: '+62' + dataFactory.getObject('shippingDetails').phone_number,
+        email: dataFactory.getObject('shippingDetails').email,
+        shipping_address: {
+          first_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(0, -1).join(' '),
+          last_name: dataFactory.getObject('shippingDetails').full_name.split(' ').slice(-1).join(' '),
+          address: dataFactory.getObject('shippingDetails').address,
+          phone: '+62' + dataFactory.getObject('shippingDetails').phone_number,
+          district_id: dataFactory.getObject('shippingDetails').district.id,
+          postal_code: dataFactory.getObject('shippingDetails').postal_code
+        }
+      };
+      serviceDetails = {
+        include_shipping_insurance: dataFactory.getObject('serviceDetails').insurance,
+        shipping_service_id: dataFactory.getObject('serviceDetails').servicePackage.service_id 
+      };
+    } else {
+      //Product doesn't need address
+      customerDetails = {
+        first_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(0, -1).join(' '),
+        last_name: dataFactory.getObject('customerDetails').full_name.split(' ').slice(-1).join(' '),
+        phone: '+62' + dataFactory.getObject('customerDetails').phone_number,
+        email: dataFactory.getObject('customerDetails').email
+      };
+    }
+    dataFactory.set('paymentType', 'BBM Money');
+    $state.transitionTo('payment.loading', { paymentStatus: 'charge-loading'});
+    $http.post(
+        //url
+        phinisiEndpoint + '/charge',
+        //data
+        angular.extend({
+          payment_type : "bbm_money",
+          item_details : [ {
+            id : dataFactory.getObject('productDetails').id,
+            price : dataFactory.getObject('productDetails').price,
+            quantity : dataFactory.getObject('productDetails').qty,
+            name : dataFactory.getObject('productDetails').name
+          } ],
+          customer_details : customerDetails
           
         },serviceDetails),
         {
@@ -331,6 +428,19 @@ paymentApp.controller('bankTransferController', ['$scope','$http', '$log', '$sta
         }
       ).success(function(data, status, headers, config) {
         console.log(data)
+        if (navigator.userAgent.match(/Android|webOS/i)){
+          var bbm_parameter = {
+            "reference": data.permata_va_number,
+            "callback_url": {
+              "check_status": "",
+              "before_payment_error": "",
+              "user_cancel": ""
+            }
+          }
+          data.bbm_money_url = 'bbmmoney://api/payment/imp?data=' + encodeURIComponent(JSON.stringify(bbm_parameter));
+        } else {
+          data.bbm_money_url = 'bbmmoney://api/deviceMessage';
+        }
         dataFactory.setObject('transactionDetails', data);
 
         //Confirm Transaction

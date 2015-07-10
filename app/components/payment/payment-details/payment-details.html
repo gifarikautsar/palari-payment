@@ -77,7 +77,7 @@
             <span class="text-label big" ng-show="serviceDetails.servicePackage">{{ serviceDetails.insurance ? serviceDetails.servicePackage.service_fare_with_issurance : serviceDetails.servicePackage.service_fare | mycurrency}}</span>
           </div>
         </div>
-        <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/>Tel. +62{{ shippingDetails.phone_number }}</p>
+        <p>{{ shippingDetails.address }}<br/>{{shippingDetails.district.nama_kecamatan}}, {{shippingDetails.city.nama_kota}}<br/>{{shippingDetails.province.nama_propinsi}}, Indonesia, {{shippingDetails.postal_code}}<br/>Tel. +62{{ shippingDetails.phone_number }}<br/>Email : {{ shippingDetails.email }}</p>
         <small><a ui-sref="payment.shippingDetails" class="btn btn-default">GANTI ALAMAT</a></small>
       </div>
     </div>
