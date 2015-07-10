@@ -7,9 +7,6 @@ paymentApp.controller('paymentFinishController', ['$scope','$http', '$log', '$st
   $scope.customerDetails = dataFactory.getObject('customerDetails');
   $scope.productDetails = dataFactory.getObject('productDetails');
 
-  $scope.save = dataFactory.getObject('transactionDetails').saved_token_id;
-  $scope.test4 = dataFactory.get('cardLastDigit');
-
   $scope.bbmToken = {
     selectedShippingDetails: dataFactory.get('selectedShippingDetails'),
     customerDetails: $scope.customerDetails,

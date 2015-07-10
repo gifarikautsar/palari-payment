@@ -234,8 +234,8 @@ paymentApp.controller('creditCardController', ['$scope', '$http', '$log', '$stat
         else{
           dataFactory.set('cardLastDigit', $scope.creditCard.card_number.substr($scope.creditCard.card_number.length-4,$scope.creditCard.card_number.length));
           dataFactory.set('saved_token_id', data.saved_token_id);
-          dataFactory.setObject('transactionDetails', data);
         }
+        dataFactory.setObject('transactionDetails', data);
         //Confirm Transaction
         $http.post(
           phinisiEndpoint + '/merchant/payment/confirm', 
